@@ -3,85 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enlaces a Figma</title>
+    <title>Tomb Raider - Proyecto Figma</title>
+    <!-- Fuente temática desde Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f4f4f5;
+        /* Variables de estilo - Temática Tomb Raider */
+        :root {
+            --bg-color: #0b0d0c;
+            --card-bg: rgba(22, 28, 25, 0.85);
+            --card-border: #4a5d4e;
+            --gold-accent: #d4af37;
+            --gold-hover: #f3e5ab;
+            --text-light: #e0e6e1;
+            --text-muted: #8a9a8d;
+            --btn-bg: #d4af37;
+            --btn-text: #0b0d0c;
+        }
+
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .container {
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            /* Fondo sutil de textura / ambiente de jungla y ruinas */
+            background-image: 
+                radial-gradient(circle at center, rgba(30, 45, 35, 0.4) 0%, rgba(11, 13, 12, 0.95) 80%),
+                url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: var(--text-light);
+            min-height: 100vh;
             display: flex;
-            gap: 16px;
-            background: #ffffff;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 1rem;
         }
 
+        /* Encabezado */
+        header {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: var(--gold-accent);
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4), 2px 2px 4px rgba(0, 0, 0, 0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        /* Contenedor de las tarjetas */
+        .cards-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            align-items: stretch;
+            flex-wrap: wrap;
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem 0;
+        }
+
+        /* Tarjetas */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Detalle dorado decorativo en las esquinas superiores */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold-accent), transparent);
+            opacity: 0.6;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-accent);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15);
+        }
+
+        /* Íconos */
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1.5rem;
+            fill: var(--gold-accent);
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+        }
+
+        .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            color: #ffffff;
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        /* Botones / Enlaces */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: 600;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.9rem 1.5rem;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 1.5px;
             text-decoration: none;
-            border-radius: 8px;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            cursor: pointer;
+            border-radius: 4px;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
         }
 
-        .btn:active {
-            transform: scale(0.98);
+        .btn:hover {
+            background-color: var(--gold-hover);
+            transform: scale(1.02);
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
         }
 
-        /* Botón Modo Editor */
-        .btn-editor {
-            background-color: #0d99ff;
-            color: #ffffff;
+        .btn-arrow {
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
         }
 
-        .btn-editor:hover {
-            background-color: #007be5;
+        .btn:hover .btn-arrow {
+            transform: translateX(4px);
         }
 
-        /* Botón Modo Presentación */
-        .btn-presentacion {
-            background-color: #18a0fb;
-            color: #ffffff;
-            background-image: linear-gradient(135deg, #0acf83, #1abcfe);
+        /* Footer */
+        footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
         }
 
-        .btn-presentacion:hover {
-            opacity: 0.9;
+        footer a {
+            color: var(--gold-accent);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--gold-hover);
+            text-decoration: underline;
+        }
+
+        /* Adaptación a pantallas pequeñas */
+        @media (max-width: 600px) {
+            .title {
+                font-size: 2.3rem;
+            }
+            .cards-container {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Botón Modo Editor (Sustituye la URL por la de tu archivo de Figma) -->
-        <a href="https://www.figma.com/design/vhcw14CuUjpUr4iDNZkeTx/TPE?node-id=882-4837&t=BnMle7a1Wxu9iBtR-1" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           class="btn btn-editor">
-            Abrir en Modo Editor
-        </a>
+    <!-- Encabezado con título principal -->
+    <header>
+        <h1 class="title">TOMB RAIDER</h1>
+        <p class="subtitle">Explorá las ruinas y descubrí el prototipo del proyecto.</p>
+    </header>
 
-        <!-- Botón Modo Presentación (Sustituye la URL por la del prototipo de Figma) -->
-        <a href="https://www.figma.com/proto/vhcw14CuUjpUr4iDNZkeTx/TPE?node-id=882-4837&t=LjHiksmSWvhgnKJe-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           class="btn btn-presentacion">
-            Ver Presentación
-        </a>
-    </div>
+    <!-- Contenedor principal con las dos opciones -->
+    <main class="cards-container">
+        
+        <!-- Tarjeta 1: Modo Presentación -->
+        <article class="card">
+            <!-- Ícono de Brújula / Exploración SVG -->
+            <svg class="card-icon" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm2.17-12.17L9 11l-1.17 5.17L13 15l5.17-1.17-4-4.16zM12 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+            </svg>
+            <h2 class="card-title">Ver presentación</h2>
+            <p class="card-description">Probá el prototipo interactivo y experimentá la navegación completa del juego.</p>
+            
+            <!-- REEMPLAZA EL '#' CON TU LINK DE FIGMA EN MODO PRESENTACIÓN -->
+            <a href="https://www.figma.com/proto/vhcw14CuUjpUr4iDNZkeTx/TPE?node-id=882-4837&t=TJtXpTYUOCaKn3iB-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" class="btn">
+                VER PRESENTACIÓN <span class="btn-arrow">&rarr;</span>
+            </a>
+        </article>
+
+        <!-- Tarjeta 2: Modo Editor (Archivo completo) -->
+        <article class="card">
+            <!-- Ícono de Mapa / Artefacto SVG -->
+            <svg class="card-icon" viewBox="0 0 24 24">
+                <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+            </svg>
+            <h2 class="card-title">Ver archivo de Figma</h2>
+            <p class="card-description">Accedé al archivo de edición completo con las páginas del proyecto y el Design System.</p>
+            
+            <!-- REEMPLAZA EL '#' CON TU LINK DE FIGMA EN MODO EDITOR -->
+            <a href="https://www.figma.com/design/vhcw14CuUjpUr4iDNZkeTx/TPE?node-id=882-4837&t=BnMle7a1Wxu9iBtR-1" target="_blank" class="btn">
+                VER ARCHIVO <span class="btn-arrow">&rarr;</span>
+            </a>
+        </article>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2026 Tomb Raider Project - Interfaces de Usuario e Interacción</p>
+        <p><a href="https://github.com" target="_blank">Repositorio en GitHub</a></p>
+    </footer>
 
 </body>
 </html>
