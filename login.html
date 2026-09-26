@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Iniciar sesión · M&M Arcade</title>
 
+  <!-- Fuente pixelada/retro para el título "Iniciar sesión" -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500..700&display=swap" rel="stylesheet">
+
   <!-- Todo el CSS vive ahora en un archivo aparte -->
   <link rel="stylesheet" href="login.css">
 </head>
@@ -16,28 +21,33 @@
        con aria-hidden="true": los lectores de pantalla lo saltean.
        ========================================================= -->
   <div class="background-wrapper" aria-hidden="true">
-    <div class="background-grid">
-      <!-- Cada fila tiene 5 "tiles" + las mismas 5 repetidas al lado
-           (10 columnas en total). Así, al desplazar la grilla -50%
-           en X, la segunda mitad calza exacto con la primera y el
-           loop horizontal no se nota.
-           (Reemplazá cada .tile por una <img> real si querés usar
-           tus propias capturas de juegos como fondo). -->
+    <!-- 6 filas independientes. Cada una tiene 5 "tiles" + las mismas
+         5 repetidas al lado (10 en total), para que el loop horizontal
+         no se note. Las filas pares se animan "al revés" (ver CSS),
+         así quedan alternadas: fila 1 izquierda, fila 2 derecha, etc.
+         (Reemplazá cada .tile por una <img> real si querés usar tus
+         propias capturas de juegos como fondo). -->
+    <div class="bg-row">
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
-
+    </div>
+    <div class="bg-row">
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
-
+    </div>
+    <div class="bg-row">
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
-
+    </div>
+    <div class="bg-row">
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
-
+    </div>
+    <div class="bg-row">
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
-
+    </div>
+    <div class="bg-row">
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
       <div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div>
     </div>
@@ -104,7 +114,7 @@
         Iniciar sesión con usuario y contraseña
       </h2>
 
-      <form action="#" method="post">
+      <form action="#" method="post" class="login-form">
         <div class="form-group">
           <label for="usuario">Ingrese su usuario o email</label>
           <input type="text" id="usuario" name="usuario" autocomplete="username" required>
@@ -116,11 +126,53 @@
         </div>
 
         <button type="submit" class="btn-submit">Iniciar sesión</button>
+
+        <!-- role="status" + aria-live="polite": es la forma semánticamente
+             correcta de anunciar un resultado (éxito/error) sin que la
+             persona que usa lector de pantalla tenga que ir a buscarlo.
+             Arranca vacío; el script lo completa cuando el login "resuelve". -->
+        <p id="login-status" class="login-status" role="status" aria-live="polite"></p>
       </form>
     </section>
 
     <p class="signup-text">¿Aún no tenes cuenta? <a href="#">Regístrate aca</a></p>
   </main>
+
+  <script>
+    // Como esta página es solo maquetado (no hay backend real), acá
+    // simulamos que el login siempre resuelve bien al enviar el form.
+    // En un sitio real, este bloque iría dentro del .then() de tu
+    // petición al servidor, solo si la respuesta es exitosa.
+    const loginForm = document.querySelector('.login-form');
+    const submitBtn = document.querySelector('.btn-submit');
+    const statusMessage = document.getElementById('login-status');
+
+    loginForm.addEventListener('submit', function (event) {
+      event.preventDefault(); // evita que la página recargue
+
+      // Deshabilitamos el botón mientras se resuelve, para que no se
+      // pueda enviar el formulario dos veces haciendo doble clic.
+      submitBtn.disabled = true;
+
+      // Disparamos la animación (el botón se desliza hacia la
+      // izquierda y desaparece, definida en login.css) agregando
+      // esta clase.
+      submitBtn.classList.add('btn-submit--success');
+
+      // Actualizamos el mensaje de estado: al ser role="status" con
+      // aria-live, esto se anuncia solo a quien use lector de pantalla,
+      // y además se ve en pantalla en verde para todos los demás.
+      statusMessage.textContent = 'Sesión iniciada correctamente.';
+
+      // Cuando termina la animación, mandamos al usuario a index.html.
+      // (En un sitio con backend real, esta redirección iría dentro
+      // del .then() de la petición de login, no acá).
+      submitBtn.addEventListener('animationend', function handleAnimationEnd() {
+        submitBtn.removeEventListener('animationend', handleAnimationEnd);
+        window.location.href = 'index.html';
+      });
+    });
+  </script>
 
 </body>
 </html>

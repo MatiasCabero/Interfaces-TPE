@@ -41,27 +41,37 @@ body {
    ========================================================= */
 
 /* Contenedor fijo que recorta (overflow: hidden) el
-   movimiento de la grilla para que no se vea el "salto". */
+   movimiento de las filas para que no se vea el "salto".
+   Ahora apila 6 filas independientes en columna. */
 .background-wrapper {
   position: fixed;
   inset: 0;
   overflow: hidden;
   z-index: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-/* La grilla mide el DOBLE de ancho: son las mismas 30 imágenes
-   (5 columnas x 6 filas) repetidas al lado, fila por fila
-   (10 columnas x 6 filas en total). Como la segunda mitad
-   es idéntica a la primera, al animar de 0% a -50% el ojo
-   no nota dónde "empieza de nuevo" el loop. */
-.background-grid {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+/* Cada fila (.bg-row) es su propio mini-carrusel: mide el DOBLE
+   de ancho (son las mismas 5 imágenes repetidas al lado, 10 en
+   total) y se anima igual que antes, de 0% a -50%. Como la
+   segunda mitad es idéntica a la primera, el loop no se nota. */
+.bg-row {
+  display: flex;
+  flex: 1;
   gap: 4px;
   width: 200%;
-  height: 100%;
   animation: scrollBackground 40s linear infinite;
+}
+
+/* Filas alternadas (2ª, 4ª, 6ª...) reproducen la MISMA animación
+   pero "al revés" (animation-direction: reverse), lo que hace que
+   se vean moviéndose para el otro lado sin necesitar un segundo
+   @keyframes. Resultado: fila 1 → izquierda, fila 2 → derecha,
+   fila 3 → izquierda, y así alternando. */
+.bg-row:nth-child(even) {
+  animation-direction: reverse;
 }
 
 @keyframes scrollBackground {
@@ -72,20 +82,21 @@ body {
 /* Si el usuario tiene activada la preferencia de "reducir
    movimiento" en su sistema operativo, dejamos el fondo quieto. */
 @media (prefers-reduced-motion: reduce) {
-  .background-grid {
+  .bg-row {
     animation: none;
   }
 }
 
 .tile {
+  flex: 1 0 10%; /* 10 tiles por fila (5 reales + 5 duplicados) */
   background-size: cover;
   background-position: center;
   filter: blur(3px) brightness(0.9);
 }
 
 /* Paleta de colores que simula capturas de distintos juegos.
-   El patrón se repite cada 5 elementos (:nth-child(5n+1..5)),
-   por eso se ve prolijo aunque la grilla tenga 10 columnas. */
+   El patrón se repite cada 5 elementos (:nth-child(5n+1..5))
+   DENTRO de cada fila, por eso se ve prolijo. */
 .tile:nth-child(5n+1) { background-color: #4a4a6a; }
 .tile:nth-child(5n+2) { background-color: #7c9db3; }
 .tile:nth-child(5n+3) { background-color: #b8a97a; }
@@ -114,13 +125,22 @@ body {
   padding: 32px 28px;
   color: #ffffff;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  /* Para que el botón, al deslizarse hacia la izquierda en el login
+     exitoso, se "esconda" detrás del borde redondeado en vez de
+     desbordar visiblemente fuera de la tarjeta. */
+  overflow: hidden;
 }
 
 .login-title {
   text-align: center;
-  font-family: 'Courier New', monospace; /* look "pixel/retro" como en el sitio */
-  letter-spacing: 2px;
-  font-size: 1.4rem;
+  /* Fuente pixelada con un trazo intermedio (ni tan fina como VT323
+     ni tan gruesa como Press Start 2P), cargada desde Google Fonts
+     en el <head>. Si no llega a cargar, cae en un monospace normal. */
+  font-family: 'Pixelify Sans', 'Courier New', monospace;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-size: 1.7rem;
+  line-height: 1.4;
   margin-bottom: 24px;
 }
 
@@ -137,10 +157,14 @@ body {
 .social-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  /* flex-start (en vez de center) hace que el ícono siempre arranque
+     en el mismo punto, sin importar si el texto es "Google", "Facebook"
+     o "Apple". Con "center" cada botón centraba ícono+texto como grupo,
+     y por eso los tres logos quedaban en posiciones distintas. */
+  justify-content: flex-start;
+  gap: 12px;
   width: 100%;
-  padding: 10px 14px;
+  padding: 10px 18px;
   border: none;
   border-radius: 20px;
   background-color: #ffffff;
@@ -222,14 +246,17 @@ body {
 
 /* =========================================================
    7) BOTÓN PRINCIPAL "Iniciar sesión"
+   Mismo verde vibrante que usa el botón "Publicar" del resto
+   del sitio (variables --primary-green / --primary-green-hover
+   del styles.css de M&M Arcade), para que quede consistente.
    ========================================================= */
 .btn-submit {
   width: 100%;
   padding: 12px;
-  margin-top: 8px;
+  margin-top: 32px; /* antes 8px: lo bajamos un poco más de los inputs */
   border: none;
   border-radius: 20px;
-  background-color: #6c5ce7;   /* violeta/púrpura */
+  background-color: #7bb31c;   /* verde vibrante (igual que "Publicar") */
   color: #ffffff;
   font-size: 0.95rem;
   font-weight: 700;
@@ -238,8 +265,53 @@ body {
 }
 
 .btn-submit:hover {
-  background-color: #5b4bd6;
+  background-color: #93d424;   /* verde hover, igual que "Publicar" */
   transform: translateY(-1px);
+}
+
+.btn-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* =========================================================
+   7.1) ANIMACIÓN DE ÉXITO AL INICIAR SESIÓN
+   Combina rotate + scale + skew en una sola secuencia. Se
+   dispara agregando la clase .btn-submit--success por JS
+   cuando el "login" se resuelve bien (ver el <script> del
+   HTML), y se saca sola al terminar (animationend).
+   ========================================================= */
+.btn-submit--success {
+  /* "forwards" mantiene el estado final (fuera de vista) hasta que
+     se dispare la redirección a index.html, sin que el botón
+     "vuelva" a aparecer un instante antes de cambiar de página. */
+  animation: loginSuccessSlide 0.5s ease-in forwards;
+}
+
+/* El botón se desliza hacia la izquierda y se desvanece, como si
+   se corriera para "dejar pasar" al usuario. */
+@keyframes loginSuccessSlide {
+  0%   { transform: translateX(0);      opacity: 1; }
+  100% { transform: translateX(-130%);  opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-submit--success {
+    animation: none;
+  }
+}
+
+/* Mensaje de estado ("Sesión iniciada correctamente"). Es visible
+   Y además tiene role="status" + aria-live en el HTML, así que
+   los lectores de pantalla lo anuncian solos, sin que el usuario
+   tenga que ir a buscarlo (ver punto 3 de la consigna). */
+.login-status {
+  text-align: center;
+  color: #93d424;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 10px;
+  min-height: 1em; /* reserva el espacio para que no "salte" el layout */
 }
 
 /* =========================================================
