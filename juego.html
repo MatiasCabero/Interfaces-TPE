@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peg Solitaire · Reliquias Ancestrales — M&M Arcade</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- =========================================================
+       Navegación Superior (Navbar)
+       ========================================================= -->
+       <header class="navbar">
+        <div class="navbar-container">
+          
+          <!-- Botón de Menú Hamburguesa + logo-->
+          <div class="nav-left">
+            <button id="btnOpenMenu" class="icon-btn" aria-label="Abrir menú">
+              <img src="Assets/Iconos/Menu.png" alt="Menú" class="hamburger-icon-img">
+            </button>
+            <div class="brand-logo">
+              <a href="index.html" class="logo-link">
+                <span class="logo-text">
+                  <span class="logo-mm">M&M</span>
+                  <span class="logo-arcade">ARCADE</span>
+                </span>
+              </a>
+            </div>
+          </div>
+    
+          <!-- Barra de Búsqueda -->
+          <div class="nav-center">
+            <div class="search-box">
+              <!-- ÍCONO LUPA SVG/PNG -->
+              <img src="Assets/Iconos/Search.png" alt="Buscar" class="search-icon-img">
+              <input type="text" placeholder="Buscar juegos..." class="search-input">
+            </div>
+          </div>
+    
+          <!-- Botón Perfil de Usuario con Avatar -->
+          <div class="nav-right">
+            <button id="btnOpenUserMenu" class="user-avatar-btn">
+            <img src="Assets/Iconos/Avatar.png" alt="Perfil de usuario" class="user-avatar-img">
+            </button>
+          </div>
+    
+        </div>
+      </header>
+    
+    
+      <!-- =========================================================
+           Menú Desplegable Lateral (Navegación Principal)
+           ========================================================= -->
+    
+    <aside id="sideMenu" class="side-menu">
+      <div class="side-menu-header">
+        <div class="side-menu-brand">
+          <!-- Logo o Icono del juego en el menú -->
+          <img src="Assets/LogoChico.jpeg" alt="M&M Games" class="mini-logo-img">
+          <span class="side-menu-title">Games</span>
+        </div>
+        <button id="btnCloseMenu" class="close-btn" aria-label="Cerrar menú">✕</button>
+      </div>
+    
+      <nav class="side-menu-nav">
+        <ul>
+          <li><a href="#"><img src="Assets/Iconos/home.png" alt="Inicio" class="menu-icon-img">Inicio</a></li>
+          <li><a href="#"><img src="Assets/Iconos/recientes.png" alt="Recientes" class="menu-icon-img">Recientes</a></li>
+          <li><a href="#"><img src="Assets/Iconos/nuevos.png" alt="Nuevos" class="menu-icon-img">Nuevos</a></li>
+          <li><a href="#"><img src="Assets/Iconos/moda.png" alt="De moda" class="menu-icon-img">De moda</a></li>
+          <li><a href="#"><img src="Assets/Iconos/actualizados.png" alt="Actualizados" class="menu-icon-img">Actualizados</a></li>
+          <li><a href="#"><img src="Assets/Iconos/multijugador.png" alt="Multijugador" class="menu-icon-img">Multijugador</a></li>
+          <li><a href="#"><img src="Assets/Iconos/original.png" alt="Originales" class="menu-icon-img">Originales</a></li>
+          <li><a href="#"><img src="Assets/Iconos/pagos.png" alt="Pagos" class="menu-icon-img">Pagos</a></li>
+        </ul>
+
+        <hr class="menu-divider">
+    
+        <ul class="categories-list">
+          <li><a href="#">Aventura</a></li>
+          <li><a href="#">Disparos</a></li>
+          <li><a href="#">Autos</a></li>
+          <li><a href="#">Juegos de rol</a></li>
+          <li><a href="#">Moda</a></li>
+          <li><a href="#">Cartas</a></li>
+          <li><a href="#">Click</a></li>
+          <li><a href="#">Cartas</a></li>
+        </ul>
+      </nav>
+    </aside>
+    
+    
+      <!-- =========================================================
+           Menú Desplegable del Perfil de Usuario (Derecha)
+           ========================================================= -->
+    
+           <div id="userMenu" class="user-popover">
+            <div class="user-popover-arrow"></div>
+            <div class="user-popover-header">
+              <div class="user-avatar-circle">
+                <img src="Assets/Iconos/Avatar.png" alt="Avatar" class="user-avatar-img">
+              </div>
+              <span class="user-name">Nombre del usuario</span>
+              <button id="btnCloseUserMenu" class="close-btn-sm" aria-label="Cerrar menú usuario">✕</button>
+            </div>
+          
+            <ul class="user-menu-list">
+              <li><a href="#"><img src="Assets/Iconos/perfil.png" alt="Mi Perfil" class="menu-icon-img">Mi Perfil</a></li>
+              <li><a href="#"><img src="Assets/Iconos/favorito.png" alt="Favoritos" class="menu-icon-img">Favoritos</a></li>
+              <li><a href="#"><img src="Assets/Iconos/compras.png" alt="Mis Compras" class="menu-icon-img">Mis Compras</a></li>
+              <li><a href="#"><img src="Assets/Iconos/config.png" alt="Configuración" class="menu-icon-img">Configuración</a></li>
+              <li><a href="#"><img src="Assets/Iconos/carrito.png" alt="Carrito" class="menu-icon-img">Carrito</a></li>
+              <li><a href="#"><img src="Assets/Iconos/dark.png" alt="Dark Mode" class="menu-icon-img">Dark Mode</a></li>
+              <li><a href="#"><img src="Assets/Iconos/soporte.png" alt="Ayuda Soporte" class="menu-icon-img">Ayuda Soporte</a></li>
+              <li><a href="login.html"><img src="Assets/Iconos/logout.png" alt="Cerrar Sesión" class="menu-icon-img">Cerrar Sesión</a></li>
+            </ul>
+          </div>
+    
+      <!-- Capa oscura para cerrar menús al tocar afuera -->
+      <div id="backdropOverlay" class="backdrop-overlay"></div>
+
+  <!-- =========================================================
+       Contenido Principal — Página de detalle del juego
+       ========================================================= -->
+  <main class="main-content game-page">
+
+    <nav class="game-breadcrumb">
+      <a href="index.html">Juegos de mesa</a> / <span class="current">Peg Solitaire · Reliquias Ancestrales</span>
+    </nav>
+
+    <!-- =========================================================
+         1) JUEGO PRINCIPAL — Protagonista absoluto (80-85vh)
+         ========================================================= -->
+    <div class="game-stage">
+      <div class="game-media" id="gameMedia">
+        <img src="Assets/peg-solitaire-hero.jpg" alt="Peg Solitaire: Reliquias Ancestrales" class="game-media-img">
+      </div>
+    </div>
+
+    <!-- =========================================================
+         2) SECCIÓN INFERIOR — Compartir + Galería + Video
+         ========================================================= -->
+    <section class="game-bottom-section">
+
+      <!-- Compartir en Redes, encima de la galería y el video -->
+      <div class="game-share-row">
+        <span class="game-share-label">Compartir en Redes</span>
+        <div class="social-icons">
+          <a href="#" class="social-icon-btn" aria-label="Compartir en Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg>
+          </a>
+          <a href="#" class="social-icon-btn" aria-label="Compartir en X">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M18.9 3H21l-6.6 7.6L22 21h-6.1l-4.8-6.3L5.6 21H3.4l7-8L2 3h6.2l4.3 5.8L18.9 3zM17.8 19h1.2L7.3 4.9H6l11.8 14.1z"/></svg>
+          </a>
+          <a href="#" class="social-icon-btn" aria-label="Compartir en Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 8.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4zM12 2c-2.7 0-3.1 0-4.1.1-1.1.1-1.9.2-2.5.5-.7.3-1.3.6-1.9 1.2-.6.6-.9 1.2-1.2 1.9-.3.6-.4 1.4-.5 2.5C2 9.2 2 9.6 2 12s0 2.8.1 3.8c.1 1.1.2 1.9.5 2.5.3.7.6 1.3 1.2 1.9.6.6 1.2.9 1.9 1.2.6.3 1.4.4 2.5.5 1 .1 1.4.1 4.1.1s3.1 0 4.1-.1c1.1-.1 1.9-.2 2.5-.5.7-.3 1.3-.6 1.9-1.2.6-.6.9-1.2 1.2-1.9.3-.6.4-1.4.5-2.5.1-1 .1-1.4.1-4.1s0-2.8-.1-3.8c-.1-1.1-.2-1.9-.5-2.5-.3-.7-.6-1.3-1.2-1.9-.6-.6-1.2-.9-1.9-1.2-.6-.3-1.4-.4-2.5-.5C15.1 2 14.7 2 12 2zm0 1.8c2.6 0 2.9 0 4 .1.9.1 1.5.2 1.9.4.5.2.8.4 1.1.7.3.3.5.6.7 1.1.2.4.3 1 .4 1.9.1 1.1.1 1.4.1 4s0 2.9-.1 4c-.1.9-.2 1.5-.4 1.9-.2.5-.4.8-.7 1.1-.3.3-.6.5-1.1.7-.4.2-1 .3-1.9.4-1.1.1-1.4.1-4 .1s-2.9 0-4-.1c-.9-.1-1.5-.2-1.9-.4-.5-.2-.8-.4-1.1-.7-.3-.3-.5-.6-.7-1.1-.2-.4-.3-1-.4-1.9-.1-1.1-.1-1.4-.1-4s0-2.9.1-4c.1-.9.2-1.5.4-1.9.2-.5.4-.8.7-1.1.3-.3.6-.5 1.1-.7.4-.2 1-.3 1.9-.4 1.1-.1 1.4-.1 4-.1z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Fila: galería a la izquierda, video a la derecha -->
+      <div class="game-gallery-video-row">
+
+        <div class="game-gallery">
+          <h3 class="game-thumbnails-title">Imágenes del juego</h3>
+          <div class="game-thumbnails" id="gameThumbnails">
+            <div class="game-thumb"><img src="Assets/peg-solitaire-thumb-1.jpg" alt="Captura 1"></div>
+            <div class="game-thumb"><img src="Assets/peg-solitaire-thumb-2.jpg" alt="Captura 2"></div>
+            <div class="game-thumb"><img src="Assets/peg-solitaire-thumb-3.jpg" alt="Captura 3"></div>
+            <div class="game-thumb"><img src="Assets/peg-solitaire-thumb-4.jpg" alt="Captura 4"></div>
+            <div class="game-thumb"><img src="Assets/peg-solitaire-thumb-5.jpg" alt="Captura 5"></div>
+          </div>
+        </div>
+
+        <div class="game-video-block">
+          <div class="game-video-placeholder" id="gameVideoPlaceholder">
+            <button class="video-play-btn" id="videoPlayBtn" aria-label="Reproducir video de presentación">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <span id="videoPlaceholderText">Video de presentación (próximamente)</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================
+         Descripción del juego + Comentarios + Recomendados
+         ========================================================= -->
+    <div class="game-detail-grid">
+
+      <div class="game-detail-main">
+
+        <div class="game-description">
+          <h3>¡Explora, salta y descifra el misterio ancestral!</h3>
+          <p>Una edición especial de Peg Solitaire inspirada en Tomb Raider, con un desafío de lógica y una estética de exploración de ruinas antiguas.</p>
+
+          <h3>¿Cómo jugar?</h3>
+          <p>Ayudá a Lara Croft a resolver un acertijo del altar dejando una sola reliquia en el tablero. Mové las reliquias saltando unas sobre otras para eliminar la reliquia capturada en cada paso. ¡Calculá bien cada movimiento para no quedar atrapado sin opciones!</p>
+        </div>
+
+        <div class="game-comments">
+          <h2 class="section-title">Lo que piensa la gente</h2>
+
+          <div class="comment-item">
+            <div class="comment-avatar"></div>
+            <div class="comment-body">
+              <span class="comment-username">Nombre de usuario dice:</span>
+              <div class="comment-box">Comentario</div>
+            </div>
+          </div>
+
+          <div class="comment-item">
+            <div class="comment-avatar"></div>
+            <div class="comment-body">
+              <span class="comment-username">Nombre de usuario dice:</span>
+              <div class="comment-box">Comentario</div>
+            </div>
+          </div>
+
+          <div class="comment-item">
+            <div class="comment-avatar"></div>
+            <div class="comment-body">
+              <span class="comment-username">Nombre de usuario dice:</span>
+              <div class="comment-box">Comentario</div>
+            </div>
+          </div>
+
+          <div class="comment-item">
+            <div class="comment-avatar"></div>
+            <div class="comment-body">
+              <span class="comment-username">Nombre de usuario dice:</span>
+              <div class="comment-box">Comentario</div>
+            </div>
+          </div>
+
+          <form class="comment-form">
+            <textarea placeholder="Comentá qué te pareció..." rows="3"></textarea>
+            <button type="submit" class="btn-primary-play btn-publicar">Publicar</button>
+          </form>
+        </div>
+
+      </div>
+
+      <aside class="game-recommended">
+        <h2 class="section-title">Recomendados</h2>
+        <div class="recommended-list">
+          <article class="recommended-card">
+            <img src="Assets/recomendado-1.jpg" alt="Juego recomendado 1">
+          </article>
+          <article class="recommended-card">
+            <img src="Assets/recomendado-2.jpg" alt="Juego recomendado 2">
+            <span class="badge-pago">Pago</span>
+          </article>
+          <article class="recommended-card">
+            <img src="Assets/recomendado-3.jpg" alt="Juego recomendado 3">
+          </article>
+          <article class="recommended-card">
+            <img src="Assets/recomendado-4.jpg" alt="Juego recomendado 4">
+            <span class="badge-pago">Pago</span>
+          </article>
+          <article class="recommended-card">
+            <img src="Assets/recomendado-5.jpg" alt="Juego recomendado 5">
+          </article>
+        </div>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- =========================================================
+       Pie de Página Extendido (Fat Footer)
+       ========================================================= -->
+       
+       <footer class="fat-footer">
+        <div class="footer-container">
+          
+        <!-- Logo del Footer -->
+        <div class="footer-brand-col">
+          <div class="footer-logo-placeholder">
+            <img src="Assets/LogoGrande.jpeg" alt="M&M Arcade Logo" class="footer-logo-img">
+          </div>
+        </div>
+      
+          <!-- Grilla de Enlaces (3 Columnas Verticales Altas) -->
+          <div class="footer-links-grid">
+            
+            <!-- Columna 1 -->
+            <div class="footer-col">
+              <h4>Navegación</h4>
+              <a href="index.html">Home</a>
+              <a href="#">Nuevos</a>
+              <a href="#">Pagos</a>
+              
+              <h4 style="margin-top: 20px;">Contacto</h4>
+              <a href="index.html">Dejanos tu comentario</a>
+              <a href="#">Nuestras redes</a>
+            </div>
+      
+            <!-- Columna 2 -->
+            <div class="footer-col">
+              <h4>Soporte</h4>
+              <a href="#">Preguntas frecuentes</a>
+              <a href="#">Términos y condiciones</a>
+              
+              <h4 style="margin-top: 20px;">Comunidad</h4>
+              <a href="#">Novedades del sitio</a>
+              <a href="#">Eventos</a>
+              <a href="#">Reseñas de comentarios</a>
+            </div>
+      
+            <!-- Columna 3 -->
+            <div class="footer-col">
+              <h4>Tienda & Cuenta</h4>
+              <a href="#">Ofertas</a>
+              <a href="#">Gift cards</a>
+              <a href="#">Juegos gratis</a>
+              <a href="#">Iniciar sesión</a>
+              <a href="#">Configuración</a>
+              <a href="#">Favoritos</a>
+              <a href="#">Historial de compra</a>
+            </div>
+      
+          </div>
+      
+        </div>
+      
+        <div class="footer-bottom">
+          <p>© Powered and secured by M&Marcade</p>
+        </div>
+      </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

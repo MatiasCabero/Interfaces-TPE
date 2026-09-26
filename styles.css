@@ -1,0 +1,1397 @@
+/* =========================================================
+   1. RESET GENERAL Y VARIABLES DE COLOR
+   ========================================================= */
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  :root {
+    --bg-main: #14134a;          /* Azul oscuro de fondo general */
+    --bg-header: #0e0d36;        /* Azul aún más oscuro para el header */
+    --bg-card: #2b2875;          /* Púrpura/Azul para las tarjetas por defecto */
+    --primary-green: #7bb31c;     /* Verde para el botón 'A Jugar' y badge 'Pago' */
+    --primary-green-hover: #93d424; /* Verde más claro al hacer hover */
+    --text-white: #ffffff;
+    --text-muted: #a9a8d1;
+    --navbar-height: 64px;       /* Alto real del navbar sticky */
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-white);
+    overflow-x: hidden;
+  }
+  
+/* =========================================================
+   2. NAVBAR SUPERIOR (UNIFORME, LOGO M&M ARCADE E ÍCONOS)
+   ========================================================= */
+   .navbar {
+    background-color: var(--bg-header);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #1f1d5e;
+    height: 64px;               /* Altura idéntica en todas las páginas */
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 40px;
+  }
+  
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .nav-center {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .nav-right {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  /* Botón de Menú Hamburguesa (Con imagen PNG/SVG) */
+  .icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, filter 0.2s ease;
+  }
+  
+  /* Ícono de menú hamburguesa con imagen transparente real */
+  .hamburger-icon-img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  display: block;
+  /* Brillo celeste neón limpio que resalta sobre el fondo azul del navbar */
+  filter: drop-shadow(0 0 5px rgba(0, 204, 255, 0.8));
+  transition: transform 0.2s ease, filter 0.2s ease;
+  }
+  
+  .icon-btn:hover {
+    transform: scale(1.12);
+  }
+  
+  .icon-btn:hover .hamburger-icon-img {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 10px rgba(0, 204, 255, 1));
+  }
+  
+  /* Estilo de Logo con Imagen + Texto Dual */
+  .logo-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  
+  .logo-img {
+    max-height: 35px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+  }
+  
+  .logo-text {
+    font-family: 'Arial Black', Gadget, sans-serif;
+    font-weight: 900;
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }
+  
+  .logo-mm {
+    color: #00a2ff;
+    -webkit-text-stroke: 1.5px #ffe600; /* Borde amarillo */
+    text-shadow: 0 0 6px rgba(255, 230, 0, 0.4);
+  }
+  
+  .logo-arcade {
+    color: #8b3dff;
+    font-size: 1.1rem;
+    -webkit-text-stroke: 1.2px #00e1ff; /* Borde celeste */
+    text-shadow: 0 0 8px rgba(0, 225, 255, 0.5);
+  }
+  
+  /* Caja de búsqueda */
+  .search-box {
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  
+  .search-icon-img {
+    position: absolute;
+    left: 14px;
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    
+    /* Convierte la imagen negra en blanco puro */
+    filter: brightness(0) invert(1) drop-shadow(0 0 4px rgba(0, 204, 255, 0.6));
+    opacity: 0.9;
+  }
+  
+  .search-input {
+    width: 100%;
+    background-color: #1a1954;
+    border: 1px solid #3b3795;
+    border-radius: 20px;
+    padding: 8px 16px 8px 38px;
+    color: white;
+    outline: none;
+  }
+  
+/* Botón contenedor del Avatar */
+.user-avatar-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #3b3795; /* Color de fondo azul que rellenará detrás de la figura */
+  border: 2px solid #00ccff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 !important;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+              box-shadow 0.3s ease, 
+              border-color 0.3s ease;
+}
+
+.user-avatar-btn:hover {
+  transform: scale(1.12) rotate(5deg);
+  border-color: #00ffcc;
+  box-shadow: 0 0 15px rgba(0, 204, 255, 0.8), 0 0 25px rgba(0, 255, 204, 0.4);
+}
+
+.user-avatar-btn:active {
+  transform: scale(0.95);
+}
+
+/* Imagen del Avatar con fondo transparente forzado */
+.user-avatar-img {
+  width: 100%;
+  height: 100% ;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block ;
+  
+  /* Elimina la cuadrícula de falsa transparencia */
+  mix-blend-mode: darken;
+  filter: contrast(200%) brightness(1.2); 
+}
+
+/* =========================================================
+   ESTILO DE LOGO CON TEXTO DUAL (M&M ARCADE)
+   ========================================================= */
+
+   .logo-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  
+  .logo-text {
+    font-family: 'Arial Black', Gadget, sans-serif; /* Tipografía bien gruesa y arcade */
+    font-weight: 900;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }
+  
+  /* Estilo para "M&M" (Azul celeste con borde amarillo) */
+  .logo-mm {
+    color: #00a2ff;
+    -webkit-text-stroke: 1.5px #ffe600; /* Borde amarillo brillante */
+    text-shadow: 0 0 6px rgba(255, 230, 0, 0.4);
+  }
+  
+  /* Estilo para "ARCADE" (Violeta con borde celeste neón) */
+  .logo-arcade {
+    color: #8b3dff;
+    font-size: 1.15rem;
+    -webkit-text-stroke: 1.2px #00e1ff; /* Borde celeste brillante */
+    text-shadow: 0 0 8px rgba(0, 225, 255, 0.5);
+  }
+
+  /* =========================================================
+   3. MENÚ DESPLEGABLE LATERAL (IZQUIERDA)
+   ========================================================= */
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 260px;
+  height: 100vh;
+  background-color: var(--bg-header);
+  z-index: 200;
+  transition: left 0.3s ease-in-out;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.side-menu.active {
+  left: 0;
+}
+
+.side-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.side-menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.mini-logo-placeholder {
+  background: #2b2875;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.mini-logo-img {
+  max-height: 24px;
+  width: auto;
+  object-fit: contain;
+}
+
+.close-btn, .close-btn-sm {
+  background: none;
+  border: 1px solid #3b3795;
+  color: white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.close-btn:hover, .close-btn-sm:hover {
+  border-color: #00ccff;
+  color: #00ccff;
+}
+
+.side-menu-nav ul {
+  list-style: none;
+}
+
+.side-menu-nav li {
+  margin-bottom: 12px;
+}
+
+.side-menu-nav a {
+  color: var(--text-white);
+  text-decoration: none;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  transition: color 0.2s;
+}
+
+.side-menu-nav a:hover {
+  color: #00ccff;
+}
+
+/* Íconos del menú desplegable: tamaño uniforme, blanco y brillo al hover */
+.menu-icon-img {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  object-fit: contain !important;
+  margin-right: 14px;
+  flex-shrink: 0;
+  display: block;
+
+  /* Convierte cualquier ícono oscuro en blanco brillante */
+  filter: brightness(0) invert(1) !important;
+  opacity: 0.9;
+  transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Al pasar el mouse sobre el link, el ícono toma brillo celeste neón */
+.side-menu-nav a:hover .menu-icon-img,
+.user-menu-list a:hover .menu-icon-img {
+  filter: brightness(0) invert(1) drop-shadow(0 0 5px #00ccff) !important;
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.menu-divider {
+  border: 0;
+  height: 1px;
+  background: #2d2b78;
+  margin: 18px 0;
+}
+
+.backdrop-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 150;
+  display: none;
+}
+
+.backdrop-overlay.active {
+  display: block;
+}
+  
+  /* =========================================================
+     4. MENÚ DESPLEGABLE USUARIO (DERECHA)
+     ========================================================= */
+  .user-popover {
+    position: fixed;
+    top: 60px;
+    right: -320px;
+    width: 260px;
+    background-color: var(--bg-header);
+    border-radius: 12px;
+    padding: 18px;
+    z-index: 200;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: right 0.3s ease-in-out;
+  }
+  
+  .user-popover.active {
+    right: 20px;
+  }
+  
+  .user-popover-arrow {
+    position: absolute;
+    top: -8px;
+    right: 18px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--bg-header);
+  }
+  
+  .user-popover-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #2d2b78;
+    padding-bottom: 12px;
+  }
+  
+  .user-avatar-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #3b3795;
+    overflow: hidden;
+  }
+  
+  .user-name {
+    font-size: 0.9rem;
+    font-weight: bold;
+    flex: 1;
+  }
+  
+  .user-menu-list {
+    list-style: none;
+  }
+  
+  .user-menu-list li {
+    margin-bottom: 10px;
+  }
+  
+  .user-menu-list a {
+    color: var(--text-white);
+    text-decoration: none;
+    font-size: 0.88rem;
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    transition: color 0.2s ease;
+  }
+  
+  .user-menu-list a:hover {
+    color: #00ccff;
+  }
+  
+  /* =========================================================
+     5. CONTENIDO PRINCIPAL Y ESTRUCTURA DE CARRUSELES
+     ========================================================= */
+  .main-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 30px 40px;
+  }
+  
+  .carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 15;
+    width: 42px;
+    height: 42px;
+    background-color: rgba(14, 13, 54, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.6rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  }
+  
+  .left-arrow {
+    left: -20px;
+  }
+  
+  .right-arrow {
+    right: -20px;
+  }
+  
+  .carousel-arrow:hover {
+    background-color: var(--bg-header);
+    border-color: #00ccff;
+    color: #00ccff;
+    transform: translateY(-50%) scale(1.08);
+  }
+  
+  /* =========================================================
+     6. CARRUSEL PRINCIPAL (3D / COVERFLOW ANIMADO)
+     ========================================================= */
+  .hero-carousel-section {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .hero-carousel-section .carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 780px;
+    width: 100%;
+    height: 290px;
+    perspective: 1000px;
+  }
+  
+  .hero-cards-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+  }
+  
+  .hero-cards-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .hero-card {
+    position: absolute;
+    width: 180px;
+    height: 260px;
+    background-color: var(--bg-card);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.5s ease, 
+                filter 0.5s ease, 
+                box-shadow 0.5s ease,
+                z-index 0.5s step-end;
+  }
+  
+  .hero-card.pos-left {
+    transform: translateX(-210px) scale(0.82) rotateY(10deg);
+    opacity: 0.65;
+    filter: brightness(0.7);
+    z-index: 2;
+  }
+  
+  .hero-card.pos-center {
+    transform: translateX(0px) scale(1.08) rotateY(0deg) translateZ(20px);
+    opacity: 1;
+    filter: brightness(1);
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 18px rgba(0, 204, 255, 0.35);
+  }
+  
+  .hero-card.pos-center:hover {
+    transform: translateX(0px) scale(1.12) rotateY(0deg) translateZ(30px);
+  }
+  
+  .hero-card.pos-right {
+    transform: translateX(210px) scale(0.82) rotateY(-10deg);
+    opacity: 0.65;
+    filter: brightness(0.7);
+    z-index: 2;
+  }
+  
+  .hero-carousel-section .left-arrow {
+    left: -30px;
+    z-index: 20;
+  }
+  
+  .hero-carousel-section .right-arrow {
+    right: -30px;
+    z-index: 20;
+  }
+  
+  .play-btn-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .btn-primary-play {
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 32px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .btn-primary-play:hover {
+    background-color: var(--primary-green-hover);
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(123, 179, 28, 0.4);
+  }
+  
+  /* =========================================================
+     7. CATEGORÍAS DE JUEGOS Y TARJETAS
+     ========================================================= */
+  .category-block {
+    margin-bottom: 10px;
+  }
+  
+  .category-title {
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+    margin-left: 45px;
+  }
+  
+  .category-cards-container {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 12px 35px;
+    width: 100%;
+  }
+  
+  .category-cards-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .game-card {
+    position: relative;
+    width: 230px;
+    min-width: 230px;
+    height: 135px;
+    background-color: var(--bg-card);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .badge-pago {
+    position: absolute;
+    top: 12px;
+    right: -22px;
+    background-color: var(--primary-green);
+    color: #121212;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 3px 25px;
+    transform: rotate(45deg);
+    z-index: 5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .card-gradient-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(93, 72, 199, 0.85), transparent);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  
+  .game-title {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: white;
+    z-index: 6;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    text-shadow: 
+      -1px -1px 0 #000,  
+       1px -1px 0 #000,
+      -1px  1px 0 #000,
+       1px  1px 0 #000;
+  }
+  
+  .game-card:hover {
+    border-color: #000000;
+    box-shadow: 0 0 0 1px #000000;
+    transform: translateY(-2px);
+  }
+  
+  .game-card:hover .card-gradient-overlay,
+  .game-card:hover .game-title {
+    opacity: 1;
+  }
+  
+  /* =========================================================
+     8. PÁGINA DE JUEGO DETALLE (TOMB RAIDER / PEG SOLITAIRE)
+     ========================================================= */
+  .main-content.game-page {
+    padding-top: 30px;
+  }
+  
+  .game-breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  
+  .game-breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .game-breadcrumb a:hover {
+    color: #00ccff;
+  }
+  
+  .game-breadcrumb .current {
+    color: var(--text-white);
+    font-weight: bold;
+  }
+  
+  .game-stage {
+    margin-bottom: 18px;
+  }
+  
+  .game-media {
+    position: relative;
+    height: 82vh;
+    min-height: 420px;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: var(--bg-card);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  }
+  
+  .game-media img,
+  .game-media-img,
+  .game-media canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* Sección inferior: Redes + Galería + Video */
+  .game-bottom-section {
+    margin-bottom: 10px;
+  }
+  
+  .game-share-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  
+  .game-share {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .game-share-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .social-icon-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: #1a1954;
+    border: 1px solid #3b3795;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--text-white);
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  }
+  
+  .social-icon-btn:hover {
+    background-color: var(--bg-header);
+    color: #00ccff;
+    transform: translateY(-2px);
+  }
+  
+  .social-icon-btn svg {
+    display: block;
+    width: 16px !important;
+    height: 16px !important;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+  
+  .game-gallery-video-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+  }
+  
+  .game-gallery {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  
+  .game-thumbnails-block {
+    flex-shrink: 0;
+  }
+  
+  .game-thumbnails-title {
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+  
+  .game-thumbnails {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  
+  .game-thumbnails::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .game-thumb {
+    width: 120px;
+    height: 74px;
+    min-width: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .game-thumb:hover {
+    border-color: #00ccff;
+    transform: translateY(-2px);
+  }
+  
+  .game-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .game-video-block {
+    flex-shrink: 0;
+    width: 320px;
+  }
+  
+  .game-video-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    background-color: var(--bg-card);
+    border: 1px dashed #3b3795;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 12px;
+  }
+  
+  .video-play-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid #3b3795;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-white);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .video-play-btn:hover {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+    transform: scale(1.08);
+  }
+  
+  .video-play-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    margin-left: 2px;
+  }
+  
+  /* Descripción, comentarios y recomendados */
+  .game-detail-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    margin-top: 30px;
+    align-items: start;
+  }
+  
+  .section-title {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+  
+  .game-description h3 {
+    font-size: 1rem;
+    color: #00ccff;
+    margin-top: 20px;
+    margin-bottom: 6px;
+  }
+  
+  .game-description h3:first-child {
+    margin-top: 0;
+  }
+  
+  .game-description p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  
+  .game-comments {
+    margin-top: 36px;
+  }
+  
+  .comment-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  
+  .comment-avatar {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 50%;
+    background-color: #3b3795;
+    flex-shrink: 0;
+  }
+  
+  .comment-body {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .comment-username {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  
+  .comment-box {
+    background-color: #1a1954;
+    border: 1px solid #3b3795;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .comment-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    margin-top: 22px;
+  }
+  
+  .comment-form textarea {
+    width: 100%;
+    background-color: #1a1954;
+    border: 1px solid #3b3795;
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text-white);
+    font-family: inherit;
+    font-size: 0.9rem;
+    resize: vertical;
+  }
+  
+  .comment-form textarea::placeholder {
+    color: var(--text-muted);
+  }
+  
+  .recommended-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  
+  .recommended-card {
+    position: relative;
+    height: 84px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: var(--bg-card);
+  }
+  
+  .recommended-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* =========================================================
+     9. FAT FOOTER
+     ========================================================= */
+  .fat-footer {
+    background-color: var(--bg-header);
+    padding: 60px 40px 30px;
+    margin-top: 40px;
+    border-top: 1px solid #1f1d5e;
+    min-height: 450px;
+  }
+  
+  .footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+  }
+  
+  .footer-brand-col {
+    width: 140px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .footer-logo-placeholder {
+    width: 130px !important;
+    height: 130px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    border: 2px solid #2b2875;
+    background-color: #0e0d36;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+  }
+  
+  .footer-logo-placeholder img.footer-logo-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 0 !important;
+  }
+  
+  .footer-logo-img {
+    width: 110px;
+    height: auto;
+    display: block;
+  }
+  
+  .footer-links-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px 60px;
+    flex: 1;
+  }
+  
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .footer-col h4 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: var(--text-white);
+    border-bottom: 1px solid #2d2b78;
+    padding-bottom: 4px;
+  }
+  
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: color 0.2s ease;
+  }
+  
+  .footer-col a:hover {
+    color: var(--text-white);
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #1a1954;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
+  /* =========================================================
+     10. PANTALLA DE CARGA (LOADER 5s)
+     ========================================================= */
+  .loader-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #0e0d36;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+  
+  .spinner {
+    width: 55px;
+    height: 55px;
+    border: 5px solid rgba(255, 255, 255, 0.15);
+    border-top-color: #00ccff;
+    border-radius: 50%;
+    animation: spinLoader 0.9s linear infinite;
+  }
+  
+  @keyframes spinLoader {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .loader-percent {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #00ccff;
+  }
+  
+  /* =========================================================
+   11. ANIMACIONES Y EFECTOS HOVER OBLIGATORIOS
+   ========================================================= */
+
+/* HOVER 1: Escala + Sombra Neón Verde (Botones generales) */
+.btn-hover-1 {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-hover-1:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 0 18px #7bb31c;
+}
+
+/* HOVER 2: Brillo Celeste Neón Fijo (Flechas del Carrusel) */
+.btn-hover-2 {
+  transition: color 0.2s ease, text-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-hover-2:hover {
+  color: #00ccff !important;
+  text-shadow: 0 0 12px rgba(0, 204, 255, 0.9), 0 0 20px rgba(0, 204, 255, 0.5);
+  opacity: 1;
+}
+
+/* HOVER 3: Sacudida Neón (Botón 'Publicar' / Formulario) */
+@keyframes publicarWiggle {
+  0%   { transform: translateY(0)    scale(1)    rotate(0deg)  skewX(0deg); }
+  20%  { transform: translateY(-5px) scale(1.06) rotate(-5deg) skewX(-3deg); }
+  40%  { transform: translateY(-7px) scale(1.09) rotate(4deg)  skewX(2deg); }
+  60%  { transform: translateY(-4px) scale(1.05) rotate(-3deg) skewX(-1deg); }
+  80%  { transform: translateY(-1px) scale(1.02) rotate(1deg)  skewX(0deg); }
+  100% { transform: translateY(0)    scale(1)    rotate(0deg)  skewX(0deg); }
+}
+
+@keyframes publicarStamp {
+  0%   { transform: scale(1)    rotate(0deg); }
+  50%  { transform: scale(0.88) rotate(-4deg); }
+  100% { transform: scale(1)    rotate(0deg); }
+}
+
+.btn-publicar {
+  background-color: var(--primary-green);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-publicar:hover {
+  animation: publicarWiggle 0.6s ease-in-out;
+  box-shadow: 0 0 16px rgba(123, 179, 28, 0.5);
+  background-color: var(--primary-green-hover);
+}
+
+.btn-publicar:active {
+  animation: publicarStamp 0.25s ease;
+}
+
+
+/* ANIMACIÓN 4 EXCLUSIVA: Pulso + Supercarga Neón (SÓLO PARA "¡A JUGAR!") */
+@keyframes playBtnPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(123, 179, 28, 0.7);
+  }
+  70% {
+    transform: scale(1.03);
+    box-shadow: 0 0 0 14px rgba(123, 179, 28, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(123, 179, 28, 0);
+  }
+}
+
+@keyframes playBtnSupercharge {
+  0%   { transform: translateY(0) scale(1.03) rotate(0deg); }
+  30%  { transform: translateY(-6px) scale(1.12) rotate(-2deg); }
+  60%  { transform: translateY(-4px) scale(1.1) rotate(2deg); }
+  100% { transform: translateY(-5px) scale(1.1) rotate(0deg); }
+}
+
+/* Especificidad alta: Afecta ÚNICAMENTE al botón A Jugar del Hero */
+.play-btn-container .btn-primary-play {
+  background: linear-gradient(135deg, var(--primary-green) 0%, #9be322 100%);
+  color: #ffffff !important; /* Letras blancas puras */
+  border: none;
+  border-radius: 12px;
+  padding: 12px 36px;
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  animation: playBtnPulse 2s infinite ease-in-out;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); /* Sombra sutil para que resalte más el texto */
+}
+
+.play-btn-container .btn-primary-play:hover {
+  animation: playBtnSupercharge 0.4s ease-out forwards;
+  background: linear-gradient(135deg, #82be1e 0%, #a2ea28 100%);
+  box-shadow: 0 0 22px rgba(123, 179, 28, 0.9), 0 0 35px rgba(0, 204, 255, 0.5);
+  color: #ffffff !important; /* Mantiene letras blancas al pasar el mouse */
+}
+
+.play-btn-container .btn-primary-play:active {
+  transform: translateY(1px) scale(0.96) !important;
+  box-shadow: 0 0 10px rgba(123, 179, 28, 0.8);
+  color: #ffffff !important;
+}
+  
+  /* =========================================================
+     12. DISEÑO ADAPTATIVO MOBILE (SIEMPRE AL FINAL)
+     ========================================================= */
+  @media (max-width: 768px) {
+    /* Navbar */
+    .navbar-container {
+      grid-template-columns: auto 1fr auto;
+      padding: 10px 16px;
+    }
+  
+    .search-box {
+      max-width: 180px;
+    }
+  
+    /* Carrusel Hero Home */
+    .hero-carousel-section .carousel-wrapper {
+      height: 240px;
+    }
+  
+    .hero-card {
+      width: 130px;
+      height: 190px;
+    }
+  
+    .hero-card.pos-left {
+      transform: translateX(-110px) scale(0.8) rotateY(8deg);
+    }
+  
+    .hero-card.pos-right {
+      transform: translateX(110px) scale(0.8) rotateY(-8deg);
+    }
+  
+    /* Tarjetas de Categorías */
+    .category-title {
+      margin-left: 20px;
+    }
+  
+    .category-cards-container {
+      padding: 10px 20px;
+    }
+  
+    .game-card {
+      width: 170px;
+      min-width: 170px;
+      height: 100px;
+    }
+  
+    /* Vista de Detalle de Juego */
+    .game-media {
+      height: 55vh;
+      min-height: 260px;
+    }
+  
+    .game-gallery-video-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .game-video-block {
+      width: 100%;
+    }
+  
+    .game-share-row {
+      flex-wrap: wrap;
+    }
+  
+    .game-detail-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .comment-form {
+      align-items: stretch;
+    }
+  
+    /* Footer */
+    .footer-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .footer-links-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+  }
