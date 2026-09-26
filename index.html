@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M&M Arcade</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="loaderScreen" class="loader-screen">
+  <div class="loader-content">
+    <div class="spinner"></div>
+    <span id="loaderPercent" class="loader-percent">0%</span>
+    <p>Cargando M&M Arcade...</p>
+  </div>
+</div>
+  <!-- =========================================================
+       Navegación Superior (Navbar)
+       ========================================================= -->
+  <header class="navbar">
+    <div class="navbar-container">
+      
+      <!-- Botón de Menú Hamburguesa + logo-->
+      <div class="nav-left">
+        <button id="btnOpenMenu" class="icon-btn">☰</button>
+        <div class="brand-logo">
+          <a href="index.html" class="logo-link">
+            <span class="logo-text">
+              <span class="logo-mm">M&M</span>
+              <span class="logo-arcade">ARCADE</span>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Barra de Búsqueda -->
+      <div class="nav-center">
+        <div class="search-box">
+          <!-- ÍCONO LUPA SVG/PNG -->
+          <img src="img/search-icon.png" alt="Buscar" class="search-icon-img">
+          <input type="text" placeholder="Buscar juegos..." class="search-input">
+        </div>
+      </div>
+
+      <!-- Botón Perfil de Usuario con Avatar -->
+      <div class="nav-right">
+        <button id="btnOpenUserMenu" class="user-avatar-btn">
+        <img src="img/avatar-usuario.png" alt="Perfil de usuario" class="user-avatar-img">
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- =========================================================
+       Menú Desplegable Lateral (Navegación Principal)
+       ========================================================= -->
+
+<aside id="sideMenu" class="side-menu">
+  <div class="side-menu-header">
+    <div class="side-menu-brand">
+      <!-- Logo o Icono del juego en el menú -->
+      <img src="Assets/LogoChico.jpeg" alt="M&M Games" class="mini-logo-img">
+      <span class="side-menu-title">Games</span>
+    </div>
+    <button id="btnCloseMenu" class="close-btn" aria-label="Cerrar menú">✕</button>
+  </div>
+
+  <nav class="side-menu-nav">
+    <ul>
+      <li><a href="#"><img src="img/icons/inicio.png" alt="Inicio" class="menu-icon-img">Inicio</a></li>
+      <li><a href="#"><img src="img/icons/recientes.png" alt="Recientes" class="menu-icon-img">Recientes</a></li>
+      <li><a href="#"><img src="img/icons/nuevos.png" alt="Nuevos" class="menu-icon-img">Nuevos</a></li>
+      <li><a href="#"><img src="img/icons/demoda.png" alt="De moda" class="menu-icon-img">De moda</a></li>
+      <li><a href="#"><img src="img/icons/actualizados.png" alt="Actualizados" class="menu-icon-img">Actualizados</a></li>
+      <li><a href="#"><img src="img/icons/multijugador.png" alt="Multijugador" class="menu-icon-img">Multijugador</a></li>
+      <li><a href="#"><img src="img/icons/originales.png" alt="Originales" class="menu-icon-img">Originales</a></li>
+      <li><a href="#"><img src="img/icons/pagos.png" alt="Pagos" class="menu-icon-img">Pagos</a></li>
+    </ul>
+
+    <hr class="menu-divider">
+
+    <ul class="categories-list">
+      <li><a href="#">Aventura</a></li>
+      <li><a href="#">Disparos</a></li>
+      <li><a href="#">Autos</a></li>
+      <li><a href="#">Juegos de rol</a></li>
+      <li><a href="#">Moda</a></li>
+      <li><a href="#">Cartas</a></li>
+      <li><a href="#">Click</a></li>
+      <li><a href="#">Cartas</a></li>
+    </ul>
+  </nav>
+</aside>
+
+
+  <!-- =========================================================
+       Menú Desplegable del Perfil de Usuario (Derecha)
+       ========================================================= -->
+
+       <div id="userMenu" class="user-popover">
+        <div class="user-popover-arrow"></div>
+        <div class="user-popover-header">
+          <div class="user-avatar-circle">
+            <img src="img/avatar-usuario.png" alt="Avatar" class="user-avatar-img">
+          </div>
+          <span class="user-name">Nombre del usuario</span>
+          <button id="btnCloseUserMenu" class="close-btn-sm" aria-label="Cerrar menú usuario">✕</button>
+        </div>
+      
+        <ul class="user-menu-list">
+          <li><a href="#"><img src="img/icons/perfil.png" alt="Mi Perfil" class="menu-icon-img">Mi Perfil</a></li>
+          <li><a href="#"><img src="img/icons/favoritos.png" alt="Favoritos" class="menu-icon-img">Favoritos</a></li>
+          <li><a href="#"><img src="img/icons/compras.png" alt="Mis Compras" class="menu-icon-img">Mis Compras</a></li>
+          <li><a href="#"><img src="img/icons/configuracion.png" alt="Configuración" class="menu-icon-img">Configuración</a></li>
+          <li><a href="#"><img src="img/icons/carrito.png" alt="Carrito" class="menu-icon-img">Carrito</a></li>
+          <li><a href="#"><img src="img/icons/darkmode.png" alt="Dark Mode" class="menu-icon-img">Dark Mode</a></li>
+          <li><a href="#"><img src="img/icons/soporte.png" alt="Ayuda Soporte" class="menu-icon-img">Ayuda Soporte</a></li>
+          <li><a href="login.html"><img src="img/icons/cerrarsesion.png" alt="Cerrar Sesión" class="menu-icon-img">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+
+  <!-- Capa oscura para cerrar menús al tocar afuera -->
+  <div id="backdropOverlay" class="backdrop-overlay"></div>
+
+
+  <!-- =========================================================
+       Contenido Principal de la Página (Home)
+       ========================================================= -->
+
+  <main class="main-content">
+
+    <!-- Carrusel Principal (Tarjetas Verticales Destacadas) -->
+    <section class="hero-carousel-section">
+      <div class="carousel-wrapper">
+        <button class="carousel-arrow left-arrow" id="heroLeftArrow">&#8249;</button>
+    
+        <div class="hero-cards-container" id="heroCardsContainer">
+          <!-- Tarjeta 1 (Izquierda) -->
+          <article class="hero-card pos-left">
+            <img src="Assets/Hero.jpeg" alt="Juego Destacado 1" class="card-img">
+          </article>
+    
+          <!-- Tarjeta 2 (Centro) -->
+          <article class="hero-card pos-center">
+            <img src="Assets/Hero.jpeg" alt="Juego Destacado 1" class="card-img">
+          </article>
+    
+          <!-- Tarjeta 3 (Derecha) -->
+          <article class="hero-card pos-right">
+            <img src="Assets/Hero.jpeg" alt="Juego Destacado 1" class="card-img">
+          </article>
+        </div>
+    
+        <button class="carousel-arrow right-arrow" id="heroRightArrow">&#8250;</button>
+      </div>
+    
+      <div class="play-btn-container">
+        <a href="juego.html">
+          <button class="btn-primary-play btn-hover-1">A Jugar!</button>
+        </a>
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         Categorías de Juegos (Carruseles Horizontales)
+         ========================================================= -->
+
+    <!-- Categoría 1: Aventura -->
+    <section class="category-block">
+      <h2 class="category-title">Aventura</h2>
+      <div class="carousel-wrapper">
+        <button class="carousel-arrow left-arrow btn-hover-2" id="heroLeftArrow">&#8249;</button>
+
+        <div class="category-cards-container">
+          <article class="game-card">
+            <img src="Assets/The Legend of Zelda.avif" alt="The Legend of Zelda: Breath of the Wild" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">The Legend of Zelda: Breath of the Wild</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/uncharted.jpeg" alt="Uncharted 4: A Thief's End" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Uncharted 4: A Thief's End</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/Tomb Raider.jpeg" alt="Tomb Raider" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Tomb Raider</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Red Dead Redemption 2.webp" alt="Red Dead Redemption 2" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Red Dead Redemption 2</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Assassin's Creed.webp" alt="Assassin's Creed IV: Black Flag" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Assassin's Creed IV: Black Flag</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/The Last of Us.jpeg" alt="The Last of Us" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">The Last of Us</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/God of War.webp" alt="God of War" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">God of War</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Indiana Jones.webp" alt="Indiana Jones and the Great Circle" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Indiana Jones and the Great Circle</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/Life is Strange.jpeg" alt="Life is Strange" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Life is Strange</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Ghost of Tsushima.webp" alt="Ghost of Tsushima" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Ghost of Tsushima</span>
+          </article>
+        </div>
+
+        <button class="carousel-arrow right-arrow btn-hover-2" id="heroRightArrow">&#8250;</button>
+      </div>
+    </section>
+
+    <!-- Categoría 2: Disparos -->
+    <section class="category-block">
+      <h2 class="category-title">Disparos</h2>
+      <div class="carousel-wrapper">
+        <button class="carousel-arrow left-arrow btn-hover-2" id="heroLeftArrow">&#8249;</button>
+
+        <div class="category-cards-container">
+          <article class="game-card">
+            <img src="Assets/Counter-Strike 2.webp" alt="Counter-Strike 2" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Counter-Strike 2</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Call of Duty.webp" alt="Call of Duty" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Call of Duty</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/Battlefield 1.webp" alt="Battlefield 1" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Battlefield 1</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/DOOM Eternal.webp" alt="DOOM Eternal" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">DOOM Eternal</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Valorant.webp" alt="Valorant" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Valorant</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/Overwatch.jpeg" alt="Overwatch" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Overwatch</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/Apex Legends.webp" alt="Apex Legends" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Apex Legends</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Halo Infinite.webp" alt="Halo Infinite" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Halo Infinite</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/Far Cry 6.jpeg" alt="Far Cry 6" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Far Cry 6</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Titanfall 2.webp" alt="Titanfall 2" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Titanfall 2</span>
+          </article>
+        </div>
+
+        <button class="carousel-arrow right-arrow btn-hover-2" id="heroRightArrow">&#8250;</button>
+      </div>
+    </section>
+
+    <!-- Categoría 3: Autos -->
+    <section class="category-block">
+      <h2 class="category-title">Autos</h2>
+      <div class="carousel-wrapper">
+        <button class="carousel-arrow left-arrow btn-hover-2" id="heroLeftArrow">&#8249;</button>
+
+        <div class="category-cards-container">
+          <article class="game-card">
+            <img src="Assets/Forza Horizon.webp" alt="Forza Horizon" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Forza Horizon</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Gran Turismo.webp" alt="Gran Turismo" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Gran Turismo</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/Need for Speed Heat.webp" alt="Need for Speed Heat" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Need for Speed Heat</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Burnout Paradise Remastered.jpeg" alt="Burnout Paradise Remastered" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Burnout Paradise Remastered</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Need for Speed Most Wanted.webp" alt="Need for Speed Most Wanted" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Need for Speed Most Wanted</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/The Crew Motorfest.jpeg" alt="The Crew Motorfest" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">The Crew Motorfest</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/F1 25.jpeg" alt="F1 25" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">F1 25</span>
+          </article>>
+
+          <article class="game-card">
+            <img src="Assets/Dirt Rally.jpeg" alt="Dirt Rally" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Dirt Rally</span>
+          </article>
+
+        <button class="carousel-arrow right-arrow btn-hover-2" id="heroRightArrow">&#8250;</button>
+      </div>
+    </section>
+
+    <!-- Categoría 4: Juegos de rol -->
+    <section class="category-block">
+      <h2 class="category-title">Juegos de rol</h2>
+      <div class="carousel-wrapper">
+        <button class="carousel-arrow left-arrow btn-hover-2" id="heroLeftArrow">&#8249;</button>
+
+        
+        <div class="category-cards-container">
+          <article class="game-card">
+            <img src="Assets/the_witcher_3_wild_hunt.jpeg" alt="The Witcher 3: Wild Hunt" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">The Witcher 3: Wild Hunt</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Elden Ring.jpeg" alt="Elden Ring" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Elden Ring</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/Skyrim.jpeg" alt="Skyrim" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Skyrim</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Fallout 4.jpeg" alt="Fallout 4" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Fallout 4</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Cyberpunk 2077.jpeg" alt="Cyberpunk 2077" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Cyberpunk 2077</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/Final Fantasy VII Rebirth.jpeg" alt="Final Fantasy VII Rebirth" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Final Fantasy VII Rebirth</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/Persona 5 Royal.jpeg" alt="Persona 5 Royal" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Persona 5 Royal</span>
+          </article>
+
+          <article class="game-card">
+            <img src="Assets/dragon-age-the-veilguard.jpeg" alt="Dragon Age: The Veilguard" class="card-img">
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Dragon Age: The Veilguard</span>
+          </article>
+
+          <article class="game-card is-paid">
+            <img src="Assets/Mario Kart 8 Deluxe.jpeg" alt="Mario Kart 8 Deluxe" class="card-img">
+            <span class="badge-pago">Pago</span>
+            <div class="card-gradient-overlay"></div>
+            <span class="game-title">Mario Kart 8 Deluxe</span>
+          </article>
+        </div>
+
+        <button class="carousel-arrow right-arrow btn-hover-2" id="heroRightArrow">&#8250;</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       Pie de Página Extendido (Fat Footer)
+       ========================================================= -->
+       
+       <footer class="fat-footer">
+        <div class="footer-container">
+          
+        <!-- Logo del Footer -->
+        <div class="footer-brand-col">
+          <div class="footer-logo-placeholder">
+            <img src="Assets/LogoGrande.jpeg" alt="M&M Arcade Logo" class="footer-logo-img">
+          </div>
+        </div>
+      
+          <!-- Grilla de Enlaces (3 Columnas Verticales Altas) -->
+          <div class="footer-links-grid">
+            
+            <!-- Columna 1 -->
+            <div class="footer-col">
+              <h4>Navegación</h4>
+              <a href="#">Home</a>
+              <a href="#">Nuevos</a>
+              <a href="#">Pagos</a>
+              
+              <h4 style="margin-top: 20px;">Contacto</h4>
+              <a href="#">Dejanos tu comentario</a>
+              <a href="#">Nuestras redes</a>
+            </div>
+      
+            <!-- Columna 2 -->
+            <div class="footer-col">
+              <h4>Soporte</h4>
+              <a href="#">Preguntas frecuentes</a>
+              <a href="#">Términos y condiciones</a>
+              
+              <h4 style="margin-top: 20px;">Comunidad</h4>
+              <a href="#">Novedades del sitio</a>
+              <a href="#">Eventos</a>
+              <a href="#">Reseñas de comentarios</a>
+            </div>
+      
+            <!-- Columna 3 -->
+            <div class="footer-col">
+              <h4>Tienda & Cuenta</h4>
+              <a href="#">Ofertas</a>
+              <a href="#">Gift cards</a>
+              <a href="#">Juegos gratis</a>
+              <a href="#">Iniciar sesión</a>
+              <a href="#">Configuración</a>
+              <a href="#">Favoritos</a>
+              <a href="#">Historial de compra</a>
+            </div>
+      
+          </div>
+      
+        </div>
+      
+        <div class="footer-bottom">
+          <p>© Powered and secured by M&Marcade</p>
+        </div>
+      </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
