@@ -8,115 +8,118 @@
 </head>
 <body>
 
-  <!-- =========================================================
-       Navegación Superior (Navbar)
-       ========================================================= -->
-       <header class="navbar">
-        <div class="navbar-container">
-          
-          <!-- Botón de Menú Hamburguesa + logo-->
-          <div class="nav-left">
-            <button id="btnOpenMenu" class="icon-btn">☰</button>
-            <div class="brand-logo">
-              <a href="index.html" class="logo-link">
-                <span class="logo-text">
-                  <span class="logo-mm">M&M</span>
-                  <span class="logo-arcade">ARCADE</span>
-                </span>
-              </a>
-            </div>
-          </div>
+</div>
+<!-- =========================================================
+     Navegación Superior (Navbar)
+     ========================================================= -->
+<header class="navbar">
+  <div class="navbar-container">
     
-          <!-- Barra de Búsqueda -->
-          <div class="nav-center">
-            <div class="search-box">
-              <!-- ÍCONO LUPA SVG/PNG -->
-              <img src="img/search-icon.png" alt="Buscar" class="search-icon-img">
-              <input type="text" placeholder="Buscar juegos..." class="search-input">
-            </div>
-          </div>
-    
-          <!-- Botón Perfil de Usuario con Avatar -->
-          <div class="nav-right">
-            <button id="btnOpenUserMenu" class="user-avatar-btn">
-            <img src="img/avatar-usuario.png" alt="Perfil de usuario" class="user-avatar-img">
-            </button>
-          </div>
-    
+    <!-- Botón de Menú Hamburguesa + logo-->
+    <div class="nav-left">
+      <button id="btnOpenMenu" class="icon-btn" aria-label="Abrir menú">
+        <img src="Assets/Iconos/Menu.png" alt="Menú" class="hamburger-icon-img">
+      </button>
+      <div class="brand-logo">
+        <a href="index.html" class="logo-link">
+          <span class="logo-text">
+            <span class="logo-mm">M&M</span>
+            <span class="logo-arcade">ARCADE</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Barra de Búsqueda -->
+    <div class="nav-center">
+      <div class="search-box">
+        <!-- ÍCONO LUPA SVG/PNG -->
+        <img src="Assets/Iconos/Search.png" alt="Buscar" class="search-icon-img">
+        <input type="text" placeholder="Buscar juegos..." class="search-input">
+      </div>
+    </div>
+
+    <!-- Botón Perfil de Usuario con Avatar -->
+    <div class="nav-right">
+      <button id="btnOpenUserMenu" class="user-avatar-btn">
+      <img src="Assets/Iconos/Avatar.png" alt="Perfil de usuario" class="user-avatar-img">
+      </button>
+    </div>
+
+  </div>
+</header>
+
+
+<!-- =========================================================
+     Menú Desplegable Lateral (Navegación Principal)
+     ========================================================= -->
+
+<aside id="sideMenu" class="side-menu">
+<div class="side-menu-header">
+  <div class="side-menu-brand">
+    <!-- Logo o Icono del juego en el menú -->
+    <img src="Assets/LogoChico.jpeg" alt="M&M Games" class="mini-logo-img">
+    <span class="side-menu-title">Games</span>
+  </div>
+  <button id="btnCloseMenu" class="close-btn" aria-label="Cerrar menú">✕</button>
+</div>
+
+<nav class="side-menu-nav">
+  <ul>
+    <li><a href="#"><img src="Assets/Iconos/home.png" alt="Inicio" class="menu-icon-img">Inicio</a></li>
+    <li><a href="#"><img src="Assets/Iconos/recientes.png" alt="Recientes" class="menu-icon-img">Recientes</a></li>
+    <li><a href="#"><img src="Assets/Iconos/nuevos.png" alt="Nuevos" class="menu-icon-img">Nuevos</a></li>
+    <li><a href="#"><img src="Assets/Iconos/moda.png" alt="De moda" class="menu-icon-img">De moda</a></li>
+    <li><a href="#"><img src="Assets/Iconos/actualizados.png" alt="Actualizados" class="menu-icon-img">Actualizados</a></li>
+    <li><a href="#"><img src="Assets/Iconos/multijugador.png" alt="Multijugador" class="menu-icon-img">Multijugador</a></li>
+    <li><a href="#"><img src="Assets/Iconos/original.png" alt="Originales" class="menu-icon-img">Originales</a></li>
+    <li><a href="#"><img src="Assets/Iconos/pagos.png" alt="Pagos" class="menu-icon-img">Pagos</a></li>
+  </ul>
+
+  <hr class="menu-divider">
+
+  <ul class="categories-list">
+    <li><a href="#">Aventura</a></li>
+    <li><a href="#">Disparos</a></li>
+    <li><a href="#">Autos</a></li>
+    <li><a href="#">Juegos de rol</a></li>
+    <li><a href="#">Moda</a></li>
+    <li><a href="#">Cartas</a></li>
+    <li><a href="#">Click</a></li>
+    <li><a href="#">Cartas</a></li>
+  </ul>
+</nav>
+</aside>
+
+
+<!-- =========================================================
+     Menú Desplegable del Perfil de Usuario (Derecha)
+     ========================================================= -->
+
+     <div id="userMenu" class="user-popover">
+      <div class="user-popover-arrow"></div>
+      <div class="user-popover-header">
+        <div class="user-avatar-circle">
+          <img src="Assets/Iconos/Avatar.png" alt="Avatar" class="user-avatar-img">
         </div>
-      </header>
-    
-    
-      <!-- =========================================================
-           Menú Desplegable Lateral (Navegación Principal)
-           ========================================================= -->
-    
-    <aside id="sideMenu" class="side-menu">
-      <div class="side-menu-header">
-        <div class="side-menu-brand">
-          <!-- Logo o Icono del juego en el menú -->
-          <img src="Assets/LogoChico.jpeg" alt="M&M Games" class="mini-logo-img">
-          <span class="side-menu-title">Games</span>
-        </div>
-        <button id="btnCloseMenu" class="close-btn" aria-label="Cerrar menú">✕</button>
+        <span class="user-name">Nombre del usuario</span>
+        <button id="btnCloseUserMenu" class="close-btn-sm" aria-label="Cerrar menú usuario">✕</button>
       </div>
     
-      <nav class="side-menu-nav">
-        <ul>
-          <li><a href="#"><img src="img/icons/inicio.png" alt="Inicio" class="menu-icon-img">Inicio</a></li>
-          <li><a href="#"><img src="img/icons/recientes.png" alt="Recientes" class="menu-icon-img">Recientes</a></li>
-          <li><a href="#"><img src="img/icons/nuevos.png" alt="Nuevos" class="menu-icon-img">Nuevos</a></li>
-          <li><a href="#"><img src="img/icons/demoda.png" alt="De moda" class="menu-icon-img">De moda</a></li>
-          <li><a href="#"><img src="img/icons/actualizados.png" alt="Actualizados" class="menu-icon-img">Actualizados</a></li>
-          <li><a href="#"><img src="img/icons/multijugador.png" alt="Multijugador" class="menu-icon-img">Multijugador</a></li>
-          <li><a href="#"><img src="img/icons/originales.png" alt="Originales" class="menu-icon-img">Originales</a></li>
-          <li><a href="#"><img src="img/icons/pagos.png" alt="Pagos" class="menu-icon-img">Pagos</a></li>
-        </ul>
+      <ul class="user-menu-list">
+        <li><a href="#"><img src="Assets/Iconos/perfil.png" alt="Mi Perfil" class="menu-icon-img">Mi Perfil</a></li>
+        <li><a href="#"><img src="Assets/Iconos/favorito.png" alt="Favoritos" class="menu-icon-img">Favoritos</a></li>
+        <li><a href="#"><img src="Assets/Iconos/compras.png" alt="Mis Compras" class="menu-icon-img">Mis Compras</a></li>
+        <li><a href="#"><img src="Assets/Iconos/config.png" alt="Configuración" class="menu-icon-img">Configuración</a></li>
+        <li><a href="#"><img src="Assets/Iconos/carrito.png" alt="Carrito" class="menu-icon-img">Carrito</a></li>
+        <li><a href="#"><img src="Assets/Iconos/dark.png" alt="Dark Mode" class="menu-icon-img">Dark Mode</a></li>
+        <li><a href="#"><img src="Assets/Iconos/soporte.png" alt="Ayuda Soporte" class="menu-icon-img">Ayuda Soporte</a></li>
+        <li><a href="login.html"><img src="Assets/Iconos/logout.png" alt="Cerrar Sesión" class="menu-icon-img">Cerrar Sesión</a></li>
+      </ul>
+    </div>
 
-        <hr class="menu-divider">
-    
-        <ul class="categories-list">
-          <li><a href="#">Aventura</a></li>
-          <li><a href="#">Disparos</a></li>
-          <li><a href="#">Autos</a></li>
-          <li><a href="#">Juegos de rol</a></li>
-          <li><a href="#">Moda</a></li>
-          <li><a href="#">Cartas</a></li>
-          <li><a href="#">Click</a></li>
-          <li><a href="#">Cartas</a></li>
-        </ul>
-      </nav>
-    </aside>
-    
-    
-      <!-- =========================================================
-           Menú Desplegable del Perfil de Usuario (Derecha)
-           ========================================================= -->
-    
-           <div id="userMenu" class="user-popover">
-            <div class="user-popover-arrow"></div>
-            <div class="user-popover-header">
-              <div class="user-avatar-circle">
-                <img src="img/avatar-usuario.png" alt="Avatar" class="user-avatar-img">
-              </div>
-              <span class="user-name">Nombre del usuario</span>
-              <button id="btnCloseUserMenu" class="close-btn-sm" aria-label="Cerrar menú usuario">✕</button>
-            </div>
-          
-            <ul class="user-menu-list">
-              <li><a href="#"><img src="img/icons/perfil.png" alt="Mi Perfil" class="menu-icon-img">Mi Perfil</a></li>
-              <li><a href="#"><img src="img/icons/favoritos.png" alt="Favoritos" class="menu-icon-img">Favoritos</a></li>
-              <li><a href="#"><img src="img/icons/compras.png" alt="Mis Compras" class="menu-icon-img">Mis Compras</a></li>
-              <li><a href="#"><img src="img/icons/configuracion.png" alt="Configuración" class="menu-icon-img">Configuración</a></li>
-              <li><a href="#"><img src="img/icons/carrito.png" alt="Carrito" class="menu-icon-img">Carrito</a></li>
-              <li><a href="#"><img src="img/icons/darkmode.png" alt="Dark Mode" class="menu-icon-img">Dark Mode</a></li>
-              <li><a href="#"><img src="img/icons/soporte.png" alt="Ayuda Soporte" class="menu-icon-img">Ayuda Soporte</a></li>
-              <li><a href="login.html"><img src="img/icons/cerrarsesion.png" alt="Cerrar Sesión" class="menu-icon-img">Cerrar Sesión</a></li>
-            </ul>
-          </div>
-    
-      <!-- Capa oscura para cerrar menús al tocar afuera -->
-      <div id="backdropOverlay" class="backdrop-overlay"></div>
+<!-- Capa oscura para cerrar menús al tocar afuera -->
+<div id="backdropOverlay" class="backdrop-overlay"></div>
 
   <!-- =========================================================
        Contenido Principal — Página de detalle del juego
