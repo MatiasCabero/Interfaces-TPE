@@ -1,0 +1,259 @@
+/* =========================================================
+   1) RESET BÁSICO
+   Quita los márgenes por defecto del navegador para que
+   el fondo ocupe toda la pantalla sin espacios raros.
+   ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  min-height: 100vh;
+  /* Fondo azul muy oscuro/marino detrás del collage de imágenes */
+  background-color: #0c0a3e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* Clase de utilidad para textos que solo deben existir
+   para lectores de pantalla (no se ven, pero dan contexto). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================
+   2) FONDO CON "CARRUSEL" DE IMÁGENES DIFUMINADAS
+   Como no tenemos las capturas reales de los juegos, arma-
+   mos un mosaico de bloques de color con blur, tal como se
+   ve en la imagen de referencia. Podés reemplazar cada
+   .tile por <img> reales y dejar el mismo efecto de blur.
+   ========================================================= */
+
+/* Contenedor fijo que recorta (overflow: hidden) el
+   movimiento de la grilla para que no se vea el "salto". */
+.background-wrapper {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* La grilla mide el DOBLE de ancho: son las mismas 30 imágenes
+   (5 columnas x 6 filas) repetidas al lado, fila por fila
+   (10 columnas x 6 filas en total). Como la segunda mitad
+   es idéntica a la primera, al animar de 0% a -50% el ojo
+   no nota dónde "empieza de nuevo" el loop. */
+.background-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 4px;
+  width: 200%;
+  height: 100%;
+  animation: scrollBackground 40s linear infinite;
+}
+
+@keyframes scrollBackground {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Si el usuario tiene activada la preferencia de "reducir
+   movimiento" en su sistema operativo, dejamos el fondo quieto. */
+@media (prefers-reduced-motion: reduce) {
+  .background-grid {
+    animation: none;
+  }
+}
+
+.tile {
+  background-size: cover;
+  background-position: center;
+  filter: blur(3px) brightness(0.9);
+}
+
+/* Paleta de colores que simula capturas de distintos juegos.
+   El patrón se repite cada 5 elementos (:nth-child(5n+1..5)),
+   por eso se ve prolijo aunque la grilla tenga 10 columnas. */
+.tile:nth-child(5n+1) { background-color: #4a4a6a; }
+.tile:nth-child(5n+2) { background-color: #7c9db3; }
+.tile:nth-child(5n+3) { background-color: #b8a97a; }
+.tile:nth-child(5n+4) { background-color: #6b7fa3; }
+.tile:nth-child(5n+5) { background-color: #8a9a6b; }
+
+/* Capa oscura semitransparente arriba del collage,
+   para que la tarjeta de login resalte mejor. */
+.background-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(12, 10, 62, 0.35);
+  z-index: 1;
+}
+
+/* =========================================================
+   3) TARJETA PRINCIPAL DEL LOGIN
+   ========================================================= */
+.login-card {
+  position: relative;
+  z-index: 2; /* por encima del fondo animado y su overlay */
+  width: 100%;
+  max-width: 340px;
+  background-color: #14123f;      /* azul marino muy oscuro */
+  border-radius: 16px;
+  padding: 32px 28px;
+  color: #ffffff;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.login-title {
+  text-align: center;
+  font-family: 'Courier New', monospace; /* look "pixel/retro" como en el sitio */
+  letter-spacing: 2px;
+  font-size: 1.4rem;
+  margin-bottom: 24px;
+}
+
+/* =========================================================
+   4) BOTONES DE LOGIN SOCIAL (Google / Facebook / Apple)
+   ========================================================= */
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 20px;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.social-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Tamaño fijo para los logos SVG de Google/Facebook/Apple */
+.social-btn .icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   5) SEPARADOR ENTRE LOGIN SOCIAL Y FORMULARIO TRADICIONAL
+   Ahora es un <hr> real (elemento semántico de "cambio de
+   tema"), al que le agregamos un punto en el medio con
+   pseudo-elementos y overflow visible.
+   ========================================================= */
+.divider {
+  position: relative;
+  border: none;               /* sacamos el estilo por defecto del <hr> */
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.25);
+  margin: 22px 0;
+  overflow: visible;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background-color: #14123f; /* mismo color de la tarjeta, para "tapar" la línea detrás */
+}
+
+/* =========================================================
+   6) FORMULARIO: usuario/email y contraseña
+   ========================================================= */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: #e8e8f5;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+.form-group input:focus {
+  outline: 3px solid #7c6ff2; /* accesibilidad: foco visible al navegar con teclado */
+  outline-offset: 1px;
+}
+
+/* =========================================================
+   7) BOTÓN PRINCIPAL "Iniciar sesión"
+   ========================================================= */
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 20px;
+  background-color: #6c5ce7;   /* violeta/púrpura */
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-submit:hover {
+  background-color: #5b4bd6;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   8) PIE DE LA TARJETA: link a registro
+   ========================================================= */
+.signup-text {
+  text-align: center;
+  font-size: 0.78rem;
+  color: #cfcfe8;
+  margin-top: 18px;
+}
+
+.signup-text a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: underline;
+}
