@@ -1,0 +1,331 @@
+/* =========================================================
+   1) RESET BÁSICO
+   Quita los márgenes por defecto del navegador para que
+   el fondo ocupe toda la pantalla sin espacios raros.
+   ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  min-height: 100vh;
+  /* Fondo azul muy oscuro/marino detrás del collage de imágenes */
+  background-color: #0c0a3e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* Clase de utilidad para textos que solo deben existir
+   para lectores de pantalla (no se ven, pero dan contexto). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================
+   2) FONDO CON "CARRUSEL" DE IMÁGENES DIFUMINADAS
+   Como no tenemos las capturas reales de los juegos, arma-
+   mos un mosaico de bloques de color con blur, tal como se
+   ve en la imagen de referencia. Podés reemplazar cada
+   .tile por <img> reales y dejar el mismo efecto de blur.
+   ========================================================= */
+
+/* Contenedor fijo que recorta (overflow: hidden) el
+   movimiento de las filas para que no se vea el "salto".
+   Ahora apila 6 filas independientes en columna. */
+.background-wrapper {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Cada fila (.bg-row) es su propio mini-carrusel: mide el DOBLE
+   de ancho (son las mismas 5 imágenes repetidas al lado, 10 en
+   total) y se anima igual que antes, de 0% a -50%. Como la
+   segunda mitad es idéntica a la primera, el loop no se nota. */
+.bg-row {
+  display: flex;
+  flex: 1;
+  gap: 4px;
+  width: 200%;
+  animation: scrollBackground 40s linear infinite;
+}
+
+/* Filas alternadas (2ª, 4ª, 6ª...) reproducen la MISMA animación
+   pero "al revés" (animation-direction: reverse), lo que hace que
+   se vean moviéndose para el otro lado sin necesitar un segundo
+   @keyframes. Resultado: fila 1 → izquierda, fila 2 → derecha,
+   fila 3 → izquierda, y así alternando. */
+.bg-row:nth-child(even) {
+  animation-direction: reverse;
+}
+
+@keyframes scrollBackground {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Si el usuario tiene activada la preferencia de "reducir
+   movimiento" en su sistema operativo, dejamos el fondo quieto. */
+@media (prefers-reduced-motion: reduce) {
+  .bg-row {
+    animation: none;
+  }
+}
+
+.tile {
+  flex: 1 0 10%; /* 10 tiles por fila (5 reales + 5 duplicados) */
+  background-size: cover;
+  background-position: center;
+  filter: blur(3px) brightness(0.9);
+}
+
+/* Paleta de colores que simula capturas de distintos juegos.
+   El patrón se repite cada 5 elementos (:nth-child(5n+1..5))
+   DENTRO de cada fila, por eso se ve prolijo. */
+.tile:nth-child(5n+1) { background-color: #4a4a6a; }
+.tile:nth-child(5n+2) { background-color: #7c9db3; }
+.tile:nth-child(5n+3) { background-color: #b8a97a; }
+.tile:nth-child(5n+4) { background-color: #6b7fa3; }
+.tile:nth-child(5n+5) { background-color: #8a9a6b; }
+
+/* Capa oscura semitransparente arriba del collage,
+   para que la tarjeta de login resalte mejor. */
+.background-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(12, 10, 62, 0.35);
+  z-index: 1;
+}
+
+/* =========================================================
+   3) TARJETA PRINCIPAL DEL LOGIN
+   ========================================================= */
+.login-card {
+  position: relative;
+  z-index: 2; /* por encima del fondo animado y su overlay */
+  width: 100%;
+  max-width: 340px;
+  background-color: #14123f;      /* azul marino muy oscuro */
+  border-radius: 16px;
+  padding: 32px 28px;
+  color: #ffffff;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  /* Para que el botón, al deslizarse hacia la izquierda en el login
+     exitoso, se "esconda" detrás del borde redondeado en vez de
+     desbordar visiblemente fuera de la tarjeta. */
+  overflow: hidden;
+}
+
+.login-title {
+  text-align: center;
+  /* Fuente pixelada con un trazo intermedio (ni tan fina como VT323
+     ni tan gruesa como Press Start 2P), cargada desde Google Fonts
+     en el <head>. Si no llega a cargar, cae en un monospace normal. */
+  font-family: 'Pixelify Sans', 'Courier New', monospace;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-size: 1.7rem;
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+
+/* =========================================================
+   4) BOTONES DE LOGIN SOCIAL (Google / Facebook / Apple)
+   ========================================================= */
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  /* flex-start (en vez de center) hace que el ícono siempre arranque
+     en el mismo punto, sin importar si el texto es "Google", "Facebook"
+     o "Apple". Con "center" cada botón centraba ícono+texto como grupo,
+     y por eso los tres logos quedaban en posiciones distintas. */
+  justify-content: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 20px;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.social-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Tamaño fijo para los logos SVG de Google/Facebook/Apple */
+.social-btn .icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   5) SEPARADOR ENTRE LOGIN SOCIAL Y FORMULARIO TRADICIONAL
+   Ahora es un <hr> real (elemento semántico de "cambio de
+   tema"), al que le agregamos un punto en el medio con
+   pseudo-elementos y overflow visible.
+   ========================================================= */
+.divider {
+  position: relative;
+  border: none;               /* sacamos el estilo por defecto del <hr> */
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.25);
+  margin: 22px 0;
+  overflow: visible;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background-color: #14123f; /* mismo color de la tarjeta, para "tapar" la línea detrás */
+}
+
+/* =========================================================
+   6) FORMULARIO: usuario/email y contraseña
+   ========================================================= */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: #e8e8f5;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+.form-group input:focus {
+  outline: 3px solid #7c6ff2; /* accesibilidad: foco visible al navegar con teclado */
+  outline-offset: 1px;
+}
+
+/* =========================================================
+   7) BOTÓN PRINCIPAL "Iniciar sesión"
+   Mismo verde vibrante que usa el botón "Publicar" del resto
+   del sitio (variables --primary-green / --primary-green-hover
+   del styles.css de M&M Arcade), para que quede consistente.
+   ========================================================= */
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  margin-top: 32px; /* antes 8px: lo bajamos un poco más de los inputs */
+  border: none;
+  border-radius: 20px;
+  background-color: #7bb31c;   /* verde vibrante (igual que "Publicar") */
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-submit:hover {
+  background-color: #93d424;   /* verde hover, igual que "Publicar" */
+  transform: translateY(-1px);
+}
+
+.btn-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* =========================================================
+   7.1) ANIMACIÓN DE ÉXITO AL INICIAR SESIÓN
+   Combina rotate + scale + skew en una sola secuencia. Se
+   dispara agregando la clase .btn-submit--success por JS
+   cuando el "login" se resuelve bien (ver el <script> del
+   HTML), y se saca sola al terminar (animationend).
+   ========================================================= */
+.btn-submit--success {
+  /* "forwards" mantiene el estado final (fuera de vista) hasta que
+     se dispare la redirección a index.html, sin que el botón
+     "vuelva" a aparecer un instante antes de cambiar de página. */
+  animation: loginSuccessSlide 0.5s ease-in forwards;
+}
+
+/* El botón se desliza hacia la izquierda y se desvanece, como si
+   se corriera para "dejar pasar" al usuario. */
+@keyframes loginSuccessSlide {
+  0%   { transform: translateX(0);      opacity: 1; }
+  100% { transform: translateX(-130%);  opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-submit--success {
+    animation: none;
+  }
+}
+
+/* Mensaje de estado ("Sesión iniciada correctamente"). Es visible
+   Y además tiene role="status" + aria-live en el HTML, así que
+   los lectores de pantalla lo anuncian solos, sin que el usuario
+   tenga que ir a buscarlo (ver punto 3 de la consigna). */
+.login-status {
+  text-align: center;
+  color: #93d424;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 10px;
+  min-height: 1em; /* reserva el espacio para que no "salte" el layout */
+}
+
+/* =========================================================
+   8) PIE DE LA TARJETA: link a registro
+   ========================================================= */
+.signup-text {
+  text-align: center;
+  font-size: 0.78rem;
+  color: #cfcfe8;
+  margin-top: 18px;
+}
+
+.signup-text a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: underline;
+}
