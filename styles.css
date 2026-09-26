@@ -775,14 +775,14 @@
   
   /* Sección inferior: Redes + Galería + Video */
   .game-bottom-section {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
   
   .game-share-row {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 18px;
+    margin-bottom: 12px; /* Reducido para pegar la galería a las redes */
   }
   
   .game-share {
@@ -834,13 +834,14 @@
   
   .game-gallery-video-row {
     display: flex;
-    align-items: flex-end;
-    gap: 24px;
+    align-items: flex-start;
+    justify-content: space-between; /* <--- Esto manda el video bien a la derecha */
+    width: 100%;
   }
   
   .game-gallery {
-    flex: 1 1 auto;
-    min-width: 0;
+    flex: 0 0 auto;
+    margin-top: 24px; /* <--- Subí a 30px o 35px si lo querés más abajo todavía */
   }
   
   .game-thumbnails-block {
@@ -848,15 +849,17 @@
   }
   
   .game-thumbnails-title {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     margin-bottom: 10px;
+    margin-top: 0; /* Eliminamos cualquier margen superior residual */
   }
   
   .game-thumbnails {
     display: flex;
     gap: 12px;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding-top: 8px;     
+    padding-bottom: 8px;  
   }
   
   .game-thumbnails::-webkit-scrollbar {
@@ -864,20 +867,21 @@
   }
   
   .game-thumb {
-    width: 120px;
-    height: 74px;
-    min-width: 120px;
-    border-radius: 8px;
+    width: 160px;          
+    height: 98px;          
+    min-width: 160px;
+    border-radius: 10px;
     overflow: hidden;
     flex-shrink: 0;
     cursor: pointer;
     border: 2px solid transparent;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   .game-thumb:hover {
     border-color: #00ccff;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 204, 255, 0.3);
   }
   
   .game-thumb img {
@@ -889,7 +893,16 @@
   
   .game-video-block {
     flex-shrink: 0;
-    width: 320px;
+    width: 380px !important;
+    max-width: 380px !important;
+  }
+
+  .video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
   }
   
   .game-video-placeholder {
@@ -899,16 +912,11 @@
     aspect-ratio: 16 / 9;
     border-radius: 14px;
     background-color: var(--bg-card);
-    border: 1px dashed #3b3795;
+    padding: 0;
+    border: none;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 12px;
   }
 
   /* Imagen de portada del video: cubre todo el recuadro sin deformarse */
@@ -962,7 +970,7 @@
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 40px;
-    margin-top: 30px;
+    margin-top: 15px; 
     align-items: start;
   }
   
@@ -972,10 +980,10 @@
   }
   
   .game-description h3 {
-    font-size: 1rem;
+    font-size: 1.15rem; 
     color: #00ccff;
-    margin-top: 20px;
-    margin-bottom: 6px;
+    margin-top: 18px;
+    margin-bottom: 8px;
   }
   
   .game-description h3:first-child {
@@ -983,13 +991,13 @@
   }
   
   .game-description p {
-    font-size: 0.9rem;
+    font-size: 0.98rem; 
     color: var(--text-muted);
-    line-height: 1.5;
+    line-height: 1.6;
   }
   
   .game-comments {
-    margin-top: 36px;
+    margin-top: 28px;
   }
   
   .comment-item {
@@ -1004,8 +1012,9 @@
     height: 34px;
     min-width: 34px;
     border-radius: 50%;
-    background-color: #3b3795;
+    object-fit: cover;
     flex-shrink: 0;
+    border: 1px solid #00ccff;
   }
   
   .comment-body {
@@ -1061,17 +1070,34 @@
   
   .recommended-card {
     position: relative;
-    height: 84px;
-    border-radius: 10px;
+    height: 110px;               /* Altura óptima para no estirar las imágenes */
+    border-radius: 12px;
     overflow: hidden;
     background-color: var(--bg-card);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
   }
   
+  /* Centrado y escala perfecta de la imagen sin deformaciones */
   .recommended-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     display: block;
+  }
+
+  /* Hover de Recomendados idéntico al Home */
+  .recommended-card:hover {
+  border-color: #000000;
+  box-shadow: 0 0 0 1px #000000;
+  transform: translateY(-2px);
+  }
+
+  .recommended-card:hover .card-gradient-overlay,
+  .recommended-card:hover .game-title {
+    opacity: 1;
   }
   
   /* =========================================================
