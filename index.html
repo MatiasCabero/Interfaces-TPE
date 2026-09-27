@@ -171,8 +171,33 @@
     </section>
 
 
+
+
     <!-- =========================================================
-         Categorías de Juegos (Carruseles Horizontales)
+         NUEVA SECCIÓN: CATÁLOGO DINÁMICO API V2 / FALLBACK LOCAL
+         ========================================================= -->
+    <!-- INICIO DE EDICIÓN: SECCIÓN AGREGADA PARA RENDERIZAR JUEGOS DESDE LA API -->
+    <section class="category-block">
+      <h2 class="category-title">Catálogo Completo</h2>
+      <div class="carousel-wrapper">
+        <button class="carousel-arrow left-arrow btn-hover-2">&#8249;</button>
+
+        <!-- CONTENEDOR DONDE SCRIPT.JS INYECTA LAS TARJETAS DINÁMICAMENTE -->
+        <div class="category-cards-container" id="api-games-container">
+          <!-- SI LA API O EL FALLBACK CARGAN, AQUÍ SE GENERARÁN LAS TARJETAS -->
+        </div>
+
+        <button class="carousel-arrow right-arrow btn-hover-2">&#8250;</button>
+      </div>
+    </section>
+    <!-- FIN DE EDICIÓN: SECCIÓN AGREGADA PARA RENDERIZAR JUEGOS DESDE LA API -->
+
+
+
+
+
+    <!-- =========================================================
+         Categorías de Juegos (Carruseles Horizontales Hardcodeados)
          ========================================================= -->
 
     <!-- Categoría 1: Aventura -->
@@ -379,13 +404,14 @@
             <img src="Assets/F1 25.jpeg" alt="F1 25" class="card-img">
             <div class="card-gradient-overlay"></div>
             <span class="game-title">F1 25</span>
-          </article>>
+          </article>
 
           <article class="game-card">
             <img src="Assets/Dirt Rally.jpeg" alt="Dirt Rally" class="card-img">
             <div class="card-gradient-overlay"></div>
             <span class="game-title">Dirt Rally</span>
           </article>
+        </div>
 
         <button class="carousel-arrow right-arrow btn-hover-2" id="heroRightArrow">&#8250;</button>
       </div>
@@ -397,7 +423,6 @@
       <div class="carousel-wrapper">
         <button class="carousel-arrow left-arrow btn-hover-2" id="heroLeftArrow">&#8249;</button>
 
-        
         <div class="category-cards-container">
           <article class="game-card">
             <img src="Assets/he Witcher.jpeg" alt="The Witcher 3: Wild Hunt" class="card-img">
@@ -464,6 +489,25 @@
 
   </main>
 
+
+
+  <!-- =========================================================
+       NUEVO MODAL: DETALLES EXTENDIDOS DEL JUEGO
+       ========================================================= -->
+  <!-- INICIO DE EDICIÓN: VENTANA MODAL AGREGADA PARA MOSTRAR DETALLES DE LA API -->
+  <div id="modal-detalle" class="modal-overlay hidden">
+    <div class="modal-content">
+      <button id="modal-close" class="close-btn" aria-label="Cerrar modal">&times;</button>
+      <div id="modal-body">
+        <!-- AQUÍ SE INYECTARÁ DINÁMICAMENTE LA DESCRIPCIÓN, IMAGEN Y DETALLES DEL JUEGO -->
+      </div>
+    </div>
+  </div>
+  <!-- FIN DE EDICIÓN: VENTANA MODAL AGREGADA PARA MOSTRAR DETALLES DE LA API -->
+
+
+
+  
   <!-- =========================================================
        Pie de Página Extendido (Fat Footer)
        ========================================================= -->

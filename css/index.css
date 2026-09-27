@@ -220,6 +220,80 @@
   .game-card:hover .game-title {
     opacity: 1;
   }
+
+
+
+
+  /* =========================================================
+     INICIO DE EDICIÓN: ESTILOS DE LA VENTANA MODAL EMERGENTE
+     ========================================================= */
+  .hidden {
+    display: none !important;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.82);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 16px;
+  }
+
+  .modal-content {
+    background-color: #2a2a33;
+    color: #f2f2f2;
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 550px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 26px;
+    cursor: pointer;
+  }
+
+  .modal-game-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 14px;
+  }
+
+  .modal-game-title {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+
+  .modal-game-description {
+    margin-top: 12px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    color: #d1d1d1;
+  }
+  /* =========================================================
+     FIN DE EDICIÓN: ESTILOS DE LA VENTANA MODAL EMERGENTE
+     ========================================================= */
+
+
+     
   
   @media (max-width: 768px) {
     .hero-carousel-section .carousel-wrapper { height: 240px; }
