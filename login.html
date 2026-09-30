@@ -116,7 +116,11 @@
           <input type="password" id="password" name="password" autocomplete="current-password" required>
         </div>
 
-        <button type="submit" class="btn-submit">Iniciar sesión</button>
+        <button type="submit" class="btn-submit" id="btnSubmit">
+          <span class="btn-text">Iniciar sesión</span>
+          <span class="btn-spinner" aria-hidden="true"></span>
+          <span class="btn-check" aria-hidden="true">✓</span>
+        </button>
 
         <p id="login-status" class="login-status" role="status" aria-live="polite"></p>
       </form>

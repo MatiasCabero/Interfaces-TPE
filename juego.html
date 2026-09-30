@@ -103,9 +103,6 @@
      <div id="userMenu" class="user-popover">
       <div class="user-popover-arrow"></div>
       <div class="user-popover-header">
-        <div class="user-avatar-circle">
-          <img src="Assets/Iconos/Avatar.png" alt="Avatar" class="user-avatar-img">
-        </div>
         <span class="user-name">Nombre del usuario</span>
         <button id="btnCloseUserMenu" class="close-btn-sm" aria-label="Cerrar menú usuario">✕</button>
       </div>
@@ -190,7 +187,7 @@
     </section>
 
     <!-- =========================================================
-         Descripción del juego + Comentarios + Recomendados
+         Descripción del juego + Comentarios
          ========================================================= -->
     <div class="game-detail-grid">
 
@@ -206,84 +203,163 @@
 
         <div class="game-comments">
           <h2 class="section-title">Lo que piensa la gente</h2>
-
+        
+          <!-- Comentario 1 -->
           <div class="comment-item">
             <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
             <div class="comment-body">
-              <span class="comment-username">Nombre de usuario dice:</span>
-              <div class="comment-box">Comentario</div>
+              <div class="comment-header">
+                <span class="comment-username">LaraFan_99</span>
+                <span class="comment-date">- Hace 2 horas</span>
+              </div>
+              <div class="comment-box">
+                ¡Increíble la ambientación retro de Tomb Raider! El acertijo del altar me llevó como 10 intentos hasta que le agarré la mano.
+              </div>
+              <div class="comment-actions">
+                <button type="button" class="action-btn like-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                  <span>12</span>
+                </button>
+                <button type="button" class="action-btn dislike-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                  <span>0</span>
+                </button>
+              </div>
             </div>
           </div>
-
+        
+          <!-- Comentario 2 -->
           <div class="comment-item">
             <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
             <div class="comment-body">
-              <span class="comment-username">Nombre de usuario dice:</span>
-              <div class="comment-box">Comentario</div>
+              <div class="comment-header">
+                <span class="comment-username">PixelKnight</span>
+                <span class="comment-date">- Ayer, 18:45</span>
+              </div>
+              <div class="comment-box">
+                Muy buen juego de lógica. Quedar con una sola reliquia al final es adictivo, 10/10.
+              </div>
+              <div class="comment-actions">
+                <button type="button" class="action-btn like-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                  <span>8</span>
+                </button>
+                <button type="button" class="action-btn dislike-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                  <span>1</span>
+                </button>
+              </div>
             </div>
           </div>
-
+        
+          <!-- Comentario 3 -->
           <div class="comment-item">
             <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
             <div class="comment-body">
-              <span class="comment-username">Nombre de usuario dice:</span>
-              <div class="comment-box">Comentario</div>
+              <div class="comment-header">
+                <span class="comment-username">GamerGirl_Arg</span>
+                <span class="comment-date">- Hace 3 días</span>
+              </div>
+              <div class="comment-box">
+                Me encantó la música de fondo y los efectos visuales cuando eliminás una reliquia del tablero.
+              </div>
+              <div class="comment-actions">
+                <button type="button" class="action-btn like-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                  <span>15</span>
+                </button>
+                <button type="button" class="action-btn dislike-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                  <span>0</span>
+                </button>
+              </div>
             </div>
           </div>
-
+        
+          <!-- Comentario 4 -->
           <div class="comment-item">
             <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
             <div class="comment-body">
-              <span class="comment-username">Nombre de usuario dice:</span>
-              <div class="comment-box">Comentario</div>
+              <div class="comment-header">
+                <span class="comment-username">RetroArcadeMaster</span>
+                <span class="comment-date">- 15 de Septiembre</span>
+              </div>
+              <div class="comment-box">
+                Un clásico inmortal adaptado con una estética tremenda. ¡Queremos más niveles y tableros temáticos!
+              </div>
+              <div class="comment-actions">
+                <button type="button" class="action-btn like-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                  <span>22</span>
+                </button>
+                <button type="button" class="action-btn dislike-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                  <span>2</span>
+                </button>
+              </div>
             </div>
           </div>
-
-          <form class="comment-form">
-            <textarea placeholder="Comentá qué te pareció..." rows="3"></textarea>
-            <button type="submit" class="btn-primary-play btn-publicar">Publicar</button>
+        
+          <!-- Comentario 5 -->
+          <div class="comment-item">
+            <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-username">PuzzlePro_x</span>
+                <span class="comment-date">- Hace 1 semana</span>
+              </div>
+              <div class="comment-box">
+                Al principio parece fácil pero después te das cuenta de que cada movimiento cuenta. ¡Muy recomendado para entrenar la cabeza!
+              </div>
+              <div class="comment-actions">
+                <button type="button" class="action-btn like-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                  <span>5</span>
+                </button>
+                <button type="button" class="action-btn dislike-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                  <span>0</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Comentario 6 -->
+          <div class="comment-item">
+            <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-username">SpeedRunner_94</span>
+                <span class="comment-date">- Hace 2 semanas</span>
+              </div>
+              <div class="comment-box">
+                Pude resolver el tablero en menos de 2 minutos. ¿Alguien sabe si hay tabla de posiciones global?
+              </div>
+              <div class="comment-actions">
+                <button type="button" class="action-btn like-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                  <span>19</span>
+                </button>
+                <button type="button" class="action-btn dislike-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                  <span>3</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Formulario para publicar -->
+          <form class="comment-form" id="commentForm">
+            <textarea placeholder="Comentá qué te pareció..." rows="3" required></textarea>
+            <button type="submit" class="btn-primary-play btn-publicar" id="btnPublicar">
+              <span class="btn-text">Publicar</span>
+              <svg class="mail-icon" width="22" height="22" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+              </svg>
+            </button>
           </form>
         </div>
-
       </div>
-
-      <aside class="game-recommended">
-        <h2 class="section-title">Recomendados</h2>
-        <div class="recommended-list">
-          
-          <article class="recommended-card">
-            <img src="Assets/Apex Legends.webp" alt="Apex Legends">
-            <div class="card-gradient-overlay"></div>
-            <span class="game-title">Apex Legends</span>
-          </article>
-
-          <article class="recommended-card">
-            <img src="Assets/F1 25.jpeg" alt="F1 25">
-            <span class="badge-pago">Pago</span>
-            <div class="card-gradient-overlay"></div>
-            <span class="game-title">F1 25</span>
-          </article>
-
-          <article class="recommended-card">
-            <img src="Assets/Mario Kart 8 Deluxe.jpeg" alt="Mario Kart 8">
-            <div class="card-gradient-overlay"></div>
-            <span class="game-title">Mario Kart 8 Deluxe</span>
-          </article>
-
-          <article class="recommended-card">
-            <img src="Assets/Burnout Paradise Remastered.jpeg" alt="Burnout Paradise">
-            <span class="badge-pago">Pago</span>
-            <div class="card-gradient-overlay"></div>
-            <span class="game-title">Burnout Paradise</span>
-          </article>
-
-          <article class="recommended-card">
-            <img src="Assets/The Crew Motorfest.jpeg" alt="The Crew Motorfest">
-            <div class="card-gradient-overlay"></div>
-            <span class="game-title">The Crew Motorfest</span>
-          </article>
-        </div>
-      </aside>
     </div>
   </main>
 
@@ -291,63 +367,92 @@
        Pie de Página Extendido (Fat Footer)
        ========================================================= -->
        
-       <footer class="fat-footer">
-        <div class="footer-container">
-          
-        <!-- Logo del Footer -->
-        <div class="footer-brand-col">
-          <div class="footer-logo-placeholder">
-            <img src="Assets/LogoGrande.jpeg" alt="M&M Arcade Logo" class="footer-logo-img">
-          </div>
-        </div>
+  <footer class="fat-footer">
+  <div class="footer-container">
+    
+    <!-- Columna Logo + Resumen del sitio -->
+    <div class="footer-brand-col">
+      <div class="footer-logo-placeholder">
+        <img src="Assets/LogoGrande.jpeg" alt="M&M Arcade Logo" class="footer-logo-img">
+      </div>
+      <p class="footer-brand-desc">Tu plataforma de entretenimiento retro y moderna. Juégalo todo desde tu navegador.</p>
+    </div>
+
+    <!-- Grilla de Enlaces Ampliada (4 Columnas) -->
+    <div class="footer-links-grid">
       
-          <!-- Grilla de Enlaces (3 Columnas Verticales Altas) -->
-          <div class="footer-links-grid">
-            
-            <!-- Columna 1 -->
-            <div class="footer-col">
-              <h4>Navegación</h4>
-              <a href="index.html">Home</a>
-              <a href="#">Nuevos</a>
-              <a href="#">Pagos</a>
-              
-              <h4 style="margin-top: 20px;">Contacto</h4>
-              <a href="index.html">Dejanos tu comentario</a>
-              <a href="#">Nuestras redes</a>
-            </div>
-      
-            <!-- Columna 2 -->
-            <div class="footer-col">
-              <h4>Soporte</h4>
-              <a href="#">Preguntas frecuentes</a>
-              <a href="#">Términos y condiciones</a>
-              
-              <h4 style="margin-top: 20px;">Comunidad</h4>
-              <a href="#">Novedades del sitio</a>
-              <a href="#">Eventos</a>
-              <a href="#">Reseñas de comentarios</a>
-            </div>
-      
-            <!-- Columna 3 -->
-            <div class="footer-col">
-              <h4>Tienda & Cuenta</h4>
-              <a href="#">Ofertas</a>
-              <a href="#">Gift cards</a>
-              <a href="#">Juegos gratis</a>
-              <a href="#">Iniciar sesión</a>
-              <a href="#">Configuración</a>
-              <a href="#">Favoritos</a>
-              <a href="#">Historial de compra</a>
-            </div>
-      
-          </div>
-      
-        </div>
-      
-        <div class="footer-bottom">
-          <p>© Powered and secured by M&Marcade</p>
-        </div>
-      </footer>
+      <!-- Columna 1: Explorar -->
+      <div class="footer-col">
+        <h4>Explorar</h4>
+        <a href="index.html">Inicio</a>
+        <a href="#">Juegos Populares</a>
+        <a href="#">Novedades</a>
+        <a href="#">Juegos de Mesa</a>
+        <a href="#">Multijugador</a>
+        <a href="#">Acción & Aventura</a>
+        <a href="#">Estrategia</a>
+        <a href="#">Originales M&M</a>
+      </div>
+
+      <!-- Columna 2: Comunidad & Social -->
+      <div class="footer-col">
+        <h4>Comunidad</h4>
+        <a href="#">Foro de Jugadores</a>
+        <a href="#">Reseñas & Críticas</a>
+        <a href="#">Eventos & Torneos</a>
+        <a href="#">Creadores de Contenido</a>
+        <a href="#">Discord Oficial</a>
+        <a href="#">Canal de YouTube</a>
+        <a href="#">Instagram</a>
+        <a href="#">Servidores de Estado</a>
+      </div>
+
+      <!-- Columna 3: Soporte & Legales -->
+      <div class="footer-col">
+        <h4>Soporte & Legal</h4>
+        <a href="#">Centro de Ayuda</a>
+        <a href="#">Preguntas Frecuentes</a>
+        <a href="#">Reportar un Error</a>
+        <a href="#">Términos de Servicio</a>
+        <a href="#">Política de Privacidad</a>
+        <a href="#">Política de Cookies</a>
+        <a href="#">Aviso Legal</a>
+        <a href="#">Configuración de Cookies</a>
+      </div>
+
+      <!-- Columna 4: Tienda & Newsletter -->
+      <div class="footer-col footer-col-newsletter">
+        <h4>Tienda & Cuenta</h4>
+        <a href="login.html">Iniciar Sesión</a>
+        <a href="register.html">Crear Cuenta</a>
+        <a href="#">Pase Arcade VIP</a>
+        <a href="#">Tarjetas de Regalo</a>
+        <a href="#">Historial de Compras</a>
+        
+        <h4 style="margin-top: 14px;">Boletín Informativo</h4>
+        <p class="newsletter-desc">Recibí ofertas y nuevos juegos semanalmente.</p>
+        <form class="footer-newsletter-form" onsubmit="event.preventDefault();">
+          <input type="email" placeholder="Tu email..." required>
+          <button type="submit">Unirme</button>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Sección inferior: Medios de pago y Copyright -->
+  <div class="footer-bottom">
+    <div class="footer-payments">
+      <span>Métodos de pago aceptados:</span>
+      <span class="payment-badge">Visa</span>
+      <span class="payment-badge">Mastercard</span>
+      <span class="payment-badge">Mercado Pago</span>
+      <span class="payment-badge">PayPal</span>
+    </div>
+    <p>© 2026 Powered and secured by M&M Arcade Inc. Todos los derechos reservados.</p>
+  </div>
+</footer>
 
   <!-- JS común a todo el sitio -->
   <script src="js/script.js"></script>

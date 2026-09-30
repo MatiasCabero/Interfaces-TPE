@@ -32,6 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // REDIRECCIÓN AL HACER CLIC EN CUALQUIER TARJETA DESTACADA DEL HERO DE MANERA DIRECTA A JUEGO.HTML
+  const heroContainer = document.getElementById('heroCardsContainer');
+  if (heroContainer) {
+    heroContainer.addEventListener('click', (e) => {
+      const clickedCard = e.target.closest('.hero-card');
+      if (clickedCard) {
+        if (clickedCard.classList.contains('pos-center')) {
+          window.location.href = 'juego.html';
+        }
+      }
+    });
+  }
 
   // -------------------------------------------------------
   // 2. DESPLAZAMIENTO HORIZONTAL DE CATEGORÍAS
@@ -54,19 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-
-  
-
   // =======================================================
-  // INICIO DE EDICIÓN: INTEGRACIÓN DE API V2 Y MODAL
+  // INTEGRACIÓN DE API V2 (SIN MODAL POP-UP)
   // =======================================================
   const API_URL = 'https://vj.interfaces.jima.com.ar/api/v2';
   const apiContainer = document.getElementById('api-games-container');
-  const modal = document.getElementById('modal-detalle');
-  const modalBody = document.getElementById('modal-body');
-  const closeBtn = document.getElementById('modal-close');
 
-  // DATOS DE RESPALDO (FALLBACK) POR SI LA API O RED FALLAN
   const HARDCODED_GAMES = [
     {
       id: 3498,
@@ -109,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     apiContainer.innerHTML = '';
 
     games.forEach(game => {
-      // USO DE IMAGEN OPTIMIZADA DE LA API V2
       const imageUrl = game.background_image_low_res || game.background_image;
 
       const card = document.createElement('article');
@@ -121,47 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="game-title">${game.name}</span>
       `;
 
-      // AL HACER CLIC EN LA TARJETA SE DESPLIEGA EL MODAL DETALLADO
-      card.addEventListener('click', () => openModal(game));
+      // SE REMOVIÓ EL EVENT LISTENER DE CLIC PARA QUE NO HAGA NADA AL PRESIONAR LA TARJETA
       apiContainer.appendChild(card);
     });
   }
 
-  function openModal(game) {
-    if (!modal || !modalBody) return;
-
-    const imageUrl = game.background_image || game.background_image_low_res;
-    const platformsText = game.platforms ? game.platforms.map(p => p.name).join(', ') : 'No disponible';
-    const genresText = game.genres ? game.genres.map(g => g.name).join(', ') : 'No disponible';
-    const descriptionText = game.description || 'Sin descripción disponible para este juego.';
-
-    modalBody.innerHTML = `
-      <img src="${imageUrl}" alt="${game.name}" class="modal-game-img">
-      <h2 class="modal-game-title">${game.name}</h2>
-      <p><strong>Fecha de lanzamiento:</strong> ${game.released || 'N/A'}</p>
-      <p><strong>Calificación:</strong> ★ ${game.rating || 'N/A'} / 5</p>
-      <p><strong>Géneros:</strong> ${genresText}</p>
-      <p><strong>Plataformas:</strong> ${platformsText}</p>
-      <p class="modal-game-description">${descriptionText}</p>
-    `;
-
-    modal.classList.remove('hidden');
-  }
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-  }
-
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.classList.add('hidden');
-    });
-  }
-
-  // INICIALIZACIÓN DE CARGA DE JUEGOS DESDE LA API
   loadApiGames();
-  // =======================================================
-  // FIN DE EDICIÓN: INTEGRACIÓN DE API V2 Y MODAL
-  // =======================================================
 
 });

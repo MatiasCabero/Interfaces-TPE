@@ -1,27 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Duplica automáticamente las tarjetas de cada fila para lograr el loop continuo infinitamente
+  // Duplica automáticamente las tarjetas de cada fila
   document.querySelectorAll('.bg-row').forEach(row => {
     row.innerHTML = row.innerHTML.repeat(4);
   });
 
   const registerForm = document.querySelector('.register-form');
-  const submitBtn = document.querySelector('.btn-submit');
+  const submitBtn = document.getElementById('btnSubmit');
 
-  if (registerForm) {
+  if (registerForm && submitBtn) {
     registerForm.addEventListener('submit', (event) => {
       event.preventDefault();
 
-      // Deshabilitar botón durante el proceso
-      submitBtn.disabled = true;
+      // 1. Inicia animación de carga
+      submitBtn.classList.add('is-loading');
 
-      // Animación de salida deslizable
-      submitBtn.classList.add('btn-submit--success');
+      // 2. Transición a estado de éxito
+      setTimeout(() => {
+        submitBtn.classList.remove('is-loading');
+        submitBtn.classList.add('is-success');
 
-      // Redirección al finalizar la animación
-      submitBtn.addEventListener('animationend', function handleAnimationEnd() {
-        submitBtn.removeEventListener('animationend', handleAnimationEnd);
-        window.location.href = 'login.html';
-      });
+        // 3. Redirección a Login
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 700);
+
+      }, 1200);
     });
   }
 });
