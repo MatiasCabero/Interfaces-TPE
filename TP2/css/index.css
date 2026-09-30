@@ -1,0 +1,205 @@
+/* =========================================================
+   CARRUSEL PRINCIPAL (3D / COVERFLOW)
+   ========================================================= */
+   .hero-carousel-section {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .hero-carousel-section .carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    width: 100%;
+    height: 280px;
+    perspective: 1000px;
+    padding: 0 45px;
+    box-sizing: border-box;
+  }
+  
+  .hero-cards-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+  }
+  
+  .hero-card {
+    position: absolute; /* Mantiene las tarjetas superpuestas en el carrusel 3D */
+    width: 420px;
+    height: 230px;
+    background-color: var(--bg-card);
+    border-radius: 14px;
+    cursor: pointer;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.5s ease, 
+                filter 0.5s ease, 
+                box-shadow 0.5s ease,
+                border-color 0.25s ease,
+                z-index 0.5s step-end;
+  }
+  
+  .hero-card.pos-left {
+    transform: translateX(-340px) scale(0.82) rotateY(10deg);
+    opacity: 0.65;
+    filter: brightness(0.7);
+    z-index: 2;
+  }
+  
+  .hero-card.pos-center {
+    transform: translateX(0px) scale(1.05) rotateY(0deg) translateZ(20px);
+    opacity: 1;
+    filter: brightness(1);
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 18px rgba(0, 204, 255, 0.35);
+  }
+  
+  .hero-card.pos-right {
+    transform: translateX(340px) scale(0.82) rotateY(-10deg);
+    opacity: 0.65;
+    filter: brightness(0.7);
+    z-index: 2;
+  }
+  
+  /* EFECTO HOVER EN LAS TARJETAS DEL HERO */
+  .hero-card:hover {
+    border-color: #000000;
+    box-shadow: 0 0 0 1px #000000, 0 12px 35px rgba(0, 0, 0, 0.7);
+  }
+  
+  .hero-card:hover .card-gradient-overlay,
+  .hero-card:hover .game-title {
+    opacity: 1;
+  }
+  
+  .hero-card.pos-center:hover {
+    transform: translateX(0px) scale(1.08) rotateY(0deg) translateZ(30px);
+  }
+  
+  .hero-carousel-section .left-arrow { left: 10px; z-index: 20; }
+  .hero-carousel-section .right-arrow { right: 10px; z-index: 20; }
+  
+  
+  /* =========================================================
+     CATEGORÍAS DE JUEGOS Y TARJETAS
+     ========================================================= */
+  .category-block {
+    margin-bottom: 4px;
+  }
+  
+  .category-title {
+    font-size: 1.05rem;
+    margin-bottom: 2px;
+    margin-left: 45px;
+  }
+  
+  .category-cards-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 6px 35px;
+    width: 100%;
+  }
+  
+  .category-cards-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* TARJETAS DE CATEGORÍA ACHICADAS */
+  .game-card {
+    position: relative;
+    width: 150px;
+    min-width: 150px;
+    height: 90px;
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .badge-pago {
+    position: absolute;
+    top: 8px;
+    right: -24px;
+    background-color: var(--primary-green);
+    color: #121212;
+    font-size: 8px;
+    font-weight: bold;
+    padding: 2px 22px;
+    transform: rotate(45deg);
+    z-index: 5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .card-gradient-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(93, 72, 199, 0.85), transparent);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  
+  .game-title {
+    position: absolute;
+    bottom: 6px;
+    left: 8px;
+    font-size: 0.72rem;
+    font-weight: bold;
+    color: white;
+    z-index: 6;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    text-shadow: 
+      -1px -1px 0 #000,  
+       1px -1px 0 #000,
+      -1px  1px 0 #000,
+       1px  1px 0 #000;
+  }
+  
+  .game-card:hover {
+    border-color: #000000;
+    box-shadow: 0 0 0 1px #000000;
+    transform: translateY(-2px);
+  }
+  
+  .game-card:hover .card-gradient-overlay,
+  .game-card:hover .game-title {
+    opacity: 1;
+  }
+  
+  
+  /* =========================================================
+     DISEÑO RESPONSIVO (MÓVILES Y TABLETS)
+     ========================================================= */
+  @media (max-width: 768px) {
+    .hero-carousel-section .carousel-wrapper { height: 180px; padding: 0 20px; }
+    .hero-card { width: 240px; height: 140px; }
+    .hero-card.pos-left { transform: translateX(-160px) scale(0.8) rotateY(8deg); }
+    .hero-card.pos-right { transform: translateX(160px) scale(0.8) rotateY(-8deg); }
+    .category-title { margin-left: 20px; }
+    .category-cards-container { padding: 6px 20px; }
+    .game-card { width: 130px; min-width: 130px; height: 80px; }
+  }
