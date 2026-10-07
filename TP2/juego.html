@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Peg Solitaire · Reliquias Ancestrales — M&M Arcade</title>
@@ -12,7 +11,7 @@
 </head>
 
 <body>
-</div>
+
 <!-- =========================================================
      Navegación Superior (Navbar)
      ========================================================= -->
@@ -37,7 +36,6 @@
     <!-- Barra de Búsqueda -->
     <div class="nav-center">
       <div class="search-box">
-        <!-- ÍCONO LUPA SVG/PNG -->
         <img src="Assets/Iconos/Search.png" alt="Buscar" class="search-icon-img">
         <input type="text" placeholder="Buscar juegos..." class="search-input">
       </div>
@@ -46,7 +44,7 @@
     <!-- Botón Perfil de Usuario con Avatar -->
     <div class="nav-right">
       <button id="btnOpenUserMenu" class="user-avatar-btn">
-      <img src="Assets/Iconos/Avatar.png" alt="Perfil de usuario" class="user-avatar-img">
+        <img src="Assets/Iconos/Avatar.png" alt="Perfil de usuario" class="user-avatar-img">
       </button>
     </div>
 
@@ -57,67 +55,64 @@
 <!-- =========================================================
      Menú Desplegable Lateral (Navegación Principal)
      ========================================================= -->
-
 <aside id="sideMenu" class="side-menu">
-<div class="side-menu-header">
-  <div class="side-menu-brand">
-    <!-- Logo o Icono del juego en el menú -->
-    <img src="Assets/LogoChico.jpeg" alt="M&M Games" class="mini-logo-img">
-    <span class="side-menu-title">Games</span>
+  <div class="side-menu-header">
+    <div class="side-menu-brand">
+      <img src="Assets/LogoChico.jpeg" alt="M&M Games" class="mini-logo-img">
+      <span class="side-menu-title">Games</span>
+    </div>
+    <button id="btnCloseMenu" class="close-btn" aria-label="Cerrar menú">✕</button>
   </div>
-  <button id="btnCloseMenu" class="close-btn" aria-label="Cerrar menú">✕</button>
-</div>
 
-<nav class="side-menu-nav">
-  <ul>
-    <li><a href="#"><img src="Assets/Iconos/home.png" alt="Inicio" class="menu-icon-img">Inicio</a></li>
-    <li><a href="#"><img src="Assets/Iconos/recientes.png" alt="Recientes" class="menu-icon-img">Recientes</a></li>
-    <li><a href="#"><img src="Assets/Iconos/nuevos.png" alt="Nuevos" class="menu-icon-img">Nuevos</a></li>
-    <li><a href="#"><img src="Assets/Iconos/moda.png" alt="De moda" class="menu-icon-img">De moda</a></li>
-    <li><a href="#"><img src="Assets/Iconos/actualizados.png" alt="Actualizados" class="menu-icon-img">Actualizados</a></li>
-    <li><a href="#"><img src="Assets/Iconos/multijugador.png" alt="Multijugador" class="menu-icon-img">Multijugador</a></li>
-    <li><a href="#"><img src="Assets/Iconos/original.png" alt="Originales" class="menu-icon-img">Originales</a></li>
-    <li><a href="#"><img src="Assets/Iconos/pagos.png" alt="Pagos" class="menu-icon-img">Pagos</a></li>
-  </ul>
+  <nav class="side-menu-nav">
+    <ul>
+      <li><a href="index.html"><img src="Assets/Iconos/home.png" alt="Inicio" class="menu-icon-img">Inicio</a></li>
+      <li><a href="#"><img src="Assets/Iconos/recientes.png" alt="Recientes" class="menu-icon-img">Recientes</a></li>
+      <li><a href="#"><img src="Assets/Iconos/nuevos.png" alt="Nuevos" class="menu-icon-img">Nuevos</a></li>
+      <li><a href="#"><img src="Assets/Iconos/moda.png" alt="De moda" class="menu-icon-img">De moda</a></li>
+      <li><a href="#"><img src="Assets/Iconos/actualizados.png" alt="Actualizados" class="menu-icon-img">Actualizados</a></li>
+      <li><a href="#"><img src="Assets/Iconos/multijugador.png" alt="Multijugador" class="menu-icon-img">Multijugador</a></li>
+      <li><a href="#"><img src="Assets/Iconos/original.png" alt="Originales" class="menu-icon-img">Originales</a></li>
+      <li><a href="#"><img src="Assets/Iconos/pagos.png" alt="Pagos" class="menu-icon-img">Pagos</a></li>
+    </ul>
 
-  <hr class="menu-divider">
+    <hr class="menu-divider">
 
-  <ul class="categories-list">
-    <li><a href="#">Aventura</a></li>
-    <li><a href="#">Disparos</a></li>
-    <li><a href="#">Autos</a></li>
-    <li><a href="#">Juegos de rol</a></li>
-    <li><a href="#">Moda</a></li>
-    <li><a href="#">Cartas</a></li>
-    <li><a href="#">Click</a></li>
-    <li><a href="#">Cartas</a></li>
-  </ul>
-</nav>
+    <ul class="categories-list">
+      <li><a href="#">Aventura</a></li>
+      <li><a href="#">Disparos</a></li>
+      <li><a href="#">Autos</a></li>
+      <li><a href="#">Juegos de rol</a></li>
+      <li><a href="#">Moda</a></li>
+      <li><a href="#">Cartas</a></li>
+      <li><a href="#">Click</a></li>
+      <li><a href="#">Cartas</a></li>
+    </ul>
+  </nav>
 </aside>
 
 
 <!-- =========================================================
      Menú Desplegable del Perfil de Usuario (Derecha)
      ========================================================= -->
+<div id="userMenu" class="user-popover">
+  <div class="user-popover-arrow"></div>
+  <div class="user-popover-header">
+    <span class="user-name">Nombre del usuario</span>
+    <button id="btnCloseUserMenu" class="close-btn-sm" aria-label="Cerrar menú usuario">✕</button>
+  </div>
 
-     <div id="userMenu" class="user-popover">
-      <div class="user-popover-arrow"></div>
-      <div class="user-popover-header">
-        <span class="user-name">Nombre del usuario</span>
-        <button id="btnCloseUserMenu" class="close-btn-sm" aria-label="Cerrar menú usuario">✕</button>
-      </div>
-    
-      <ul class="user-menu-list">
-        <li><a href="#"><img src="Assets/Iconos/perfil.png" alt="Mi Perfil" class="menu-icon-img">Mi Perfil</a></li>
-        <li><a href="#"><img src="Assets/Iconos/favorito.png" alt="Favoritos" class="menu-icon-img">Favoritos</a></li>
-        <li><a href="#"><img src="Assets/Iconos/compras.png" alt="Mis Compras" class="menu-icon-img">Mis Compras</a></li>
-        <li><a href="#"><img src="Assets/Iconos/config.png" alt="Configuración" class="menu-icon-img">Configuración</a></li>
-        <li><a href="#"><img src="Assets/Iconos/carrito.png" alt="Carrito" class="menu-icon-img">Carrito</a></li>
-        <li><a href="#"><img src="Assets/Iconos/dark.png" alt="Dark Mode" class="menu-icon-img">Dark Mode</a></li>
-        <li><a href="#"><img src="Assets/Iconos/soporte.png" alt="Ayuda Soporte" class="menu-icon-img">Ayuda Soporte</a></li>
-        <li><a href="login.html"><img src="Assets/Iconos/logout.png" alt="Cerrar Sesión" class="menu-icon-img">Cerrar Sesión</a></li>
-      </ul>
-    </div>
+  <ul class="user-menu-list">
+    <li><a href="#"><img src="Assets/Iconos/perfil.png" alt="Mi Perfil" class="menu-icon-img">Mi Perfil</a></li>
+    <li><a href="#"><img src="Assets/Iconos/favorito.png" alt="Favoritos" class="menu-icon-img">Favoritos</a></li>
+    <li><a href="#"><img src="Assets/Iconos/compras.png" alt="Mis Compras" class="menu-icon-img">Mis Compras</a></li>
+    <li><a href="#"><img src="Assets/Iconos/config.png" alt="Configuración" class="menu-icon-img">Configuración</a></li>
+    <li><a href="#"><img src="Assets/Iconos/carrito.png" alt="Carrito" class="menu-icon-img">Carrito</a></li>
+    <li><a href="#"><img src="Assets/Iconos/dark.png" alt="Dark Mode" class="menu-icon-img">Dark Mode</a></li>
+    <li><a href="#"><img src="Assets/Iconos/soporte.png" alt="Ayuda Soporte" class="menu-icon-img">Ayuda Soporte</a></li>
+    <li><a href="login.html"><img src="Assets/Iconos/logout.png" alt="Cerrar Sesión" class="menu-icon-img">Cerrar Sesión</a></li>
+  </ul>
+</div>
 
 <!-- Capa oscura para cerrar menús al tocar afuera -->
 <div id="backdropOverlay" class="backdrop-overlay"></div>
@@ -132,7 +127,7 @@
     </nav>
 
     <!-- =========================================================
-         1) JUEGO PRINCIPAL — Protagonista absoluto (80-85vh)
+         1) JUEGO PRINCIPAL — Protagonista absoluto 
          ========================================================= -->
     <div class="game-stage">
       <div class="game-media" id="gameMedia">
@@ -141,11 +136,11 @@
     </div>
 
     <!-- =========================================================
-         2) SECCIÓN INFERIOR — Compartir + Galería + Video
+         2) SECCIÓN INFERIOR — Compartir + Galería Unificada
          ========================================================= -->
     <section class="game-bottom-section">
 
-      <!-- Compartir en Redes, encima de la galería y el video -->
+      <!-- Compartir en Redes -->
       <div class="game-share-row">
         <span class="game-share-label">Compartir en Redes</span>
         <div class="social-icons">
@@ -161,12 +156,18 @@
         </div>
       </div>
 
-      <!-- Fila: galería a la izquierda, video a la derecha -->
+      <!-- Fila Unificada: Galería con Video integrado -->
       <div class="game-gallery-video-row">
-
         <div class="game-gallery">
-          <h3 class="game-thumbnails-title">Imágenes del juego</h3>
+          <h3 class="game-thumbnails-title">Imágenes y Video del juego</h3>
           <div class="game-thumbnails" id="gameThumbnails">
+            <!-- Video integrado con el mismo tamaño que las fotos -->
+            <div class="game-thumb game-thumb-video">
+              <video class="video-player-thumb" controls preload="metadata">
+                <source src="Assets/video/gameplay.mp4" type="video/mp4">
+              </video>
+            </div>
+            <!-- Capturas del juego -->
             <div class="game-thumb"><img src="Assets/gameplay1.png" alt="Captura 1"></div>
             <div class="game-thumb"><img src="Assets/gameplay2.png" alt="Captura 2"></div>
             <div class="game-thumb"><img src="Assets/gameplay3.png" alt="Captura 3"></div>
@@ -174,15 +175,6 @@
             <div class="game-thumb"><img src="Assets/gameplay5.png" alt="Captura 5"></div>
           </div>
         </div>
-
-        <div class="game-video-block">
-          <div class="game-video-placeholder">
-            <video class="video-player"  controls preload="metadata">
-              <source src="Assets/video/gameplay.mp4" type="video/mp4">
-            </video>
-          </div>
-        </div>
-
       </div>
     </section>
 
@@ -366,7 +358,6 @@
   <!-- =========================================================
        Pie de Página Extendido (Fat Footer)
        ========================================================= -->
-       
   <footer class="fat-footer">
   <div class="footer-container">
     

@@ -172,7 +172,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    perspective: 600px; /* PERMITE EL EFECTO 3D DE GIRO */
+    perspective: 600px; /* PERMITE EL EFECTO 3D DE GIRO, sirve como efecto de fuga */
   }
   
   .user-avatar-img {
@@ -188,7 +188,8 @@
   .user-avatar-btn:hover .user-avatar-img {
     border-color: var(--primary-green, #7bb31c);
     box-shadow: 0 0 12px rgba(123, 179, 28, 0.7);
-    animation: arcadeCoinFlip 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: arcadeCoinFlip 0.6s cubic-bezier(0.4, 0, 0.2, 1) /* reverse */; 
+                                    /* estos 4 valores controlan la curva de velocidad en X e Y */
   }
   
   
@@ -202,7 +203,7 @@
       box-shadow: 0 0 20px rgba(0, 204, 255, 0.9);
     }
     80% {
-      transform: rotateY(360deg) scale(0.92) skewY(2deg);
+      transform: rotateY(360deg) scale(0.92) skewY(2deg); /* aca el scale funciona como efecto rebote */
     }
     100% {
       transform: rotateY(360deg) scale(1) skewY(0deg);
@@ -424,7 +425,7 @@
   .carousel-arrow {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%); /* aca lo pusimos para que quede alineada a la card */
     z-index: 15;
     width: 42px;
     height: 42px;
@@ -450,7 +451,7 @@
     background-color: var(--bg-header);
     border-color: #00ccff;
     color: #00ccff;
-    transform: translateY(-50%) scale(1.08);
+    transform: translateY(-50%) scale(1.08); /* aca mantenemos la alineacion */
   }
   
   /* =========================================================
@@ -628,7 +629,7 @@
     width: 100vw;
     height: 100vh;
     background-color: #0e0d36;
-    z-index: 9999;
+    z-index: 9999; /*desgina la profundidad*/
     display: flex;
     align-items: center;
     justify-content: center;
@@ -649,11 +650,13 @@
     border: 5px solid rgba(255, 255, 255, 0.15);
     border-top-color: #00ccff;
     border-radius: 50%;
-    animation: spinLoader 0.9s linear infinite;
+    animation: spinLoader 0.9s linear infinite; /* duracion animacion, acelaracion lineal y bucle es infinito */
   }
   
   @keyframes spinLoader {
-    to { transform: rotate(360deg); }
+    from /* 0% */ { transform: rotate(0deg); } /* esta linea se puede saltear */
+    to /* 100% */{ transform: rotate(360deg); }
+    /* todo el bloque anterior define que la animacion de la ruedita da una vuelta completa */
   }
   
   .loader-percent {
@@ -685,22 +688,58 @@
   }
   
   @media (max-width: 768px) {
+    /* 1. Ocultar el Fat Footer completo en Mobile */
+    .fat-footer {
+      display: none !important;
+    }
+  
+    /* 2. Navbar full width con búsqueda centrada */
     .navbar-container {
-      grid-template-columns: auto 1fr auto;
-      padding: 10px 16px;
-    }
-    .search-box { max-width: 180px; }
-    
-    .footer-container {
-      flex-direction: column;
+      display: flex;
       align-items: center;
-    }
-    .footer-brand-col {
+      justify-content: space-between;
+      padding: 0 12px;
+      gap: 8px;
       width: 100%;
     }
-    .footer-links-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+  
+    .nav-left {
+      gap: 8px;
+      flex-shrink: 0;
+    }
+  
+    /* Ocultamos el texto "M&M Arcade" para liberar espacio */
+    .logo-text {
+      display: none !important;
+    }
+  
+    /* La barra de búsqueda ocupa todo el espacio central */
+    .nav-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      /* Les da margen a los lados para despegarse del icono hamburguesa y el avatar */
+      margin: 0 12px; 
+    }
+  
+    .search-box {
       width: 100%;
+      /* Limitamos el ancho para que respire más el centro */
+      max-width: 180px; 
+    }
+  
+    .search-input {
+      padding: 6px 12px 6px 30px;
+      font-size: 0.8rem;
+    }
+  
+    .search-icon-img {
+      left: 10px;
+      width: 15px;
+      height: 15px;
+    }
+  
+    .nav-right {
+      flex-shrink: 0;
     }
   }

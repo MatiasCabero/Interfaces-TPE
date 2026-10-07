@@ -62,6 +62,7 @@
     to   { transform: translateX(-50%); }
   }
   
+  /* accesibilidad para reducir movimiento */
   @media (prefers-reduced-motion: reduce) {
     .bg-row {
       animation: none;
@@ -302,8 +303,6 @@
   animation: popCheckmark 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-/* KEYFRAMES CON PORCENTAJES REQUERIDOS POR LA CÁTEDRA */
-
 /* 1. Rotación continua de spinner */
 @keyframes spinLoader {
   0% {
@@ -358,4 +357,44 @@
   color: #ffffff;
   font-weight: 600;
   text-decoration: underline;
+}
+
+/* =========================================================
+   AJUSTE DEL FONDO ANIMADO PARA PANTALLAS MÓVILES (MOBILE)
+   ========================================================= */
+  @media (max-width: 768px) {
+  .background-wrapper {
+    gap: 4px;
+    height: 100vh; /* Asegura cubrir todo el alto de la pantalla */
+  }
+
+  .bg-row {
+    flex: 1; /* Ocupa un 1/6 exacto de la altura visible en cada fila */
+    height: calc(100vh / 6);
+    max-height: calc(100vh / 6);
+    width: 400%; /* Espacio amplio horizontal para el scroll fluido */
+    gap: 4px;
+  }
+
+  .tile {
+    flex: none; /* Mantiene la forma sin deformar */
+    aspect-ratio: 1 / 1; /* FORZA EL FORMATO CUADRADO PERFECTO (1:1) */
+    height: 100%; /* Toma la altura disponible de la fila */
+    width: auto;  /* El ancho se adapta automáticamente al alto para ser cuadrado */
+    border-radius: 6px;
+  }
+
+  .tile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Ajuste ligero a la tarjeta del formulario para que luzca centrada */
+  .login-card, 
+  .register-card {
+    max-width: 330px;
+    padding: 24px 20px;
+  }
 }

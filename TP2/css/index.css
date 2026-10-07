@@ -31,35 +31,36 @@
     overflow: visible;
   }
   
+  /* tiene una animacion basada en transiciones (no en keyframe) */
   .hero-card {
-    position: absolute; /* Mantiene las tarjetas superpuestas en el carrusel 3D */
+    position:absolute; /* Mantiene las tarjetas superpuestas en el carrusel 3D */
     width: 420px;
     height: 230px;
     background-color: var(--bg-card);
     border-radius: 14px;
-    cursor: pointer;
+    cursor: pointer; /* cambia el icono del mouse */
     overflow: hidden;
     border: 2px solid transparent;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), /* de vuelta aceleracion medida en X e Y */
                 opacity 0.5s ease, 
                 filter 0.5s ease, 
                 box-shadow 0.5s ease,
                 border-color 0.25s ease,
-                z-index 0.5s step-end;
+                z-index 0.5s ease;
   }
   
   .hero-card.pos-left {
     transform: translateX(-340px) scale(0.82) rotateY(10deg);
     opacity: 0.65;
     filter: brightness(0.7);
-    z-index: 2;
+    z-index: 2; /* le da la superposicion (profundidad) */
   }
   
   .hero-card.pos-center {
-    transform: translateX(0px) scale(1.05) rotateY(0deg) translateZ(20px);
+    transform: translateX(0px) scale(1.05) rotateY(0deg) translateZ(20px); /* el rotateY sirve para darle el efecto 3D */
     opacity: 1;
     filter: brightness(1);
-    z-index: 10;
+    z-index: 10; /* le da la superposicion (profundidad) */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 18px rgba(0, 204, 255, 0.35);
   }
   
@@ -67,7 +68,7 @@
     transform: translateX(340px) scale(0.82) rotateY(-10deg);
     opacity: 0.65;
     filter: brightness(0.7);
-    z-index: 2;
+    z-index: 2; /* le da la superposicion (profundidad) */
   }
   
   /* EFECTO HOVER EN LAS TARJETAS DEL HERO */
@@ -85,8 +86,8 @@
     transform: translateX(0px) scale(1.08) rotateY(0deg) translateZ(30px);
   }
   
-  .hero-carousel-section .left-arrow { left: 10px; z-index: 20; }
-  .hero-carousel-section .right-arrow { right: 10px; z-index: 20; }
+  .hero-carousel-section .left-arrow { left: 125px; z-index: 20; }
+  .hero-carousel-section .right-arrow { right: 125px; z-index: 20; }
   
   
   /* =========================================================
@@ -172,7 +173,7 @@
     z-index: 6;
     opacity: 0;
     transition: opacity 0.25s ease;
-    text-shadow: 
+    text-shadow: /* se hizo asi para darle el borde a las letras de arriba-izquierda,arriba-izquierda,abajo-izquierda,abajo-derecha */
       -1px -1px 0 #000,  
        1px -1px 0 #000,
       -1px  1px 0 #000,
@@ -194,12 +195,60 @@
   /* =========================================================
      DISEÑO RESPONSIVO (MÓVILES Y TABLETS)
      ========================================================= */
-  @media (max-width: 768px) {
-    .hero-carousel-section .carousel-wrapper { height: 180px; padding: 0 20px; }
-    .hero-card { width: 240px; height: 140px; }
-    .hero-card.pos-left { transform: translateX(-160px) scale(0.8) rotateY(8deg); }
-    .hero-card.pos-right { transform: translateX(160px) scale(0.8) rotateY(-8deg); }
-    .category-title { margin-left: 20px; }
-    .category-cards-container { padding: 6px 20px; }
-    .game-card { width: 130px; min-width: 130px; height: 80px; }
+     
+    @media (max-width: 768px) {
+    /* 1. Ajustes del Carrusel Principal (Hero 3D) */
+    .hero-carousel-section .carousel-wrapper { 
+      height: 160px; 
+      padding: 0 10px; 
+    }
+  
+    /* Tarjetas más chicas */
+    .hero-card { 
+      width: 200px; 
+      height: 120px; 
+    }
+  
+    /* Menor desplazamiento lateral */
+    .hero-card.pos-left { 
+      transform: translateX(-110px) scale(0.78) rotateY(8deg); 
+    }
+  
+    .hero-card.pos-right { 
+      transform: translateX(110px) scale(0.78) rotateY(-8deg); 
+    }
+  
+    /* Flechas hacia los bordes exteriores */
+    .hero-carousel-section .left-arrow { 
+      left: 4px !important; 
+      z-index: 25; 
+    }
+  
+    .hero-carousel-section .right-arrow { 
+      right: 4px !important; 
+      z-index: 25; 
+    }
+  
+    .carousel-arrow {
+      width: 32px;
+      height: 32px;
+      font-size: 1.2rem;
+    }
+  
+    /* 2. Ajustes para los Carruseles de Categorías */
+    .category-title { 
+      margin-left: 12px; 
+      font-size: 0.95rem;
+    }
+  
+    /* Sacamos los bordes laterales gigantes */
+    .category-cards-container { 
+      padding: 6px 10px; 
+    }
+  
+    .game-card { 
+      width: 120px; 
+      min-width: 120px; 
+      height: 75px; 
+    }
   }

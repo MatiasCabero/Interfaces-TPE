@@ -100,21 +100,21 @@
     flex-shrink: 0;
   }
   
+  /* =========================================================
+     GALERÍA UNIFICADA DE IMÁGENES Y VIDEO
+     ========================================================= */
   .game-gallery-video-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
     width: 100%;
   }
   
   .game-gallery {
-    flex: 0 0 auto;
-    margin-top: 24px;
+    width: 100%;
+    margin-top: 15px;
   }
   
   .game-thumbnails-title {
     font-size: 1.1rem;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     margin-top: 0;
   }
   
@@ -122,14 +122,16 @@
     display: flex;
     gap: 12px;
     overflow-x: auto;
-    padding-top: 8px;     
-    padding-bottom: 8px;  
+    padding-top: 6px;     
+    padding-bottom: 12px;  
+    scroll-behavior: smooth;
   }
   
   .game-thumbnails::-webkit-scrollbar {
     display: none;
   }
   
+  /* Todas las miniaturas (imágenes y video) miden EXACTAMENTE lo mismo */
   .game-thumb {
     width: 160px;          
     height: 98px;          
@@ -139,6 +141,7 @@
     flex-shrink: 0;
     cursor: pointer;
     border: 2px solid transparent;
+    background-color: var(--bg-card);
     transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
   
@@ -148,48 +151,21 @@
     box-shadow: 0 4px 12px rgba(0, 204, 255, 0.3);
   }
   
-  .game-thumb img {
+  .game-thumb img,
+  .video-player-thumb {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
   
-  .game-video-block {
-    flex-shrink: 0;
-    width: 380px !important;
-    max-width: 380px !important;
-  }
-  
-  .video-player {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 14px;
-    display: block;
-  }
-  
-  .game-video-placeholder {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 14px;
-    background-color: var(--bg-card);
-    padding: 0;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   /* DESCRIPCIÓN Y COMENTARIOS OCUPAN EL 100% DEL ANCHO */
   .game-detail-grid {
     display: block;
     width: 100%;
     margin-top: 15px; 
   }
-
+  
   .game-detail-main {
     width: 100%;
   }
@@ -240,7 +216,6 @@
     min-width: 0;
   }
   
-  /* CABECERA CON USUARIO Y FECHA AL LADO */
   .comment-header {
     display: flex;
     align-items: center;
@@ -276,7 +251,7 @@
     gap: 12px;
     margin-top: 6px;
   }
-
+  
   .action-btn {
     background: transparent;
     border: none;
@@ -290,12 +265,12 @@
     border-radius: 4px;
     transition: color 0.2s ease, background-color 0.2s ease;
   }
-
+  
   .action-btn:hover {
     color: #00ccff;
     background-color: rgba(0, 204, 255, 0.1);
   }
-
+  
   .action-btn svg {
     display: block;
   }
@@ -343,30 +318,29 @@
     height: 42px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
-
+  
   .btn-publicar .btn-text {
     display: inline-block;
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
-
+  
   .btn-publicar .mail-icon {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0) rotate(-45deg);
+    transform: translate(-50%, -50%) scale(0);
     opacity: 0;
     width: 20px;
     height: 20px;
     fill: #ffffff;
     transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-
+  
   .btn-publicar:hover {
     background-color: var(--primary-green-hover);
     box-shadow: 0 0 16px rgba(123, 179, 28, 0.5);
   }
-
-  /* ESTADO CUANDO SE HACE CLIC */
+  
   .btn-publicar.is-sent {
     width: 42px !important;
     min-width: 42px !important;
@@ -376,22 +350,43 @@
     background-color: var(--primary-green) !important;
     box-shadow: 0 0 18px rgba(123, 179, 28, 0.8);
   }
-
+  
   .btn-publicar.is-sent .btn-text {
     opacity: 0;
     transform: scale(0.5);
   }
-
+  
   .btn-publicar.is-sent .mail-icon {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    transform: translate(-50%, -50%) scale(1);
   }
   
+  /* =========================================================
+     ADAPTACIÓN RESPONSIVA (MOBILE)
+     ========================================================= */
   @media (max-width: 768px) {
-    .game-media { height: 55vh; min-height: 260px; }
-    .game-gallery-video-row { flex-direction: column; align-items: stretch; }
-    .game-video-block { width: 100%; }
-    .game-share-row { flex-wrap: wrap; }
-    .comment-form { align-items: stretch; }
-    .game-video-placeholder { flex-shrink: 0; width: 320px; }
+    .game-media { 
+      height: 35vh; 
+      min-height: 220px; 
+    }
+  
+    .game-thumbnails {
+      gap: 8px;
+      padding-bottom: 8px;
+    }
+  
+    /* Miniaturas un poco más compactas en mobile */
+    .game-thumb { 
+      width: 130px; 
+      min-width: 130px; 
+      height: 80px; 
+    }
+  
+    .game-share-row { 
+      flex-wrap: wrap; 
+    }
+  
+    .comment-form { 
+      align-items: stretch; 
+    }
   }

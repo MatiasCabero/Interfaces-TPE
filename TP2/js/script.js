@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (progress >= 100) {
         clearInterval(interval);
         loaderScreen.style.opacity = '0';
-        loaderScreen.style.transition = 'opacity 0.4s ease';
+        loaderScreen.style.transition = 'opacity 0.4s ease'; /* tiempo en el cual se opaca en css */
         setTimeout(() => {
           loaderScreen.style.display = 'none';
-        }, 400);
+        }, 400)/* tiempo el cual js espera para ocultar todo el loader, 0,4seg */;
       }
-    }, 100);
+    }, 100/* tiempo en el cual se repite la funcion, 0,1seg */);
   }
 
 

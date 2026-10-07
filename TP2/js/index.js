@@ -111,21 +111,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderApiGames(games) {
-    apiContainer.innerHTML = '';
-
+    apiContainer.innerHTML = ''; // Limpia el contenedor (remueve placeholders o cargando)
+  
     games.forEach(game => {
+      // Operador OR (||): Si existe la versión de baja resolución la usa, si no, usa la normal
       const imageUrl = game.background_image_low_res || game.background_image;
-
+  
+      // Crea el nodo HTML <article class="game-card">
       const card = document.createElement('article');
       card.classList.add('game-card');
       
+      // Inyecta la estructura interna de la tarjeta usando Template Strings
       card.innerHTML = `
         <img src="${imageUrl}" alt="${game.name}" class="card-img" loading="lazy">
         <div class="card-gradient-overlay"></div>
         <span class="game-title">${game.name}</span>
       `;
-
-      // SE REMOVIÓ EL EVENT LISTENER DE CLIC PARA QUE NO HAGA NADA AL PRESIONAR LA TARJETA
+  
+      // Agrega la tarjeta creada al contenedor principal en el DOM
       apiContainer.appendChild(card);
     });
   }
