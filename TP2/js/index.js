@@ -32,14 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // REDIRECCIÓN AL HACER CLIC EN CUALQUIER TARJETA DESTACADA DEL HERO DE MANERA DIRECTA A JUEGO.HTML
+  // REDIRECCIÓN DINÁMICA SEGÚN LA TARJETA SELECCIONADA EN EL HERO
   const heroContainer = document.getElementById('heroCardsContainer');
   if (heroContainer) {
     heroContainer.addEventListener('click', (e) => {
       const clickedCard = e.target.closest('.hero-card');
       if (clickedCard) {
-        if (clickedCard.classList.contains('pos-center')) {
-          window.location.href = 'juego.html';
+        // Leemos la URL destino guardada en el atributo data-url de la tarjeta
+        const targetUrl = clickedCard.getAttribute('data-url');
+        if (targetUrl) {
+          window.location.href = targetUrl;
         }
       }
     });

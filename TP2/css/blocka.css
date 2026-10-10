@@ -1,0 +1,487 @@
+/* =========================================================
+   BLOCKA — ESTILOS GENERALES Y ESCENARIO
+   ========================================================= */
+
+   .game-stage {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .game-media {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background-color: #D4EBF8; 
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
+  }
+  
+  #miLienzo {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: pointer;
+  }
+  
+  /* =========================================================
+     HUD FLOTANTE SOBRE EL CANVAS
+     ========================================================= */
+  
+  .game-hud {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 5;
+    pointer-events: none; /* Permite clicks a través del espacio libre */
+  }
+  
+  .game-hud.hidden {
+    display: none !important;
+  }
+  
+  .hud-left,
+  .hud-center,
+  .hud-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: auto; /* Habilita interacción sobre botones y badges */
+  }
+  
+  .hud-item {
+    background: rgba(255, 255, 255, 0.92);
+    color: #1e293b;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid #c2e2f3;
+    box-shadow: 0 4px 12px rgba(15, 30, 60, 0.08);
+    backdrop-filter: blur(4px);
+  }
+  
+  .hud-btn {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid #c2e2f3;
+    box-shadow: 0 4px 12px rgba(15, 30, 60, 0.08);
+    transition: all 0.2s ease;
+  }
+  
+  .btn-ayuda {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+  }
+  
+  .btn-ayuda:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+  }
+  
+  .btn-secondary-hud {
+    background: rgba(255, 255, 255, 0.92);
+    color: #1e293b;
+  }
+  
+  .btn-secondary-hud:hover {
+    background: #f1f5f9;
+    transform: translateY(-1px);
+  }
+  
+  /* =========================================================
+     OVERLAYS DE RULETA, VISTA PREVIA Y VICTORIA
+     ========================================================= */
+  
+    .game-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(212, 235, 248, 0.6); /* Celeste pastel con transparencia */
+        backdrop-filter: blur(8px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        padding: 20px;
+    }
+  
+  .game-overlay.hidden {
+    display: none !important;
+  }
+  
+  /* Contenedor de la Ruleta */
+  .roulette-container,
+  .victory-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 28px 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    border: 1px solid #e2e8f0;
+  }
+  
+  .roulette-title,
+  .victory-title {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+  
+  /* Selector de Cantidad de Piezas (4, 6, 8) */
+  .piezas-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .piezas-label {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.92rem;
+    color: #475569;
+    font-weight: 600;
+  }
+  
+  .piezas-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .btn-piezas {
+    background: #f1f5f9;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-piezas:hover {
+    background: #e2e8f0;
+  }
+  
+  .btn-piezas.active {
+    background: #1e40af;
+    color: #ffffff;
+    border-color: #1e40af;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.25);
+  }
+  
+  /* Grilla de Miniaturas de la Ruleta */
+  .roulette-grid {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .roulette-thumb {
+    width: 76px;
+    height: 76px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 3px solid transparent;
+    opacity: 0.6;
+    transition: all 0.15s ease;
+  }
+  
+  .roulette-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .roulette-thumb.active-roulette {
+    opacity: 1;
+    border-color: #2563eb;
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
+  }
+  
+  /* Botones de Acción Generales */
+  .btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+  
+  .btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+  }
+  
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .btn-secondary {
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-secondary:hover {
+    background: #e2e8f0;
+  }
+  
+  .victory-actions {
+    display: flex;
+    gap: 12px;
+  }
+  
+  /* =========================================================
+     ANIMACIÓN Y TARJETA VISTA PREVIA DE LA IMAGEN GANADORA
+     ========================================================= */
+  
+  .preview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background: #ffffff;
+    padding: 32px 44px;
+    border-radius: 12px;
+    border: 1px solid #c2e2f3;
+    box-shadow: 0 12px 36px rgba(15, 30, 60, 0.2);
+    max-width: 620px;
+    width: 90%;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .preview-img {
+    width: 100%;
+    max-width: 520px;
+    max-height: 360px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    object-fit: contain;
+  }
+  
+  @keyframes popIn {
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  /* =========================================================
+     SECCIÓN INFERIOR: DETALLES, INSTRUCCIONES Y COMENTARIOS
+     ========================================================= */
+  
+  .blocka-details {
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: #e2e8f0;
+  }
+  
+  .blocka-section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+  
+  .blocka-gallery {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+  
+  .blocka-gallery-item {
+    min-width: 160px;
+    height: 95px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0f172a;
+  }
+  
+  .blocka-gallery-item img,
+  .blocka-gallery-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .blocka-sub-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+  
+  .blocka-sub-title.blue {
+    color: #38bdf8; /* Azul cyan idéntico al de Peg Solitaire */
+  }
+  
+  .blocka-sub-title.white {
+    color: #ffffff;
+  }
+  
+  .blocka-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #cbd5e1;
+  }
+  
+  .blocka-comments {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .blocka-comment-card {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .blocka-comment-avatar {
+    font-size: 1.5rem;
+    background: #1e293b;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .blocka-comment-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .blocka-comment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .blocka-comment-author {
+    font-weight: 700;
+    color: #38bdf8;
+    font-size: 0.9rem;
+  }
+  
+  .blocka-comment-date {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+  
+  .blocka-comment-text {
+    font-size: 0.88rem;
+    color: #e2e8f0;
+  }
+  
+  /* =========================================================
+     ADAPTATIVIDAD MOBILE (MEDIA QUERIES)
+     ========================================================= */
+  
+  @media (max-width: 768px) {
+    .game-media {
+      height: 440px;
+    }
+  
+    .game-hud {
+      flex-wrap: wrap;
+      top: 8px;
+      padding: 0 10px;
+      gap: 6px;
+    }
+  
+    .hud-btn,
+    .hud-item {
+      font-size: 0.75rem;
+      padding: 6px 8px;
+    }
+  
+    .roulette-container,
+    .victory-container,
+    .preview-container {
+      padding: 20px 16px;
+      width: 95%;
+      gap: 14px;
+    }
+  
+    .roulette-title,
+    .victory-title {
+      font-size: 1.15rem;
+    }
+  
+    .roulette-grid {
+      justify-content: flex-start;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+  
+    .roulette-thumb {
+      width: 64px;
+      height: 64px;
+      min-width: 64px;
+    }
+  
+    .piezas-selector {
+      flex-direction: column;
+      gap: 6px;
+    }
+  
+    .victory-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    .btn-secondary,
+    .btn-primary {
+      width: 100%;
+    }
+  }
