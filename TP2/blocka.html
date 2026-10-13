@@ -132,50 +132,50 @@
          1) JUEGO PRINCIPAL — Protagonista absoluto 
          ========================================================= -->
 
-      <div class="game-stage">
-        <div class="game-media" id="gameMedia">
-          
-          <!-- HUD Flotante (Nivel, Cronómetro y Ayuda) -->
-          <div class="game-hud hidden" id="gameHUD">
-            <div class="hud-left">
-              <div class="hud-item level-badge">
-                Nivel: <strong id="hudNivel">1 (2x2)</strong>
-              </div>
-              <button id="btnVolverHUD" class="hud-btn btn-secondary-hud" title="Volver al Menú Inicial">
-                 Menú
-              </button>
+    <div class="game-stage">
+      <div class="game-media" id="gameMedia">
+        
+        <!-- HUD Flotante (Nivel, Cronómetro y Ayuda) -->
+        <div class="game-hud hidden" id="gameHUD">
+          <div class="hud-left">
+            <div class="hud-item level-badge">
+              Nivel: <strong id="hudNivel">1 (2x2)</strong>
             </div>
-  
-            <div class="hud-center">
-              <div class="hud-item timer-badge">
-                 <strong id="hudTiempo">00:00</strong>
-              </div>
-            </div>
-  
-            <div class="hud-right">
-              <button id="btnReiniciarHUD" class="hud-btn btn-secondary-hud" title="Reiniciar nivel y cronómetro">
-                 Reiniciar
-              </button>
-              <button id="btnAyuda" class="hud-btn btn-ayuda" title="Ubica una pieza (+5s penalización)">
-                 Ayudita (+5s)
-              </button>
+            <button id="btnVolverHUD" class="hud-btn btn-secondary-hud" title="Volver al Menú Inicial">
+              Menú
+            </button>
+          </div>
+
+          <div class="hud-center">
+            <div class="hud-item timer-badge">
+              <strong id="hudTiempo">00:00</strong>
             </div>
           </div>
 
-          <canvas id="miLienzo"></canvas>
+          <div class="hud-right">
+            <button id="btnReiniciarHUD" class="hud-btn btn-secondary-hud" title="Reiniciar nivel y cronómetro">
+              Reiniciar
+            </button>
+            <button id="btnAyuda" class="hud-btn btn-ayuda" title="Ubica una pieza (+5s penalización)">
+              Ayudita (+5s)
+            </button>
+          </div>
+        </div>
 
-         <!-- Overlay con Ruleta y Configuración -->
-         <div class="game-overlay" id="gameOverlay">
+        <canvas id="miLienzo"></canvas>
+
+        <!-- Overlay con Ruleta y Configuración -->
+        <div class="game-overlay" id="gameOverlay">
           <div class="roulette-container">
             <h2 class="roulette-title">Sorteo de Imagen</h2>
             
-            <!-- Selección de Cantidad de Piezas -->
+            <!-- Selección de Dificultad (Afecta a todos los niveles) -->
             <div class="piezas-selector">
-              <span class="piezas-label">Cantidad de piezas:</span>
+              <span class="piezas-label">Elegir dificultad del juego:</span>
               <div class="piezas-buttons">
-                <button type="button" class="btn-piezas active" data-piezas="4">4 (2x2)</button>
-                <button type="button" class="btn-piezas" data-piezas="6">6 (3x2)</button>
-                <button type="button" class="btn-piezas" data-piezas="8">8 (4x2)</button>
+                <button type="button" class="btn-piezas active" data-piezas="4">Fácil (4 pzs)</button>
+                <button type="button" class="btn-piezas" data-piezas="6">Media (6 pzs)</button>
+                <button type="button" class="btn-piezas" data-piezas="8">Difícil (8 pzs)</button>
               </div>
             </div>
 
@@ -191,19 +191,21 @@
             <button id="btnComenzar" class="btn-primary">Comenzar</button>
           </div>
         </div>
-          <!-- Overlay de Victoria y Selección de Nivel -->
-          <div class="game-overlay hidden" id="victoryOverlay">
-            <div class="victory-container">
-              <h2 class="victory-title" id="victoryTitle">¡Nivel Completado!</h2>
-              <p class="victory-time" id="victoryTimeMsg">Tiempo total: <strong id="timeResult">00:00</strong></p>
-              <div class="victory-actions">
-                <button id="btnSiguienteNivel" class="btn-primary">Siguiente Nivel ➔</button>
-                <button id="btnVolverMenu" class="btn-secondary">Volver al Menú</button>
-              </div>
+
+        <!-- Overlay de Victoria y Selección de Nivel -->
+        <div class="game-overlay hidden" id="victoryOverlay">
+          <div class="victory-container">
+            <h2 class="victory-title" id="victoryTitle">¡Nivel Completado!</h2>
+            <p class="victory-time" id="victoryTimeMsg"></p>
+            <div class="victory-actions">
+              <button id="btnSiguienteNivel" class="btn-primary">Siguiente Nivel ➔</button>
+              <button id="btnVolverMenu" class="btn-secondary">Volver al Menú</button>
             </div>
           </div>
         </div>
+
       </div>
+    </div>
 
     <!-- =========================================================
          2) SECCIÓN INFERIOR — Compartir + Galería Unificada
@@ -231,12 +233,6 @@
         <div class="game-gallery">
           <h3 class="game-thumbnails-title">Imágenes y Video del juego</h3>
           <div class="game-thumbnails" id="gameThumbnails">
-            <!-- Video integrado con el mismo tamaño que las fotos -->
-            <!-- <div class="game-thumb game-thumb-video">
-              <video class="video-player-thumb" controls preload="metadata">
-                <source src="Assets/video/gameplay.mp4" type="video/mp4">
-              </video>
-            </div> -->
             <!-- Capturas del juego -->
             <div class="game-thumb"><img src="Assets/blocka/game1.png" alt="Captura 1"></div>
             <div class="game-thumb"><img src="Assets/blocka/game2.png" alt="Captura 2"></div>
@@ -289,7 +285,7 @@
               </div>
             </div>
           </div>
-        
+
           <!-- Comentario 2 -->
           <div class="comment-item">
             <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
@@ -313,103 +309,7 @@
               </div>
             </div>
           </div>
-        
-          <!-- Comentario 3 -->
-          <div class="comment-item">
-            <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
-            <div class="comment-body">
-              <div class="comment-header">
-                <span class="comment-username">GamerGirl_Arg</span>
-                <span class="comment-date">- Hace 3 días</span>
-              </div>
-              <div class="comment-box">
-                Me encantó cómo al alinear la última pieza vuelve la foto completa en RGB, te da una satisfacción terrible terminar cada nivel.
-              </div>
-              <div class="comment-actions">
-                <button type="button" class="action-btn like-btn">
-                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
-                  <span>15</span>
-                </button>
-                <button type="button" class="action-btn dislike-btn">
-                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
-                  <span>0</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        
-          <!-- Comentario 4 -->
-          <div class="comment-item">
-            <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
-            <div class="comment-body">
-              <div class="comment-header">
-                <span class="comment-username">RetroArcadeMaster</span>
-                <span class="comment-date">- 15 de Septiembre</span>
-              </div>
-              <div class="comment-box">
-                Excelente cómo resolvieron la rotación con los clics del mouse. El botón de ayudita me salvó la vida en el nivel 3 cuando me quedé trabado.
-              </div>
-              <div class="comment-actions">
-                <button type="button" class="action-btn like-btn">
-                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
-                  <span>22</span>
-                </button>
-                <button type="button" class="action-btn dislike-btn">
-                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
-                  <span>2</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        
-          <!-- Comentario 5 -->
-          <div class="comment-item">
-            <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
-            <div class="comment-body">
-              <div class="comment-header">
-                <span class="comment-username">PuzzlePro_x</span>
-                <span class="comment-date">- Hace 1 semana</span>
-              </div>
-              <div class="comment-box">
-                ¡Mucha tensión con el reloj en el nivel 4! Tuve que reintentarlo como tres veces pero al final lo pude sacar. Muy bien logrado.
-              </div>
-              <div class="comment-actions">
-                <button type="button" class="action-btn like-btn">
-                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
-                  <span>5</span>
-                </button>
-                <button type="button" class="action-btn dislike-btn">
-                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
-                  <span>0</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        
-          <!-- Comentario 6 -->
-          <div class="comment-item">
-            <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
-            <div class="comment-body">
-              <div class="comment-header">
-                <span class="comment-username">SpeedRunner_94</span>
-                <span class="comment-date">- Hace 2 semanas</span>
-              </div>
-              <div class="comment-box">
-                Excelente propuesta para la plataforma. La ruleta del principio le da un toque re dinámico antes de empezar a jugar.
-              </div>
-              <div class="comment-actions">
-                <button type="button" class="action-btn like-btn">
-                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
-                  <span>19</span>
-                </button>
-                <button type="button" class="action-btn dislike-btn">
-                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
-                  <span>3</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        
+
           <!-- Formulario para publicar -->
           <form class="comment-form" id="commentForm">
             <textarea placeholder="Comentá qué te pareció..." rows="3" required></textarea>
@@ -429,91 +329,49 @@
        Pie de Página Extendido (Fat Footer)
        ========================================================= -->
   <footer class="fat-footer">
-  <div class="footer-container">
-    
-    <!-- Columna Logo + Resumen del sitio -->
-    <div class="footer-brand-col">
-      <div class="footer-logo-placeholder">
-        <img src="Assets/LogoGrande.jpeg" alt="M&M Arcade Logo" class="footer-logo-img">
+    <div class="footer-container">
+      <div class="footer-brand-col">
+        <div class="footer-logo-placeholder">
+          <img src="Assets/LogoGrande.jpeg" alt="M&M Arcade Logo" class="footer-logo-img">
+        </div>
+        <p class="footer-brand-desc">Tu plataforma de entretenimiento retro y moderna. Juégalo todo desde tu navegador.</p>
       </div>
-      <p class="footer-brand-desc">Tu plataforma de entretenimiento retro y moderna. Juégalo todo desde tu navegador.</p>
+
+      <div class="footer-links-grid">
+        <div class="footer-col">
+          <h4>Explorar</h4>
+          <a href="index.html">Inicio</a>
+          <a href="#">Juegos Populares</a>
+          <a href="#">Novedades</a>
+          <a href="#">Juegos de Mesa</a>
+        </div>
+        <div class="footer-col">
+          <h4>Comunidad</h4>
+          <a href="#">Foro de Jugadores</a>
+          <a href="#">Reseñas & Críticas</a>
+          <a href="#">Discord Oficial</a>
+        </div>
+        <div class="footer-col">
+          <h4>Soporte & Legal</h4>
+          <a href="#">Centro de Ayuda</a>
+          <a href="#">Términos de Servicio</a>
+          <a href="#">Política de Privacidad</a>
+        </div>
+        <div class="footer-col footer-col-newsletter">
+          <h4>Boletín Informativo</h4>
+          <p class="newsletter-desc">Recibí ofertas y nuevos juegos semanalmente.</p>
+          <form class="footer-newsletter-form" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="Tu email..." required>
+            <button type="submit">Unirme</button>
+          </form>
+        </div>
+      </div>
     </div>
 
-    <!-- Grilla de Enlaces Ampliada (4 Columnas) -->
-    <div class="footer-links-grid">
-      
-      <!-- Columna 1: Explorar -->
-      <div class="footer-col">
-        <h4>Explorar</h4>
-        <a href="index.html">Inicio</a>
-        <a href="#">Juegos Populares</a>
-        <a href="#">Novedades</a>
-        <a href="#">Juegos de Mesa</a>
-        <a href="#">Multijugador</a>
-        <a href="#">Acción & Aventura</a>
-        <a href="#">Estrategia</a>
-        <a href="#">Originales M&M</a>
-      </div>
-
-      <!-- Columna 2: Comunidad & Social -->
-      <div class="footer-col">
-        <h4>Comunidad</h4>
-        <a href="#">Foro de Jugadores</a>
-        <a href="#">Reseñas & Críticas</a>
-        <a href="#">Eventos & Torneos</a>
-        <a href="#">Creadores de Contenido</a>
-        <a href="#">Discord Oficial</a>
-        <a href="#">Canal de YouTube</a>
-        <a href="#">Instagram</a>
-        <a href="#">Servidores de Estado</a>
-      </div>
-
-      <!-- Columna 3: Soporte & Legales -->
-      <div class="footer-col">
-        <h4>Soporte & Legal</h4>
-        <a href="#">Centro de Ayuda</a>
-        <a href="#">Preguntas Frecuentes</a>
-        <a href="#">Reportar un Error</a>
-        <a href="#">Términos de Servicio</a>
-        <a href="#">Política de Privacidad</a>
-        <a href="#">Política de Cookies</a>
-        <a href="#">Aviso Legal</a>
-        <a href="#">Configuración de Cookies</a>
-      </div>
-
-      <!-- Columna 4: Tienda & Newsletter -->
-      <div class="footer-col footer-col-newsletter">
-        <h4>Tienda & Cuenta</h4>
-        <a href="login.html">Iniciar Sesión</a>
-        <a href="register.html">Crear Cuenta</a>
-        <a href="#">Pase Arcade VIP</a>
-        <a href="#">Tarjetas de Regalo</a>
-        <a href="#">Historial de Compras</a>
-        
-        <h4 style="margin-top: 14px;">Boletín Informativo</h4>
-        <p class="newsletter-desc">Recibí ofertas y nuevos juegos semanalmente.</p>
-        <form class="footer-newsletter-form" onsubmit="event.preventDefault();">
-          <input type="email" placeholder="Tu email..." required>
-          <button type="submit">Unirme</button>
-        </form>
-      </div>
-
+    <div class="footer-bottom">
+      <p>© 2026 Powered and secured by M&M Arcade Inc. Todos los derechos reservados.</p>
     </div>
-
-  </div>
-
-  <!-- Sección inferior: Medios de pago y Copyright -->
-  <div class="footer-bottom">
-    <div class="footer-payments">
-      <span>Métodos de pago aceptados:</span>
-      <span class="payment-badge">Visa</span>
-      <span class="payment-badge">Mastercard</span>
-      <span class="payment-badge">Mercado Pago</span>
-      <span class="payment-badge">PayPal</span>
-    </div>
-    <p>© 2026 Powered and secured by M&M Arcade Inc. Todos los derechos reservados.</p>
-  </div>
-</footer>
+  </footer>
 
   <!-- JS común a todo el sitio -->
   <script src="js/script.js"></script>

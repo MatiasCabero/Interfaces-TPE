@@ -1,19 +1,11 @@
-// el contexto (ctx) es el conjunto de herramietas que uso para dibujar sobre el canvas
+// el contexto (ctx) es el conjunto de herramientas que uso para dibujar sobre el canvas
 // imageData es una estructura de datos (un objeto) que guarda todos los píxeles de una imagen o 
 // del canvas cargados en la memoria RAM.   
 //
 // Contiene tres datos principales:   
 //          width: El ancho de la imagen.   
 //          height: El alto de la imagen.   
-//          data: Un arreglo gigante de números donde cada píxel está representado por 4 números seguidos (Rojo, Verde, 
-//          Azul, Alfa).   
-//
-// La analogía del taller de pintura:
-//      El canvas: Es el cuadro colgado en la pared.
-//      imageData: Es una foto digital exacta de ese cuadro guardada en tu memoria. 
-//      Vos podés cambiarle los colores a la foto en tu memoria todo lo que quieras, pero el cuadro 
-//      de la pared (canvas) no cambia hasta que ejecutes ctx.putImageData() para "planchar" tus cambios en la 
-//      pantalla. 
+//          data: Un arreglo gigante de números donde cada píxel está representado por 4 números seguidos (Rojo, Verde, Azul, Alfa).
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Obtenemos las referencias del DOM
@@ -52,14 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSiguienteNivel = document.getElementById('btnSiguienteNivel');
     const btnVolverMenu = document.getElementById('btnVolverMenu');
 
-    // Selección de Piezas (Solo configurable en Nivel 1)
+    // Selección de Piezas / Dificultad (Solo configurable en Nivel 1)
     let piezasSelectorContainer = document.querySelector('.piezas-selector');
     let btnsPiezas = document.querySelectorAll('.btn-piezas');
     let cantidadPiezas = 4;
     let cantFilas = 2;
     let cantColumnas = 2;
 
-    // Guardamos el HTML original de la ruleta apenas carga la página
+    // Guardamos el HTML original de la ruleta apenas carga la página en memoria RAM
     if (!gameOverlay.getAttribute('data-original-html')) {
         gameOverlay.setAttribute('data-original-html', gameOverlay.innerHTML);
     }
@@ -98,13 +90,17 @@ document.addEventListener('DOMContentLoaded', () => {
     inicializarEventosRuleta();
 
     // Variables de estado del juego
-    let nivelActual = 1; // 1: Grises, 2: Brillo, 3: Negativo, 4: Aleatorio + Tiempo límite (35s)
+    let nivelActual = 1;
     let piezas = [];
     let imagenActual = new Image();
     let rutaImagenActual = '';
     let juegoGanado = false;
     let juegoPerdido = false;
+    let primerClicRealizado = false; 
     const angulosPosibles = [90, 180, 270];
+
+    // Historial de tiempos para los 4 niveles de la dificultad actual
+    let tiemposPorNivel = [0, 0, 0, 0];
 
     // Variables del cronómetro
     let segundosTranscurridos = 0;
@@ -121,13 +117,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!juegoGanado && !juegoPerdido) aplicarAyudita();
     });
 
-    // Botón del HUD: Reiniciar Imagen y Cronómetro
     btnReiniciarHUD.addEventListener('click', () => {
         if (rutaImagenActual) {
             juegoGanado = false;
             juegoPerdido = false;
+            primerClicRealizado = false;
+            detenerCronometro();
+            segundosTranscurridos = 0;
+            actualizarTextoCronometro();
             crearPiezas();
-            iniciarCronometro();
             dibujarTablero();
         }
     });
@@ -137,11 +135,29 @@ document.addEventListener('DOMContentLoaded', () => {
         volverAlMenuInicial();
     });
 
+    // Botón Siguiente Nivel / Aumentar Dificultad
     btnSiguienteNivel.addEventListener('click', () => {
         if (juegoPerdido) {
             juegoPerdido = false;
         } else {
-            nivelActual = nivelActual < 4 ? nivelActual + 1 : 1;
+            if (nivelActual < 4) {
+                nivelActual++;
+            } else {
+                // Al terminar el Nivel 4, avanzamos la dificultad automáticamente
+                if (cantidadPiezas === 4) {
+                    cantidadPiezas = 6;
+                    cantFilas = 2; cantColumnas = 3;
+                } else if (cantidadPiezas === 6) {
+                    cantidadPiezas = 8;
+                    cantFilas = 2; cantColumnas = 4;
+                } else {
+                    // Si completó el juego en Difícil, reinicia a Fácil
+                    cantidadPiezas = 4;
+                    cantFilas = 2; cantColumnas = 2;
+                }
+                nivelActual = 1;
+                tiemposPorNivel = [0, 0, 0, 0];
+            }
         }
 
         victoryOverlay.classList.add('hidden');
@@ -155,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function volverAlMenuInicial() {
         nivelActual = 1;
+        tiemposPorNivel = [0, 0, 0, 0];
         juegoPerdido = false;
         juegoGanado = false;
         detenerCronometro();
@@ -173,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOverlay.classList.remove('hidden');
     }
 
-    // Muestra u oculta la selección de piezas según si es el Nivel 1 o un nivel avanzado
     function prepararOverlayRuleta() {
         if (nivelActual === 1) {
             if (piezasSelectorContainer) piezasSelectorContainer.style.display = 'flex';
@@ -206,10 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imagenElegida = bancoDeImagenes[indiceActual];
 
                 setTimeout(() => {
-                    mostrarVistaPreviaImagen(imagenElegida, () => {
-                        gameOverlay.classList.add('hidden');
-                        iniciarNivel(imagenElegida);
-                    });
+                    mostrarVistaPreviaImagen(imagenElegida);
                 }, 400);
             }
         }
@@ -217,43 +230,61 @@ document.addEventListener('DOMContentLoaded', () => {
         pasoRuleta();
     }
 
-    // Vista previa agrandada previa al desarmado
-    function mostrarVistaPreviaImagen(rutaImagen, callbackAlTerminar) {
+    // Vista previa agrandada e inicio fluido en segundo plano
+    function mostrarVistaPreviaImagen(rutaImagen) {
+        // 1. Inyectamos la tarjeta de vista previa
         gameOverlay.innerHTML = `
             <div class="preview-container">
-                <h2 class="roulette-title">¡Esta es tu imagen! </h2>
+                <h2 class="roulette-title">¡Esta es tu imagen! 🖼️</h2>
                 <img src="${rutaImagen}" alt="Imagen seleccionada" class="preview-img">
                 <p style="margin: 0; color: #64748b; font-size: 0.9rem; font-weight: 600;">Memorizala bien... ¡comenzando!</p>
             </div>
         `;
 
+        // 2. Cargamos y preparamos el nivel por debajo MIENTRAS se muestra la foto
+        iniciarNivel(rutaImagen);
+
+        // 3. Tras 2.5s desvanecemos el overlay suavemente
         setTimeout(() => {
-            callbackAlTerminar();
-            
+            gameOverlay.classList.add('fade-out');
+
             setTimeout(() => {
-                const htmlOriginal = gameOverlay.getAttribute('data-original-html');
-                if (htmlOriginal) {
-                    gameOverlay.innerHTML = htmlOriginal;
-                    inicializarEventosRuleta();
-                }
-            }, 300);
-        }, 3000);
+                gameOverlay.classList.add('hidden');
+                gameOverlay.classList.remove('fade-out');
+
+                // Restauramos el HTML de la ruleta en segundo plano para la próxima vez
+                setTimeout(() => {
+                    const htmlOriginal = gameOverlay.getAttribute('data-original-html');
+                    if (htmlOriginal) {
+                        gameOverlay.innerHTML = htmlOriginal;
+                        inicializarEventosRuleta();
+                    }
+                }, 200);
+            }, 400);
+
+        }, 2500);
     }
 
     function iniciarNivel(rutaImagen) {
         juegoGanado = false;
         juegoPerdido = false;
+        primerClicRealizado = false; // Reseteamos la bandera para el nuevo nivel
         rutaImagenActual = rutaImagen;
-        imagenActual = new Image();
-        imagenActual.src = rutaImagen;
 
         hudNivel.textContent = `${nivelActual} (${cantColumnas}x${cantFilas})`;
         gameHUD.classList.remove('hidden');
 
+        // Detenemos cualquier cronómetro previo y mostramos 00:00
+        detenerCronometro();
+        segundosTranscurridos = 0;
+        actualizarTextoCronometro();
+
+        imagenActual = new Image();
+        imagenActual.src = rutaImagen;
+
         imagenActual.onload = () => {
             calcularDimensionesTablero();
             crearPiezas();
-            iniciarCronometro();
             dibujarTablero();
         };
     }
@@ -362,7 +393,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let fila = 0; fila < cantFilas; fila++) {
             for (let col = 0; col < cantColumnas; col++) {
-
                 const anguloAleatorio = angulosPosibles[Math.floor(Math.random() * angulosPosibles.length)];
                 const filtroAleatorio = listaFiltros[Math.floor(Math.random() * listaFiltros.length)];
 
@@ -452,6 +482,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 mouseX >= pieza.x && mouseX <= pieza.x + pieza.ancho &&
                 mouseY >= pieza.y && mouseY <= pieza.y + pieza.alto
             ) {
+                // Si es la primera vez que toca una pieza en este nivel, arranca el reloj
+                if (!primerClicRealizado) {
+                    primerClicRealizado = true;
+                    iniciarCronometro();
+                }
+
                 pieza.angulo = (pieza.angulo + grados + 360) % 360;
                 dibujarTablero();
                 verificarVictoria();
@@ -467,12 +503,93 @@ document.addEventListener('DOMContentLoaded', () => {
             detenerCronometro();
             dibujarTablero();
 
+            // Guardamos el tiempo del nivel actual en el arreglo
+            tiemposPorNivel[nivelActual - 1] = segundosTranscurridos;
+
             setTimeout(() => {
-                victoryTitle.textContent = "¡Nivel Completado! ";
-                victoryTimeMsg.innerHTML = `Tiempo total: <strong id="timeResult">${obtenerTiempoFormateado(segundosTranscurridos)}</strong>`;
-                btnSiguienteNivel.textContent = "Siguiente Nivel ➔";
+                const tiempoTexto = obtenerTiempoFormateado(segundosTranscurridos);
+
+                // Lógica de Récord personal
+                const claveRecord = `blocka_record_diff_${cantidadPiezas}_nivel_${nivelActual}`;
+                const mejorTiempoPrevio = localStorage.getItem(claveRecord);
+                let esNuevoRecord = false;
+
+                if (!mejorTiempoPrevio || segundosTranscurridos < parseInt(mejorTiempoPrevio)) {
+                    localStorage.setItem(claveRecord, segundosTranscurridos);
+                    esNuevoRecord = true;
+                }
+
+                let textoHTML = "";
+                if (esNuevoRecord) {
+                    textoHTML = `🔥 ¡Nuevo récord: <strong>${tiempoTexto}</strong>!`;
+                } else {
+                    const tiempoPrevioTexto = obtenerTiempoFormateado(parseInt(mejorTiempoPrevio));
+                    textoHTML = `Terminado en <strong>${tiempoTexto}</strong> <br><small class="record-subtext">(Tu mejor récord: ${tiempoPrevioTexto})</small>`;
+                }
+
+                // -------------------------------------------------------------
+                // CASO A: Niveles 1, 2 y 3
+                // -------------------------------------------------------------
+                if (nivelActual < 4) {
+                    const siguienteNivelNum = nivelActual + 1;
+                    victoryTitle.textContent = `¡Nivel ${nivelActual} Completado! 🏆`;
+                    if (victoryTimeMsg) victoryTimeMsg.innerHTML = textoHTML;
+                    btnSiguienteNivel.textContent = `Siguiente Nivel: ${siguienteNivelNum} ➔`;
+                } 
+                // -------------------------------------------------------------
+                // CASO B: Completó Nivel 4 en Dificultad FÁCIL (4 pzs) o MEDIA (6 pzs)
+                // -------------------------------------------------------------
+                else if (nivelActual === 4 && cantidadPiezas < 8) {
+                    const nombreDificultadActual = cantidadPiezas === 4 ? "Fácil" : "Media";
+                    const proximaDificultad = cantidadPiezas === 4 ? "Media" : "Difícil";
+
+                    victoryTitle.textContent = `¡Dificultad ${nombreDificultadActual} Completada! 🏆`;
+                    
+                    let desgloseTiempos = `
+                        <div class="summary-container">
+                            <p style="margin-bottom: 8px;"><strong>Tiempos en esta dificultad:</strong></p>
+                            <ul class="summary-list">
+                                <li>Nivel 1: <strong>${obtenerTiempoFormateado(tiemposPorNivel[0])}</strong></li>
+                                <li>Nivel 2: <strong>${obtenerTiempoFormateado(tiemposPorNivel[1])}</strong></li>
+                                <li>Nivel 3: <strong>${obtenerTiempoFormateado(tiemposPorNivel[2])}</strong></li>
+                                <li>Nivel 4: <strong>${obtenerTiempoFormateado(tiemposPorNivel[3])}</strong></li>
+                            </ul>
+                            <p class="record-subtext" style="margin-top: 10px; color: #2563eb; font-weight: 700;">
+                                ¡Excelente trabajo! ¿Te animás a subir el desafío?
+                            </p>
+                        </div>
+                    `;
+
+                    if (victoryTimeMsg) victoryTimeMsg.innerHTML = desgloseTiempos;
+                    btnSiguienteNivel.textContent = `Aumentar Dificultad (${proximaDificultad}) 🚀`;
+                } 
+                // -------------------------------------------------------------
+                // CASO C: Completó Nivel 4 en Dificultad DIFÍCIL (8 pzs) - ¡FINAL 100%!
+                // -------------------------------------------------------------
+                else if (nivelActual === 4 && cantidadPiezas === 8) {
+                    victoryTitle.textContent = "¡JUEGO COMPLETADO AL 100%! 👑🔥";
+
+                    let desgloseFinal = `
+                        <div class="summary-container">
+                            <p style="color: #16a34a; font-weight: 800; font-size: 1.1rem; margin-bottom: 8px;">
+                                ¡Sos un genio absoluto! Lograste superar todas las dificultades.
+                            </p>
+                            <p style="margin-bottom: 6px;"><strong>Tiempos en Dificultad Difícil:</strong></p>
+                            <ul class="summary-list">
+                                <li>Nivel 1: <strong>${obtenerTiempoFormateado(tiemposPorNivel[0])}</strong></li>
+                                <li>Nivel 2: <strong>${obtenerTiempoFormateado(tiemposPorNivel[1])}</strong></li>
+                                <li>Nivel 3: <strong>${obtenerTiempoFormateado(tiemposPorNivel[2])}</strong></li>
+                                <li>Nivel 4: <strong>${obtenerTiempoFormateado(tiemposPorNivel[3])}</strong></li>
+                            </ul>
+                        </div>
+                    `;
+
+                    if (victoryTimeMsg) victoryTimeMsg.innerHTML = desgloseFinal;
+                    btnSiguienteNivel.textContent = "Volver a Jugar 🔄";
+                }
+
                 victoryOverlay.classList.remove('hidden');
-            }, 2000);
+            }, 1800);
         }
     }
 

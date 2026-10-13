@@ -107,23 +107,31 @@
      OVERLAYS DE RULETA, VISTA PREVIA Y VICTORIA
      ========================================================= */
   
-    .game-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(212, 235, 248, 0.6); /* Celeste pastel con transparencia */
-        backdrop-filter: blur(8px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10;
-        padding: 20px;
-    }
+  .game-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(212, 235, 248, 0.6); /* Celeste pastel con transparencia */
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    padding: 20px;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .game-overlay.fade-out {
+    opacity: 0;
+    visibility: hidden;
+  }
   
   .game-overlay.hidden {
     display: none !important;
   }
   
-  /* Contenedor de la Ruleta */
+  /* Contenedor de la Ruleta y Victoria */
   .roulette-container,
   .victory-container {
     background: #ffffff;
@@ -133,10 +141,11 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    max-width: 600px;
+    max-width: 720px;
     width: 100%;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
     border: 1px solid #e2e8f0;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
   
   .roulette-title,
@@ -146,6 +155,27 @@
     font-weight: 800;
     color: #0f172a;
     margin: 0;
+  }
+  
+  .victory-time {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.05rem;
+    color: #334155; /* Gris oscuro visible sobre la tarjeta blanca */
+    margin: 0;
+    text-align: center;
+  }
+  
+  .victory-time .record-subtext {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 4px;
+  }
+  
+  .victory-time strong {
+    color: #2563eb; /* Azul para resaltar los números del cronómetro */
+    font-weight: 800;
   }
   
   /* Selector de Cantidad de Piezas (4, 6, 8) */
@@ -354,7 +384,7 @@
   }
   
   .blocka-sub-title.blue {
-    color: #38bdf8; /* Azul cyan idéntico al de Peg Solitaire */
+    color: #38bdf8;
   }
   
   .blocka-sub-title.white {
@@ -421,6 +451,37 @@
   .blocka-comment-text {
     font-size: 0.88rem;
     color: #e2e8f0;
+  }
+
+  /* Desglose de tiempos al completar dificultad */
+  .summary-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 12px 20px;
+    border-radius: 8px;
+    width: 100%;
+  }
+
+  .summary-list li {
+    font-size: 0.9rem;
+    color: #475569;
+  }
+
+  .summary-list li strong {
+    color: #2563eb;
   }
   
   /* =========================================================
