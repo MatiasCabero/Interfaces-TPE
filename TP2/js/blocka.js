@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Inyectamos la tarjeta de vista previa
         gameOverlay.innerHTML = `
             <div class="preview-container">
-                <h2 class="roulette-title">¡Esta es tu imagen! 🖼️</h2>
+                <h2 class="roulette-title">¡Esta es tu imagen! </h2>
                 <img src="${rutaImagen}" alt="Imagen seleccionada" class="preview-img">
                 <p style="margin: 0; color: #64748b; font-size: 0.9rem; font-weight: 600;">Memorizala bien... ¡comenzando!</p>
             </div>
@@ -521,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 let textoHTML = "";
                 if (esNuevoRecord) {
-                    textoHTML = `🔥 ¡Nuevo récord: <strong>${tiempoTexto}</strong>!`;
+                    textoHTML = ` ¡Nuevo récord: <strong>${tiempoTexto}</strong>!`;
                 } else {
                     const tiempoPrevioTexto = obtenerTiempoFormateado(parseInt(mejorTiempoPrevio));
                     textoHTML = `Terminado en <strong>${tiempoTexto}</strong> <br><small class="record-subtext">(Tu mejor récord: ${tiempoPrevioTexto})</small>`;
@@ -532,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // -------------------------------------------------------------
                 if (nivelActual < 4) {
                     const siguienteNivelNum = nivelActual + 1;
-                    victoryTitle.textContent = `¡Nivel ${nivelActual} Completado! 🏆`;
+                    victoryTitle.textContent = `¡Nivel ${nivelActual} Completado! `;
                     if (victoryTimeMsg) victoryTimeMsg.innerHTML = textoHTML;
                     btnSiguienteNivel.textContent = `Siguiente Nivel: ${siguienteNivelNum} ➔`;
                 } 
@@ -543,7 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const nombreDificultadActual = cantidadPiezas === 4 ? "Fácil" : "Media";
                     const proximaDificultad = cantidadPiezas === 4 ? "Media" : "Difícil";
 
-                    victoryTitle.textContent = `¡Dificultad ${nombreDificultadActual} Completada! 🏆`;
+                    victoryTitle.textContent = `¡Dificultad ${nombreDificultadActual} Completada! `;
                     
                     let desgloseTiempos = `
                         <div class="summary-container">
@@ -561,13 +561,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
 
                     if (victoryTimeMsg) victoryTimeMsg.innerHTML = desgloseTiempos;
-                    btnSiguienteNivel.textContent = `Aumentar Dificultad (${proximaDificultad}) 🚀`;
+                    btnSiguienteNivel.textContent = `Aumentar Dificultad (${proximaDificultad}) `;
                 } 
                 // -------------------------------------------------------------
                 // CASO C: Completó Nivel 4 en Dificultad DIFÍCIL (8 pzs) - ¡FINAL 100%!
                 // -------------------------------------------------------------
                 else if (nivelActual === 4 && cantidadPiezas === 8) {
-                    victoryTitle.textContent = "¡JUEGO COMPLETADO AL 100%! 👑🔥";
+                    victoryTitle.textContent = "¡JUEGO COMPLETADO AL 100%! ";
 
                     let desgloseFinal = `
                         <div class="summary-container">
@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
 
                     if (victoryTimeMsg) victoryTimeMsg.innerHTML = desgloseFinal;
-                    btnSiguienteNivel.textContent = "Volver a Jugar 🔄";
+                    btnSiguienteNivel.textContent = "Volver a Jugar ";
                 }
 
                 victoryOverlay.classList.remove('hidden');
@@ -598,9 +598,9 @@ document.addEventListener('DOMContentLoaded', () => {
         detenerCronometro();
 
         setTimeout(() => {
-            victoryTitle.textContent = "¡Tiempo Agotado! ⏳";
+            victoryTitle.textContent = "¡Tiempo Agotado! ";
             victoryTimeMsg.innerHTML = `Llegaste al límite de <strong>35 segundos</strong> sin armar la imagen.`;
-            btnSiguienteNivel.textContent = "Reintentar Nivel 4 🔄";
+            btnSiguienteNivel.textContent = "Reintentar Nivel 4 ";
             victoryOverlay.classList.remove('hidden');
         }, 200);
     }
