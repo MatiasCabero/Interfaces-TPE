@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.height = contenedor.clientHeight;
 
     const bancoDeImagenes = [
-        'Assets/blocka/astronauta.jpeg',
-        'Assets/blocka/auto.jpeg',
-        'Assets/blocka/ciudad.jpeg',
-        'Assets/blocka/faro.jpeg',
-        'Assets/blocka/leon.jpeg',
-        'Assets/blocka/robot.jpeg'
+        'Assets/blocka/imagen1.jpeg',
+        'Assets/blocka/imagen2.jpeg',
+        'Assets/blocka/imagen3.jpeg',
+        'Assets/blocka/imagen4.jpeg',
+        'Assets/blocka/imagen5.jpeg',
+        'Assets/blocka/imagen6.jpeg'
     ];
 
     // Elementos de la interfaz HTML
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let juegoGanado = false;
     let juegoPerdido = false;
     let primerClicRealizado = false; 
-    const angulosPosibles = [0, 90, 180, 270];
+    const angulosPosibles = [90, 180, 270];
 
     // Historial de tiempos para los 4 niveles de la dificultad actual
     let tiemposPorNivel = [0, 0, 0, 0];
@@ -351,21 +351,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // aca vamos a calcular que tan grande va a ser el tablero
     // tmb nos sirve para que sea responsive
     function calcularDimensionesTablero() {
-        const escala = 0.65; /* solo ocupa el 65%, en el resto van los botones y demas */
+        const escala = 0.65;
         const maxAncho = Math.floor(canvas.width * escala);
         const maxAlto = Math.floor(canvas.height * escala);
 
-        const proporcionImagen = imagenActual.width / imagenActual.height;
-        
-        if (maxAncho / maxAlto > proporcionImagen) {
-            tableroAlto = maxAlto;
-            tableroAncho = Math.floor(maxAlto * proporcionImagen);
-        } else {
-            tableroAncho = maxAncho;
-            tableroAlto = Math.floor(maxAncho / proporcionImagen);
-        }
+        // Buscamos el tamano del lado del cuadrado de cad pieza
+        const ladoPiezaAncho = Math.floor(maxAncho / cantColumnas);
+        const ladoPiezaAlto = Math.floor(maxAlto / cantFilas);
 
-        /* calcula el centro del tablero */
+        // Elegimos el menor para asegurar que cada pieza sea cuadrada
+        const ladoPieza = Math.min(ladoPiezaAncho, ladoPiezaAlto);
+
+        // El tablero toma su forma rectangular final (2x2, 2x3 o 2x4)
+        tableroAncho = ladoPieza * cantColumnas;
+        tableroAlto = ladoPieza * cantFilas;
+
         offsetX = Math.floor((canvas.width - tableroAncho) / 2);
         offsetY = Math.floor((canvas.height - tableroAlto) / 2);
     }
@@ -395,14 +395,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // --------------------------------------------------------
     function crearPiezas() {
         piezas = [];
+        // CORRECION: Al dividir tableroAncho y tableroAlto por las columnas y filas,
+        // anchoPieza y altoPieza van a dar exactamente el mismo valor (ladoPieza)
         const anchoPieza = Math.floor(tableroAncho / cantColumnas); /* pueden ser 2,4,6 */
         const altoPieza = Math.floor(tableroAlto / cantFilas); /* siempre va a ser dos */
         const listaFiltros = ['grises', 'brillo', 'negativo'];
 
+        // FILTROS BALANCEADOS (Para Nivel 4):
+        // Creamos un mazo balanceado para que no se repita siempre el mismo filtro
+        const totalPiezas = cantFilas * cantColumnas;
+        const filtrosBase = ['grises', 'brillo', 'negativo'];
+        let mazoFiltros = [];
+
+        // Llenamos el mazo repartiendo equitativamente los 3 filtros
+        for (let i = 0; i < totalPiezas; i++) {
+            mazoFiltros.push(filtrosBase[i % filtrosBase.length]);
+        }
+
+        // Mezclamos el mazo de filtros (Algoritmo Fisher-Yates Shuffle RECOMENDADO POR GEMINI)
+        for (let i = mazoFiltros.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [mazoFiltros[i], mazoFiltros[j]] = [mazoFiltros[j], mazoFiltros[i]];
+        }
+
+        let indicePieza = 0;
+
         for (let fila = 0; fila < cantFilas; fila++) {
             for (let col = 0; col < cantColumnas; col++) {
-                const anguloAleatorio = angulosPosibles[Math.floor(Math.random() * angulosPosibles.length)]; // aca asignamos el angulo que va a tener cada pieza
-                const filtroAleatorio = listaFiltros[Math.floor(Math.random() * listaFiltros.length)]; // aca asignamos el filtro aleatorio del nivel 4 a cada pieza
+                // Selecciona un ángulo aleatorio
+                const anguloAleatorio = angulosPosibles[Math.floor(Math.random() * angulosPosibles.length)];
+                
+                // Toma el filtro mezclado que le corresponde a esta ficha
+                const filtroAsignado = mazoFiltros[indicePieza];
 
                 piezas.push({
                     fila: fila, /* nos dice posicion original */
@@ -412,8 +436,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     ancho: anchoPieza,
                     alto: altoPieza,
                     angulo: anguloAleatorio,
-                    filtroNivel4: filtroAleatorio  /* aca se define que el filtro en el nivel 4 es aleatorio */
+                    filtroNivel4: filtroAsignado  /* aca se define el filtro balanceado */
                 });
+
+                indicePieza++;
             }
         }
     }
@@ -431,29 +457,49 @@ document.addEventListener('DOMContentLoaded', () => {
                         /* arranca del 0,0 hasta el ancho y alto del canvas */
         ctx.fillStyle = '#D4EBF8'; /* pintamos de celeste */
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+        // 1. Calculamos la relacion de aspecto del tablero actual (por ejemplo 3/2 = 1.5 para 6 piezas)
+        const proporcionTablero = cantColumnas / cantFilas;
+        const proporcionImagen = imagenActual.width / imagenActual.height;
 
-        const anchoImgPieza = Math.floor(imagenActual.width / cantColumnas);
-        const altoImgPieza = Math.floor(imagenActual.height / cantFilas);
+        let srcAncho, srcAlto, srcX, srcY;
 
+        // 2. Encuadramos la foto original segun la proporcion del tablero sin deformarla (Cover Crop)
+        if (proporcionImagen > proporcionTablero) {
+            srcAlto = imagenActual.height;
+            srcAncho = Math.floor(imagenActual.height * proporcionTablero);
+            srcX = Math.floor((imagenActual.width - srcAncho) / 2);
+            srcY = 0;
+        } else {
+            srcAncho = imagenActual.width;
+            srcAlto = Math.floor(imagenActual.width / proporcionTablero);
+            srcX = 0;
+            srcY = Math.floor((imagenActual.height - srcAlto) / 2);
+        }
+
+        // 3. Calculamos el tamano del recorte sobre la imagen original por cada ficha
+        const anchoImgPieza = Math.floor(srcAncho / cantColumnas);
+        const altoImgPieza = Math.floor(srcAlto / cantFilas);
+    
         const MARGEN_SOLAPAMIENTO = 1.2;
-
+    
         piezas.forEach((pieza) => {
             // por cada pieza del arreglo crea un canvas invisible
             const tempCanvas = document.createElement('canvas');
             tempCanvas.width = anchoImgPieza;
             tempCanvas.height = altoImgPieza;
             const tempCtx = tempCanvas.getContext('2d');
-
+    
             tempCtx.drawImage(
                 // Recorta únicamente el pedacito de foto que le corresponde a esa ficha desde 
-                // la imagen original y la pega en el lienzo temporal
+                // la imagen original centrada y la pega en el lienzo temporal
                 imagenActual,
-                pieza.col * anchoImgPieza, pieza.fila * altoImgPieza,
+                srcX + (pieza.col * anchoImgPieza), srcY + (pieza.fila * altoImgPieza),
                 anchoImgPieza, altoImgPieza,
                 0, 0,
                 anchoImgPieza, altoImgPieza
             );
-
+    
             if (!juegoGanado) {
                 try {
                     let imgData = tempCtx.getImageData(0, 0, anchoImgPieza, altoImgPieza); /* extrae los piexeles del lienzo temporal */
@@ -463,17 +509,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.warn("Usa Live Server para probar los filtros píxel por píxel.", e);
                 }
             }
-
+    
             ctx.save(); /* guarda el estado original del canvas (sin rotar) */
-
+    
             // Mueve el eje 0,0 del canvas desde la esquina superior izquierda hasta el centro 
             // exacto de la ficha
             const centroX = pieza.x + pieza.ancho / 2;
             const centroY = pieza.y + pieza.alto / 2;
             ctx.translate(centroX, centroY);  
-            ctx.rotate((pieza.angulo * Math.PI) / 180); /* romatos la pieza con el angulo guardado */
-
-            // volvemos a dibujar la imagen pero con el nuevo centro
+            ctx.rotate((pieza.angulo * Math.PI) / 180); /* rotamos la pieza con el angulo guardado */
+    
+            // volvemos a dibujar la imagen pero con el nuevo centro 
             ctx.drawImage(
                 tempCanvas,
                 -pieza.ancho / 2 - MARGEN_SOLAPAMIENTO / 2,
@@ -481,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 pieza.ancho + MARGEN_SOLAPAMIENTO,
                 pieza.alto + MARGEN_SOLAPAMIENTO
             );
-
+    
             ctx.restore(); // Restaura el canvas a la normalidad para la siguiente pieza
         });
     }
