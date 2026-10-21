@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let juegoGanado = false;
     let juegoPerdido = false;
     let primerClicRealizado = false; 
-    const angulosPosibles = [90, 180, 270];
+    const angulosPosibles = [0, 90, 180, 270];
 
     // Historial de tiempos para los 4 niveles de la dificultad actual
     let tiemposPorNivel = [0, 0, 0, 0];
@@ -203,10 +203,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function ejecutarRuleta() {
         let indiceActual = 0;
         let vueltas = 0;
-        let velocidad = 50;
-        const minVueltas = 18 + Math.floor(Math.random() * 8);
+        let velocidad = 50; /* tiempo de espera entre un salto y el otro */
+        const minVueltas = 18 + Math.floor(Math.random() * 8); /* recomendacion de gemini para que caiga una imagen al azar */
 
         function pasoRuleta() {
+            // este es el efecto de la miniatura como que se va seleccionando
             thumbsRuleta.forEach(t => t.classList.remove('active-roulette'));
             if (thumbsRuleta[indiceActual]) {
                 thumbsRuleta[indiceActual].classList.add('active-roulette');
@@ -215,15 +216,16 @@ document.addEventListener('DOMContentLoaded', () => {
             vueltas++;
 
             if (vueltas < minVueltas) {
-                indiceActual = (indiceActual + 1) % thumbsRuleta.length;
-                velocidad += 10;
-                setTimeout(pasoRuleta, velocidad);
+                indiceActual = (indiceActual + 1) % thumbsRuleta.length; /* hacemos un bucle circular para que cuando el indice 
+                                                                            llegue a 6 (la cantidad de imagenes) vuelva a cero */
+                velocidad += 10; /* vamos haciendo que vaya mas lento por cada "vuelta" */
+                setTimeout(pasoRuleta, velocidad); /* inicia la siguiente vuelta */
             } else {
-                const imagenElegida = bancoDeImagenes[indiceActual];
+                const imagenElegida = bancoDeImagenes[indiceActual];   /* aca se selecciona como imagen en donde haya caido la ruleta */
 
                 setTimeout(() => {
                     mostrarVistaPreviaImagen(imagenElegida);
-                }, 400);
+                }, 400); /* tiempo que tiene el usuario para ver la imagen antes de comenzar el juego */
             }
         }
 
@@ -346,8 +348,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // aca vamos a calcular que tan grande va a ser el tablero
+    // tmb nos sirve para que sea responsive
     function calcularDimensionesTablero() {
-        const escala = 0.65;
+        const escala = 0.65; /* solo ocupa el 65%, en el resto van los botones y demas */
         const maxAncho = Math.floor(canvas.width * escala);
         const maxAlto = Math.floor(canvas.height * escala);
 
@@ -361,6 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tableroAlto = Math.floor(maxAncho / proporcionImagen);
         }
 
+        /* calcula el centro del tablero */
         offsetX = Math.floor((canvas.width - tableroAncho) / 2);
         offsetY = Math.floor((canvas.height - tableroAlto) / 2);
     }
@@ -385,34 +390,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --------------------------------------------------------
+    // cada pieza es un objeto que tiene diferentes elementos
+    // --------------------------------------------------------
     function crearPiezas() {
         piezas = [];
-        const anchoPieza = Math.floor(tableroAncho / cantColumnas);
-        const altoPieza = Math.floor(tableroAlto / cantFilas);
+        const anchoPieza = Math.floor(tableroAncho / cantColumnas); /* pueden ser 2,4,6 */
+        const altoPieza = Math.floor(tableroAlto / cantFilas); /* siempre va a ser dos */
         const listaFiltros = ['grises', 'brillo', 'negativo'];
 
         for (let fila = 0; fila < cantFilas; fila++) {
             for (let col = 0; col < cantColumnas; col++) {
-                const anguloAleatorio = angulosPosibles[Math.floor(Math.random() * angulosPosibles.length)];
-                const filtroAleatorio = listaFiltros[Math.floor(Math.random() * listaFiltros.length)];
+                const anguloAleatorio = angulosPosibles[Math.floor(Math.random() * angulosPosibles.length)]; // aca asignamos el angulo que va a tener cada pieza
+                const filtroAleatorio = listaFiltros[Math.floor(Math.random() * listaFiltros.length)]; // aca asignamos el filtro aleatorio del nivel 4 a cada pieza
 
                 piezas.push({
-                    fila: fila,
-                    col: col,
-                    x: offsetX + (col * anchoPieza),
-                    y: offsetY + (fila * altoPieza),
+                    fila: fila, /* nos dice posicion original */
+                    col: col,   /* nos dice posicion original */
+                    x: offsetX + (col * anchoPieza),  /* posicion dentro del canvas */
+                    y: offsetY + (fila * altoPieza),  /* posicion dentro del canvas */
                     ancho: anchoPieza,
                     alto: altoPieza,
                     angulo: anguloAleatorio,
-                    filtroNivel4: filtroAleatorio
+                    filtroNivel4: filtroAleatorio  /* aca se define que el filtro en el nivel 4 es aleatorio */
                 });
             }
         }
     }
 
+    // -------------------------------------------------
+    // ACA ESTA COMO SE PROCESA LA IMAGEN CON EL FILTRO
+    // -------------------------------------------------
+    // Creación y Recorte: Se crea el canvas temporal y se le pega el recorte limpio de la foto original (imagenActual) en posición 0.   
+    // Procesamiento de Color: Se le leen los píxeles con getImageData, se ejecuta la función de filtro (grises, brillo, negativo) y se vuelven a volcar los píxeles modificados con putImageData.   
+    // Transformación y Dibujo: Se lleva esa "estampa" ya procesada al canvas principal, se traslada el eje al centro de la celda, se aplica la rotación con ctx.rotate y se dibuja finalmente en pantalla. 
+    // esta funcion se repite segun la cantidad de piezas quie tenga la imagen, ya que se aplica a cada pieza
+    
     function dibujarTablero() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#D4EBF8';
+        ctx.clearRect(0, 0, canvas.width, canvas.height); /* borramos todo lo que habia en el canvas */
+                        /* arranca del 0,0 hasta el ancho y alto del canvas */
+        ctx.fillStyle = '#D4EBF8'; /* pintamos de celeste */
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         const anchoImgPieza = Math.floor(imagenActual.width / cantColumnas);
@@ -421,12 +438,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const MARGEN_SOLAPAMIENTO = 1.2;
 
         piezas.forEach((pieza) => {
+            // por cada pieza del arreglo crea un canvas invisible
             const tempCanvas = document.createElement('canvas');
             tempCanvas.width = anchoImgPieza;
             tempCanvas.height = altoImgPieza;
             const tempCtx = tempCanvas.getContext('2d');
 
             tempCtx.drawImage(
+                // Recorta únicamente el pedacito de foto que le corresponde a esa ficha desde 
+                // la imagen original y la pega en el lienzo temporal
                 imagenActual,
                 pieza.col * anchoImgPieza, pieza.fila * altoImgPieza,
                 anchoImgPieza, altoImgPieza,
@@ -436,21 +456,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!juegoGanado) {
                 try {
-                    let imgData = tempCtx.getImageData(0, 0, anchoImgPieza, altoImgPieza);
-                    aplicarFiltroSegunNivel(imgData, pieza);
-                    tempCtx.putImageData(imgData, 0, 0);
+                    let imgData = tempCtx.getImageData(0, 0, anchoImgPieza, altoImgPieza); /* extrae los piexeles del lienzo temporal */
+                    aplicarFiltroSegunNivel(imgData, pieza); /* aplica el filtro */
+                    tempCtx.putImageData(imgData, 0, 0); /* vuelve a pegar los piexeles procesados */
                 } catch (e) {
                     console.warn("Usa Live Server para probar los filtros píxel por píxel.", e);
                 }
             }
 
-            ctx.save();
+            ctx.save(); /* guarda el estado original del canvas (sin rotar) */
 
+            // Mueve el eje 0,0 del canvas desde la esquina superior izquierda hasta el centro 
+            // exacto de la ficha
             const centroX = pieza.x + pieza.ancho / 2;
             const centroY = pieza.y + pieza.alto / 2;
             ctx.translate(centroX, centroY);  
-            ctx.rotate((pieza.angulo * Math.PI) / 180);
+            ctx.rotate((pieza.angulo * Math.PI) / 180); /* romatos la pieza con el angulo guardado */
 
+            // volvemos a dibujar la imagen pero con el nuevo centro
             ctx.drawImage(
                 tempCanvas,
                 -pieza.ancho / 2 - MARGEN_SOLAPAMIENTO / 2,
@@ -459,25 +482,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 pieza.alto + MARGEN_SOLAPAMIENTO
             );
 
-            ctx.restore();
+            ctx.restore(); // Restaura el canvas a la normalidad para la siguiente pieza
         });
     }
 
     canvas.addEventListener('click', (e) => {
-        if (!juegoGanado && !juegoPerdido) procesarClick(e, -90);
+        if (!juegoGanado && !juegoPerdido) procesarClick(e, -90);   /* click izquierdo gira izquierda */
     });
 
     canvas.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-        if (!juegoGanado && !juegoPerdido) procesarClick(e, 90);
+        if (!juegoGanado && !juegoPerdido) procesarClick(e, 90);    /* click derecho gira derecha */
     });
+    
 
+
+    // -------------------------------------------------
+    // ACA ESTA COMO SE PROCESAN LOS CLICKS
+    // -------------------------------------------------
     function procesarClick(event, grados) {
-        const rect = canvas.getBoundingClientRect();
-        const mouseX = event.clientX - rect.left;
-        const mouseY = event.clientY - rect.top;
+        // calculamos posicion real dentro del canvas
+        const rect = canvas.getBoundingClientRect(); /* nos da la posicion del <canvas> */
+        /* event.clienteX y event.clienteY te da la posicion exacta del puntero respecto a toda la pantalla del navegador */
+        const mouseX = event.clientX - rect.left; 
+        const mouseY = event.clientY - rect.top; 
+        // cuando restamos los margenes del canvas (rect.left y rect.top) obtenemos las coordenadas exactas
+        // dentro del lienzo
 
         piezas.forEach(pieza => {
+            // recorremos todas las fichas dela arreglo piezas y verificamos siu las coordenas mouseX y mouseY 
+            // caen adentro del rectangulo de alguna pieza
             if (
                 mouseX >= pieza.x && mouseX <= pieza.x + pieza.ancho &&
                 mouseY >= pieza.y && mouseY <= pieza.y + pieza.alto
@@ -488,9 +522,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     iniciarCronometro();
                 }
 
-                pieza.angulo = (pieza.angulo + grados + 360) % 360;
-                dibujarTablero();
-                verificarVictoria();
+                pieza.angulo = (pieza.angulo + grados + 360) % 360; /* forma matematica para rotar */
+                dibujarTablero(); /* por cada pieza rotada vuelve a dibujar todo el tablero */
+                verificarVictoria(); /* chequea que el angulo de todas las piezas este en 0 */
             }
         });
     }
@@ -608,31 +642,55 @@ document.addEventListener('DOMContentLoaded', () => {
     function aplicarEscalaDeGrises(imageData) {
         const data = imageData.data;
         for (let i = 0; i < data.length; i += 4) {
+            // recordar que el pixel tiene 4 elementos, por eso el for va de 4 en 4
             const gris = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+
+            //canal rojo
             data[i]     = gris;
+            //canal verde
             data[i + 1] = gris;
+            //canal azul
             data[i + 2] = gris;
+
+            /* data[i+3] seria la transparencia*/
         }
     }
 
     function aplicarBrillo(imageData, incremento = 60) {
         const data = imageData.data;
         for (let i = 0; i < data.length; i += 4) {
+            // recordar que el pixel tiene 4 elementos, por eso el for va de 4 en 4
+
+            //canal rojo
             data[i]     = Math.min(255, data[i] + incremento);
+            //canal verde
             data[i + 1] = Math.min(255, data[i + 1] + incremento);
+            //canal azul
             data[i + 2] = Math.min(255, data[i + 2] + incremento);
+
+            /* el Math.min sirve para que no nos pasemos del 255 cuando hacemos el pixel+incremento */
+
+            /* data[i+3] seria la transparencia*/
         }
     }
 
     function aplicarNegativo(imageData) {
         const data = imageData.data;
         for (let i = 0; i < data.length; i += 4) {
+            // recordar que el pixel tiene 4 elementos, por eso el for va de 4 en 4
+            
+            //canal rojo
             data[i]     = 255 - data[i];
+            //canal verde
             data[i + 1] = 255 - data[i + 1];
+            //canal azul
             data[i + 2] = 255 - data[i + 2];
+
+            /* data[i+3] seria la transparencia*/
         }
     }
 
+    // aca se aplican los filtros segun el nivel
     function aplicarFiltroSegunNivel(imageData, pieza) {
         if (nivelActual === 1) {
             aplicarEscalaDeGrises(imageData);
@@ -641,6 +699,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (nivelActual === 3) {
             aplicarNegativo(imageData);
         } else if (nivelActual === 4) {
+            // aca se busca dentro del objeto "pieza" que efecto el toco por azar
+            // y segund que le haya tocado es el filtro que se le aplica
             if (pieza.filtroNivel4 === 'grises') aplicarEscalaDeGrises(imageData);
             else if (pieza.filtroNivel4 === 'brillo') aplicarBrillo(imageData, 60);
             else if (pieza.filtroNivel4 === 'negativo') aplicarNegativo(imageData);
