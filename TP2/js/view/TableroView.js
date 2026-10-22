@@ -107,24 +107,31 @@ class TableroView {
         for (const d of destinos) {
             const { x, y } = this.aPixeles(d.fila, d.col);
 
-            ctx.strokeStyle = `rgba(245, 158, 11, ${1 - pulso * 0.6})`;
-            ctx.lineWidth = 3;
+            ctx.save();
+            ctx.setLineDash([4, 4]); // Borde punteado
             ctx.beginPath();
-            ctx.arc(x, y, this.radioFicha * (0.8 + pulso * 0.3), 0, 2 * Math.PI);
+            ctx.arc(x, y, 22, 0, 2 * Math.PI);
+            ctx.strokeStyle = `rgba(16, 185, 129, ${0.4 + pulso * 0.4})`;
+            ctx.lineWidth = 2.5;
             ctx.stroke();
 
-            const ya = y - this.radioFicha - 8 - pulso * 6;
-            ctx.fillStyle = '#f59e0b';
-            ctx.beginPath();
-            ctx.moveTo(x - 8, ya - 10);
-            ctx.lineTo(x + 8, ya - 10);
-            ctx.lineTo(x, ya);
+            ctx.fillStyle = `rgba(16, 185, 129, ${0.15 + pulso * 0.1})`;
             ctx.fill();
+            ctx.restore();
         }
     }
 
     dibujar(estado = {}) {
-        const { arrastre = null, tiempo = 0 } = estado;
+        const { arrastre = null, tiempo = 0, esVictoria = false, esDerrota = false, shaking = false } = estado;
+
+        this.ctx.save();
+
+        // Efecto de sacudida (Screen Shake) en derrota
+        if (shaking) {
+            const dx = (Math.random() - 0.5) * 8;
+            const dy = (Math.random() - 0.5) * 8;
+            this.ctx.translate(dx, dy);
+        }
 
         this.dibujarFondo();
         this.dibujarHuecos();
@@ -147,5 +154,37 @@ class TableroView {
                 true
             );
         }
+
+        // Overlay de Victoria: Brillo dorado in crescendo progresivo y fluido (sin latido)
+        if (esVictoria) {
+            // Guardamos el tiempo exacto en el que arrancó la victoria
+            if (!this.tiempoInicioVictoria) {
+                this.tiempoInicioVictoria = tiempo;
+            }
+
+            // Calculamos los segundos transcurridos (de 0 a 2.2 segundos)
+            const transcurrido = tiempo - this.tiempoInicioVictoria;
+            const duracionTotal = 2.2; 
+            const progreso = Math.min(1, Math.max(0, transcurrido / duracionTotal));
+
+            // Curva de suavizado Smoothstep (evita frenos bruscos y da un degradado fluido)
+            const progresoSuave = progreso * progreso * (3 - 2 * progreso);
+
+            // La opacidad sube limpiamente desde 0 hasta 0.50 sin vibraciones
+            const opacidadFinal = progresoSuave * 0.50;
+
+            this.ctx.fillStyle = `rgba(245, 158, 11, ${opacidadFinal})`;
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        } else {
+            this.tiempoInicioVictoria = null; // Reinicia cuando se resetea el juego
+        }
+
+        // Overlay de Derrota: Tumba oscura y desaturada
+        if (esDerrota) {
+            this.ctx.fillStyle = 'rgba(10, 8, 20, 0.65)';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+
+        this.ctx.restore();
     }
 }

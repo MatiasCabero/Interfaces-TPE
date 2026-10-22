@@ -517,6 +517,32 @@
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
+
+/* =========================================================
+   TRANSICIÓN SUAVE PARA OVERLAYS Y MODALES (FADE-IN + SCALE)
+   ========================================================= */
+   .game-overlay {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                visibility 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* Cuando se remueve la clase .hidden, la opacidad sube suavemente */
+  .game-overlay:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Animación de entrada para la tarjeta modal (crece levemente mientras entra) */
+  .game-overlay .overlay-card {
+    transform: scale(0.88) translateY(12px);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .game-overlay:not(.hidden) .overlay-card {
+    transform: scale(1) translateY(0);
+  }
   
   @media (max-width: 768px) {
     .game-media { 

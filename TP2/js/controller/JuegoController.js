@@ -11,6 +11,9 @@ class JuegoCompleto {
         this.arrastre = null;
         this.mensaje = null;
         this.esVictoria = false;
+
+        this.esDerrota = false;
+        this.shaking = false;
         
         this.tiempoLimite = tiempoLimite;
         this.inicio = null;
@@ -105,6 +108,10 @@ class JuegoCompleto {
         this.mensaje = null;
         this.esVictoria = false;
         this.arrastre = null;
+
+        this.esDerrota = false;
+        this.shaking = false;
+
         this.juegoIniciado = false;
         this.inicio = null;
         this.victoryOverlay.classList.add('hidden');
@@ -127,6 +134,8 @@ class JuegoCompleto {
         this.tablero.configurarTableroPruebaVictoria();
         this.mensaje = null;
         this.esVictoria = false;
+        this.esDerrota = false;
+        this.shaking = false;
         this.arrastre = null;
         this.juegoIniciado = false;
         this.inicio = null;
@@ -134,20 +143,43 @@ class JuegoCompleto {
     }
 
     verificarFin() {
+        const fichasRestantes = this.tablero.fichas.length;
+
         if (this.tablero.gano()) {
-            this.mensaje = 'Mision Cumplida. Dejaste la reliquia en el centro.';
             this.esVictoria = true;
-            this.mostrarModalFin();
+            this.mensaje = `¡Misión Cumplida! Rescataste la reliquia en el centro en ${this.obtenerTiempoTranscurrido()}.`;
+            this.mostrarModalFinConRetraso();
         } else if (!this.tablero.hayMovimientosPosibles()) {
-            this.mensaje = 'Sin movimientos. La tumba se ha cerrado.';
-            this.esVictoria = false;
-            this.mostrarModalFin();
+            this.esDerrota = true;
+            this.shaking = true;
+            
+            // TIEMPO DE LA VIBRACION
+            setTimeout(() => this.shaking = false, 1000); 
+
+            this.mensaje = `Sin movimientos posibles. Te quedaron ${fichasRestantes} reliquias atrapadas en el altar.`;
+            this.mostrarModalFinConRetraso();
         }
+    }
+
+    obtenerTiempoTranscurrido() {
+        if (!this.inicio) return "0s";
+        const segsTotales = Math.floor((performance.now() - this.inicio) / 1000);
+        const m = Math.floor(segsTotales / 60);
+        const s = segsTotales % 60;
+        return m > 0 ? `${m}m ${s}s` : `${s}s`;
+    }
+
+    
+    //Muestra el modal con retraso para apreciar la jugada final
+    mostrarModalFinConRetraso() {
+        setTimeout(() => {
+            this.mostrarModalFin();
+        }, 2200);
     }
 
     mostrarModalFin() {
         if (this.victoryTitle && this.victoryTimeMsg) {
-            this.victoryTitle.textContent = this.esVictoria ? '¡VICTORIA!' : 'FIN DEL JUEGO';
+            this.victoryTitle.textContent = this.esVictoria ? '¡Victoria!' : 'Fin del juego';
             this.victoryTimeMsg.textContent = this.mensaje;
         }
         this.victoryOverlay.classList.remove('hidden');
@@ -167,8 +199,8 @@ class JuegoCompleto {
             }
 
             if (restante === 0) {
-                this.mensaje = 'Se agoto el tiempo en la tumba.';
-                this.esVictoria = false;
+                this.esDerrota = true;
+                this.mensaje = 'Se agotó el tiempo. La tumba ancestral se ha cerrado.';
                 this.arrastre = null;
                 this.mostrarModalFin();
             }
@@ -176,7 +208,10 @@ class JuegoCompleto {
 
         this.vista.dibujar({
             arrastre: this.arrastre,
-            tiempo: ahora / 1000
+            tiempo: ahora / 1000,
+            esVictoria: this.esVictoria,
+            esDerrota: this.esDerrota,
+            shaking: this.shaking
         });
 
         requestAnimationFrame(this.loop);
