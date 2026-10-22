@@ -38,16 +38,180 @@
     overflow: hidden;
     background-color: var(--bg-card);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
-  .game-media img,
-  .game-media-img {
+  /* El Canvas toma el alto del contenedor y calcula su ancho proporcional */
+  #canvasJuego {
+    display: block;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  
+  /* =========================================================
+     OVERLAYS Y CONTROLES SOBRE EL CANVAS
+     ========================================================= */
+  .game-hud {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+  }
+  
+  .game-hud * {
+    pointer-events: auto;
+  }
+  
+  .hud-item {
+    background: rgba(14, 13, 54, 0.88);
+    border: 1px solid #3b3795;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffffff;
+    backdrop-filter: blur(4px);
+  }
+  
+  .hud-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .btn-game {
+    border: none;
+    padding: 8px 18px;
+    font-size: 0.88rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #ffffff;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary-green);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-green-hover);
+    transform: translateY(-2px);
+  }
+  
+  .btn-secondary {
+    background-color: #1a1954;
+    border: 1px solid #3b3795;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #252373;
+    color: #00ccff;
+    transform: translateY(-2px);
+  }
+  
+  .btn-warning {
+    background-color: #d97706;
+  }
+  
+  .btn-warning:hover {
+    background-color: #b45309;
+    transform: translateY(-2px);
+  }
+  
+  .game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    display: block;
+    background: rgba(10, 9, 36, 0.88);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
   }
   
+  .game-overlay.hidden,
+  .game-hud.hidden {
+    display: none !important;
+  }
+  
+  .overlay-card {
+    background: #18174f;
+    border: 2px solid #3b3795;
+    border-radius: 16px;
+    padding: 30px 40px;
+    max-width: 440px;
+    text-align: center;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  }
+  
+  .overlay-title {
+    font-size: 1.8rem;
+    color: #00ccff;
+    margin-bottom: 8px;
+  }
+  
+  .overlay-subtitle {
+    color: #a9a8d1;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+  
+  .relic-selector {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+  
+  .relic-option input {
+    display: none;
+  }
+  
+  .relic-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    background: #0e0d36;
+    border: 2px solid #2d2b78;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.88rem;
+    font-weight: bold;
+    color: #ffffff;
+  }
+  
+  .relic-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #3b3795;
+  }
+  
+  .relic-option input:checked + .relic-card {
+    border-color: #00ccff;
+    box-shadow: 0 0 15px rgba(0, 204, 255, 0.5);
+    background: #252373;
+  }
+  
+  /* =========================================================
+     SECCIÓN INFERIOR Y GALERÍA
+     ========================================================= */
   .game-bottom-section {
     margin-bottom: 20px;
   }
@@ -100,9 +264,6 @@
     flex-shrink: 0;
   }
   
-  /* =========================================================
-     GALERÍA UNIFICADA DE IMÁGENES Y VIDEO
-     ========================================================= */
   .game-gallery-video-row {
     width: 100%;
   }
@@ -131,7 +292,6 @@
     display: none;
   }
   
-  /* Todas las miniaturas (imágenes y video) miden EXACTAMENTE lo mismo */
   .game-thumb {
     width: 160px;          
     height: 98px;          
@@ -159,7 +319,6 @@
     display: block;
   }
   
-  /* DESCRIPCIÓN Y COMENTARIOS OCUPAN EL 100% DEL ANCHO */
   .game-detail-grid {
     display: block;
     width: 100%;
@@ -244,7 +403,6 @@
     line-height: 1.4;
   }
   
-  /* BOTONES DE ACCIÓN (ME GUSTA / NO ME GUSTA) */
   .comment-actions {
     display: flex;
     align-items: center;
@@ -299,7 +457,6 @@
     color: var(--text-muted);
   }
   
-  /* ANIMACIÓN Y TRANSICIÓN: BOTÓN A AVIONCITO DE PAPEL */
   .btn-publicar {
     position: relative;
     background-color: var(--primary-green);
@@ -361,9 +518,6 @@
     transform: translate(-50%, -50%) scale(1);
   }
   
-  /* =========================================================
-     ADAPTACIÓN RESPONSIVA (MOBILE)
-     ========================================================= */
   @media (max-width: 768px) {
     .game-media { 
       height: 35vh; 
@@ -375,7 +529,6 @@
       padding-bottom: 8px;
     }
   
-    /* Miniaturas un poco más compactas en mobile */
     .game-thumb { 
       width: 130px; 
       min-width: 130px; 

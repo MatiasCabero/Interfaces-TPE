@@ -325,53 +325,96 @@
     </div>
   </main>
 
-  <!-- =========================================================
+<!-- =========================================================
        Pie de Página Extendido (Fat Footer)
        ========================================================= -->
-  <footer class="fat-footer">
-    <div class="footer-container">
-      <div class="footer-brand-col">
-        <div class="footer-logo-placeholder">
-          <img src="Assets/LogoGrande.jpeg" alt="M&M Arcade Logo" class="footer-logo-img">
+       
+       <footer class="fat-footer">
+        <div class="footer-container">
+          
+          <!-- Columna Logo + Resumen del sitio -->
+          <div class="footer-brand-col">
+            <div class="footer-logo-placeholder">
+              <img src="Assets/LogoGrande.jpeg" alt="M&M Arcade Logo" class="footer-logo-img">
+            </div>
+            <p class="footer-brand-desc">Tu plataforma de entretenimiento retro y moderna. Juégalo todo desde tu navegador.</p>
+          </div>
+      
+          <!-- Grilla de Enlaces Ampliada (4 Columnas) -->
+          <div class="footer-links-grid">
+            
+            <!-- Columna 1: Explorar -->
+            <div class="footer-col">
+              <h4>Explorar</h4>
+              <a href="index.html">Inicio</a>
+              <a href="#">Juegos Populares</a>
+              <a href="#">Novedades</a>
+              <a href="#">Juegos de Mesa</a>
+              <a href="#">Multijugador</a>
+              <a href="#">Acción & Aventura</a>
+              <a href="#">Estrategia</a>
+              <a href="#">Originales M&M</a>
+            </div>
+      
+            <!-- Columna 2: Comunidad & Social -->
+            <div class="footer-col">
+              <h4>Comunidad</h4>
+              <a href="#">Foro de Jugadores</a>
+              <a href="#">Reseñas & Críticas</a>
+              <a href="#">Eventos & Torneos</a>
+              <a href="#">Creadores de Contenido</a>
+              <a href="#">Discord Oficial</a>
+              <a href="#">Canal de YouTube</a>
+              <a href="#">Instagram</a>
+              <a href="#">Servidores de Estado</a>
+            </div>
+      
+            <!-- Columna 3: Soporte & Legales -->
+            <div class="footer-col">
+              <h4>Soporte & Legal</h4>
+              <a href="#">Centro de Ayuda</a>
+              <a href="#">Preguntas Frecuentes</a>
+              <a href="#">Reportar un Error</a>
+              <a href="#">Términos de Servicio</a>
+              <a href="#">Política de Privacidad</a>
+              <a href="#">Política de Cookies</a>
+              <a href="#">Aviso Legal</a>
+              <a href="#">Configuración de Cookies</a>
+            </div>
+      
+            <!-- Columna 4: Tienda & Newsletter -->
+            <div class="footer-col footer-col-newsletter">
+              <h4>Tienda & Cuenta</h4>
+              <a href="login.html">Iniciar Sesión</a>
+              <a href="register.html">Crear Cuenta</a>
+              <a href="#">Pase Arcade VIP</a>
+              <a href="#">Tarjetas de Regalo</a>
+              <a href="#">Historial de Compras</a>
+              
+              <h4 style="margin-top: 14px;">Boletín Informativo</h4>
+              <p class="newsletter-desc">Recibí ofertas y nuevos juegos semanalmente.</p>
+              <form class="footer-newsletter-form" onsubmit="event.preventDefault();">
+                <input type="email" placeholder="Tu email..." required>
+                <button type="submit">Unirme</button>
+              </form>
+            </div>
+      
+          </div>
+      
         </div>
-        <p class="footer-brand-desc">Tu plataforma de entretenimiento retro y moderna. Juégalo todo desde tu navegador.</p>
-      </div>
-
-      <div class="footer-links-grid">
-        <div class="footer-col">
-          <h4>Explorar</h4>
-          <a href="index.html">Inicio</a>
-          <a href="#">Juegos Populares</a>
-          <a href="#">Novedades</a>
-          <a href="#">Juegos de Mesa</a>
+      
+        <!-- Sección inferior: Medios de pago y Copyright -->
+        <div class="footer-bottom">
+          <div class="footer-payments">
+            <span>Métodos de pago aceptados:</span>
+            <span class="payment-badge">Visa</span>
+            <span class="payment-badge">Mastercard</span>
+            <span class="payment-badge">Mercado Pago</span>
+            <span class="payment-badge">PayPal</span>
+          </div>
+          <p>© 2026 Powered and secured by M&M Arcade Inc. Todos los derechos reservados.</p>
         </div>
-        <div class="footer-col">
-          <h4>Comunidad</h4>
-          <a href="#">Foro de Jugadores</a>
-          <a href="#">Reseñas & Críticas</a>
-          <a href="#">Discord Oficial</a>
-        </div>
-        <div class="footer-col">
-          <h4>Soporte & Legal</h4>
-          <a href="#">Centro de Ayuda</a>
-          <a href="#">Términos de Servicio</a>
-          <a href="#">Política de Privacidad</a>
-        </div>
-        <div class="footer-col footer-col-newsletter">
-          <h4>Boletín Informativo</h4>
-          <p class="newsletter-desc">Recibí ofertas y nuevos juegos semanalmente.</p>
-          <form class="footer-newsletter-form" onsubmit="event.preventDefault();">
-            <input type="email" placeholder="Tu email..." required>
-            <button type="submit">Unirme</button>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>© 2026 Powered and secured by M&M Arcade Inc. Todos los derechos reservados.</p>
-    </div>
-  </footer>
+      </footer>
 
   <!-- JS común a todo el sitio -->
   <script src="js/script.js"></script>

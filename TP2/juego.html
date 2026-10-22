@@ -127,11 +127,64 @@
     </nav>
 
     <!-- =========================================================
-         1) JUEGO PRINCIPAL — Protagonista absoluto 
+         1) JUEGO PRINCIPAL CON OVERLAYS HTML SOBRE CANVAS 
          ========================================================= -->
     <div class="game-stage">
       <div class="game-media" id="gameMedia">
-        <img src="Assets/Hero.jpeg" alt="Peg Solitaire: Reliquias Ancestrales" class="game-media-img">
+        
+        <!-- Canvas del Juego -->
+        <canvas id="canvasJuego" width="900" height="600"></canvas>
+
+        <!-- HUD HTML de Tiempo y Botones del Juego -->
+        <div id="gameHUD" class="game-hud hidden">
+            <div class="hud-item">
+                <span>Tiempo:</span>
+                <strong id="hudTiempo">15:00</strong>
+            </div>
+            <div class="hud-actions">
+                <button id="btnVolverMenu" class="btn-game btn-secondary">Cambiar Ficha</button>
+                <button id="btnReiniciarJuego" class="btn-game btn-secondary">Reiniciar</button>
+                <button id="btnModoPrueba" class="btn-game btn-warning" style="display: none;">Probar Victoria</button>
+            </div>
+        </div>
+
+        <!-- Overlay de Menú Inicial antes de comenzar -->
+        <div id="startOverlay" class="game-overlay">
+            <div class="overlay-card">
+                <h2 class="overlay-title">Reliquias Ancestrales</h2>
+                <p class="overlay-subtitle">Elige la reliquia para comenzar tu expedicion:</p>
+
+                <div class="relic-selector">
+                    <label class="relic-option">
+                        <input type="radio" name="relicChoice" value="reliquia_oro" checked>
+                        <div class="relic-card">
+                            <img src="Assets/pegSolitarie/fichaOro.jpeg" alt="Oro Ancestral" class="relic-img">
+                            <span>Oro Ancestral</span>
+                        </div>
+                    </label>
+
+                    <label class="relic-option">
+                        <input type="radio" name="relicChoice" value="reliquia_verde">
+                        <div class="relic-card">
+                            <img src="Assets/pegSolitarie/fichaVerde.jpeg" alt="Verde Imperial" class="relic-img">
+                            <span>Verde Imperial</span>
+                        </div>
+                    </label>
+                </div>
+
+                <button id="btnComenzarJuego" class="btn-game btn-primary">Comenzar Exploracion</button>
+            </div>
+        </div>
+
+        <!-- Overlay Modal para Fin de Juego (Victoria / Derrota) -->
+        <div id="victoryOverlay" class="game-overlay hidden">
+            <div class="overlay-card">
+                <h2 id="victoryTitle" class="overlay-title">¡Mision Cumplida!</h2>
+                <p id="victoryTimeMsg" class="overlay-subtitle">Rescataste la reliquia en el centro exacto.</p>
+                <button id="btnVolverAJugar" class="btn-game btn-primary">Volver a Jugar</button>
+            </div>
+        </div>
+
       </div>
     </div>
 
@@ -447,7 +500,11 @@
 
   <!-- JS común a todo el sitio -->
   <script src="js/script.js"></script>
-  <!-- JS exclusivo del juego -->
+  <!-- Modelos, Vista y Controlador del juego -->
+  <script src="js/model/ficha.js"></script>
+  <script src="js/model/tablero.js"></script>
+  <script src="js/view/TableroView.js"></script>
+  <script src="js/controller/JuegoController.js"></script>
   <script src="js/juego.js"></script>
 </body>
 </html>
