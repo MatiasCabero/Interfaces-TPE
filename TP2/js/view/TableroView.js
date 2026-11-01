@@ -100,22 +100,26 @@ class TableroView {
         ctx.restore();
     }
 
-    dibujarHints(destinos, tiempo) {
+    dibujarHints(destinos, tiempo, tipoFicha) {
         const ctx = this.ctx;
         const pulso = (Math.sin(tiempo * 6) + 1) / 2;
+
+        // Selecciona el color RGB según si la reliquia es verde o dorada
+        const esVerde = (tipoFicha === 'reliquia_verde' || tipoFicha === 'reliquia_jade');
+        const colorRgb = esVerde ? '16, 185, 129' : '245, 158, 11'; // Verde esmeralda o Dorado ancestral
 
         for (const d of destinos) {
             const { x, y } = this.aPixeles(d.fila, d.col);
 
             ctx.save();
-            ctx.setLineDash([4, 4]); // Borde punteado
+            ctx.setLineDash([4, 4]); // Borde punteado (la opción 3 que elegiste)
             ctx.beginPath();
             ctx.arc(x, y, 22, 0, 2 * Math.PI);
-            ctx.strokeStyle = `rgba(16, 185, 129, ${0.4 + pulso * 0.4})`;
+            ctx.strokeStyle = `rgba(${colorRgb}, ${0.4 + pulso * 0.4})`;
             ctx.lineWidth = 2.5;
             ctx.stroke();
 
-            ctx.fillStyle = `rgba(16, 185, 129, ${0.15 + pulso * 0.1})`;
+            ctx.fillStyle = `rgba(${colorRgb}, ${0.15 + pulso * 0.1})`;
             ctx.fill();
             ctx.restore();
         }
@@ -128,8 +132,8 @@ class TableroView {
 
         // Efecto de sacudida (Screen Shake) en derrota
         if (shaking) {
-            const dx = (Math.random() - 0.5) * 8;
-            const dy = (Math.random() - 0.5) * 8;
+            const dx = (Math.random() - 0.5) * 12;
+            const dy = (Math.random() - 0.5) * 12;
             this.ctx.translate(dx, dy);
         }
 
@@ -142,8 +146,9 @@ class TableroView {
             this.dibujarFicha(ficha.tipo, x, y);
         }
 
+        // Pasamos el tipo de ficha a los hints para que tome su color dinámico
         if (arrastre && arrastre.destinos) {
-            this.dibujarHints(arrastre.destinos, tiempo);
+            this.dibujarHints(arrastre.destinos, tiempo, arrastre.ficha.tipo);
         }
 
         if (arrastre) {
@@ -155,34 +160,42 @@ class TableroView {
             );
         }
 
-        // Overlay de Victoria: Brillo dorado in crescendo progresivo y fluido (sin latido)
+        // Overlay de Victoria: Brillo dorado in crescendo progresivo y fluido
         if (esVictoria) {
-            // Guardamos el tiempo exacto en el que arrancó la victoria
             if (!this.tiempoInicioVictoria) {
                 this.tiempoInicioVictoria = tiempo;
             }
 
-            // Calculamos los segundos transcurridos (de 0 a 2.2 segundos)
             const transcurrido = tiempo - this.tiempoInicioVictoria;
             const duracionTotal = 2.2; 
             const progreso = Math.min(1, Math.max(0, transcurrido / duracionTotal));
-
-            // Curva de suavizado Smoothstep (evita frenos bruscos y da un degradado fluido)
             const progresoSuave = progreso * progreso * (3 - 2 * progreso);
-
-            // La opacidad sube limpiamente desde 0 hasta 0.50 sin vibraciones
             const opacidadFinal = progresoSuave * 0.50;
 
             this.ctx.fillStyle = `rgba(245, 158, 11, ${opacidadFinal})`;
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         } else {
-            this.tiempoInicioVictoria = null; // Reinicia cuando se resetea el juego
+            this.tiempoInicioVictoria = null; 
         }
 
-        // Overlay de Derrota: Tumba oscura y desaturada
+        // Overlay de Derrota: Se oscurece progresivamente de forma suave mientras vibra
         if (esDerrota) {
-            this.ctx.fillStyle = 'rgba(10, 8, 20, 0.65)';
+            if (!this.tiempoInicioDerrota) {
+                this.tiempoInicioDerrota = tiempo;
+            }
+
+            const transcurridoDerrota = tiempo - this.tiempoInicioDerrota;
+            const duracionDerrota = 2.2; // Sincronizado perfectamente con el retraso del modal
+            const progreso = Math.min(1, Math.max(0, transcurridoDerrota / duracionDerrota));
+            
+            // Curva suave (Smoothstep): arranca lento, acelera suavemente y frena justo al llegar al tope
+            const progresoSuave = progreso * progreso * (3 - 2 * progreso);
+            const opacidadOscura = progresoSuave * 0.72; // Un poco más profundo y cinematográfico
+
+            this.ctx.fillStyle = `rgba(10, 8, 20, ${opacidadOscura})`;
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        } else {
+            this.tiempoInicioDerrota = null;
         }
 
         this.ctx.restore();
