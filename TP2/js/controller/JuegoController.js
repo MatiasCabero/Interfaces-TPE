@@ -229,7 +229,7 @@ class JuegoCompleto {
             this.shaking = true;
             
             // TIEMPO DE LA VIBRACION
-            setTimeout(() => this.shaking = false, 2500); 
+            setTimeout(() => this.shaking = false, 2200); 
 
             this.mensaje = `Sin movimientos posibles. Te quedaron ${fichasRestantes} reliquias atrapadas en el altar.`;
             this.mostrarModalFinConRetraso();

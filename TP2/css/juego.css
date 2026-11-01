@@ -93,14 +93,23 @@
   /* =========================================================
       Animación de vibración para la victoria
   ========================================================= */
-  @keyframes goldGlow {
-    0% { background-color: rgba(245, 158, 11, 0); }
-    50% { background-color: rgba(245, 158, 11, 0.45); }
-    100% { background-color: rgba(245, 158, 11, 0.55); }
+  @keyframes goldPulse {
+    0% { 
+      background-color: rgba(245, 158, 11, 0); 
+    }
+    40% { 
+      background-color: rgba(245, 158, 11, 0.20); 
+    }
+    70% { 
+      background-color: rgba(245, 158, 11, 0.40); 
+    }
+    100% { 
+      background-color: rgba(245, 158, 11, 0.40); 
+    }
   }
 
   .game-media.victory-glow::after {
-    animation: goldGlow 2s ease forwards;
+    animation: goldPulse 4s ease-in forwards;
   }
   
   /* =========================================================
