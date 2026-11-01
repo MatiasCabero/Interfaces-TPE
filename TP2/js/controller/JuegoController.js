@@ -183,6 +183,10 @@ class JuegoCompleto {
         this.esDerrota = false;
         this.shaking = false;
 
+        //Quitamos el destello al reiniciar
+        const gameMedia = document.getElementById('gameMedia');
+        if (gameMedia) gameMedia.classList.remove('victory-glow');
+
         this.juegoIniciado = false;
         this.inicio = null;
         this.victoryOverlay.classList.add('hidden');
@@ -256,27 +260,60 @@ class JuegoCompleto {
         this.victoryOverlay.classList.remove('hidden');
     }
 
+    //========================================================================================
+    //ESTE METODO HACE QUE EL JUEGO SE RENDERIZE A 60FPS Y NO QUEDE LA IMAGEN ESTATICA
+    //esto ayuda a que cuando movemos una ficha se dibuje su nueva posicion
+    //========================================================================================
+
     loop(ahora) {
+        // 1. Declaramos la variable local para manejar el tiempo restante de la partida
         let restante = this.tiempoLimite;
 
+        // 2. Verificamos si el juego ya arrancó, si el cronómetro tiene inicio y si no hay ningún cartel/mensaje bloqueando la jugabilidad
         if (this.juegoIniciado && this.inicio !== null && !this.mensaje) {
+            
+            // Calculamos cuánto tiempo pasó desde que empezó la partida (en segundos)
             const transcurrido = (ahora - this.inicio) / 1000;
+            
+            // Restamos el tiempo transcurrido del límite total (asegurándonos de que nunca baje de 0)
             restante = Math.max(0, this.tiempoLimite - transcurrido);
 
+            // Convertimos los segundos restantes en formato de minutos y segundos (ej: 14:59)
             const mins = Math.floor(restante / 60);
             const segs = Math.floor(restante % 60);
+            
+            // Actualizamos el texto del HUD en pantalla con el tiempo que va quedando
             if (this.hudTiempo) {
                 this.hudTiempo.textContent = `${mins}:${segs < 10 ? '0' : ''}${segs}`;
             }
 
+            // Si el cronómetro llega a 0, se gatilla la derrota por tiempo agotado
             if (restante === 0) {
                 this.esDerrota = true;
                 this.mensaje = 'Se agotó el tiempo. La tumba ancestral se ha cerrado.';
                 this.arrastre = null;
-                this.mostrarModalFin();
+                this.mostrarModalFin(); // Mostramos el cartel de fin de juego
             }
         }
 
+        // 3. Evaluamos fotograma a fotograma si el jugador perdio o gano para activar los efectos
+        const gameMedia = document.getElementById('gameMedia');
+        if (gameMedia) {
+            if (this.shaking) {
+                gameMedia.classList.add('shaking'); // Activa la animación de sacudida en todo el contenedor
+            } else {
+                gameMedia.classList.remove('shaking'); // La remueve cuando termina de vibrar
+            }
+
+            if (this.esVictoria) {
+                gameMedia.classList.add('victory-glow');
+            } else {
+                gameMedia.classList.remove('victory-glow');
+            }
+        }
+
+        // 4. Mandamos a dibujar todos los elementos visuales actualizados en el Canvas 
+        // (fondo transparente, huecos, fichas y ayudas/hints)
         this.vista.dibujar({
             arrastre: this.arrastre,
             tiempo: ahora / 1000,
@@ -285,6 +322,8 @@ class JuegoCompleto {
             shaking: this.shaking
         });
 
+        // 5. Volvemos a llamar a `loop` inmediatamente para renderizar el siguiente fotograma 
+        // (creando así la fluidez visual de 60 FPS)
         requestAnimationFrame(this.loop);
     }
 }

@@ -38,14 +38,9 @@ class TableroView {
     }
 
     dibujarFondo() {
+        // Limpiamos el canvas por completo en cada fotograma, 
+        // permitiendo que se transparente y se vea la imagen de fondo del contenedor CSS.
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        if (this.imagenes.fondo) {
-            this.ctx.drawImage(this.imagenes.fondo, 0, 0, this.canvas.width, this.canvas.height);
-        } else {
-            this.ctx.fillStyle = '#1e1b18';
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        }
     }
 
     dibujarHuecos() {
@@ -136,18 +131,13 @@ class TableroView {
     }
 
     dibujar(estado = {}) {
-        const { arrastre = null, tiempo = 0, esVictoria = false, esDerrota = false, shaking = false } = estado;
+        const { arrastre = null, tiempo = 0 } = estado;
 
         this.ctx.save();
 
-        // Efecto de sacudida (Screen Shake) en derrota
-        if (shaking) {
-            const dx = (Math.random() - 0.5) * 12;
-            const dy = (Math.random() - 0.5) * 12;
-            this.ctx.translate(dx, dy);
-        }
-
-        this.dibujarFondo();
+        // Limpiamos el canvas por completo en cada fotograma, 
+        // permitiendo que sea transparente y se luzca el fondo estático de CSS.
+        this.dibujarFondo(); 
         this.dibujarHuecos();
 
         for (const ficha of this.tablero.fichas) {
@@ -168,44 +158,6 @@ class TableroView {
                 arrastre.y - arrastre.offsetY,
                 true
             );
-        }
-
-        // Overlay de Victoria: Brillo dorado in crescendo progresivo y fluido
-        if (esVictoria) {
-            if (!this.tiempoInicioVictoria) {
-                this.tiempoInicioVictoria = tiempo;
-            }
-
-            const transcurrido = tiempo - this.tiempoInicioVictoria;
-            const duracionTotal = 2.2; 
-            const progreso = Math.min(1, Math.max(0, transcurrido / duracionTotal));
-            const progresoSuave = progreso * progreso * (3 - 2 * progreso);
-            const opacidadFinal = progresoSuave * 0.50;
-
-            this.ctx.fillStyle = `rgba(245, 158, 11, ${opacidadFinal})`;
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        } else {
-            this.tiempoInicioVictoria = null; 
-        }
-
-        // Overlay de Derrota: Se oscurece progresivamente de forma suave mientras vibra
-        if (esDerrota) {
-            if (!this.tiempoInicioDerrota) {
-                this.tiempoInicioDerrota = tiempo;
-            }
-
-            const transcurridoDerrota = tiempo - this.tiempoInicioDerrota;
-            const duracionDerrota = 2.2; // Sincronizado perfectamente con el retraso del modal
-            const progreso = Math.min(1, Math.max(0, transcurridoDerrota / duracionDerrota));
-            
-            // Curva suave (Smoothstep): arranca lento, acelera suavemente y frena justo al llegar al tope
-            const progresoSuave = progreso * progreso * (3 - 2 * progreso);
-            const opacidadOscura = progresoSuave * 0.72; // Un poco más profundo y cinematográfico
-
-            this.ctx.fillStyle = `rgba(10, 8, 20, ${opacidadOscura})`;
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        } else {
-            this.tiempoInicioDerrota = null;
         }
 
         this.ctx.restore();
