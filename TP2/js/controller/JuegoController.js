@@ -105,14 +105,72 @@ class JuegoCompleto {
 
     //DESHACER MOVIMIENTO
     deshacer() {
-        this.arrastre = null; // ¡Clave! Soltamos cualquier ficha para que no quede pegada al mouse
-        if (this.tablero.deshacerMovimiento()) {
-            this.mensaje = null;
-            this.esVictoria = false;
-            this.esDerrota = false;
-            this.shaking = false;
-            this.victoryOverlay.classList.add('hidden');
+        this.arrastre = null; // Soltamos cualquier ficha del mouse
+        if (!this.tablero.historial || this.tablero.historial.length === 0) return;
+
+        // Sacamos el último estado
+        const estadoAnterior = this.tablero.historial.pop();
+        const mov = estadoAnterior.movimiento;
+
+        // Encontramos la ficha actual que tiene que volver atrás
+        const fichaAMover = this.tablero.obtenerFicha(mov.destFila, mov.destCol);
+        if (!fichaAMover) {
+            // Si por algo no la encuentra, hace un restore directo de emergencia
+            this.tablero.grilla = estadoAnterior.grilla.map(row => [...row]);
+            this.tablero.fichas = estadoAnterior.fichas.map(f => new Ficha(f.fila, f.col, f.tipo));
+            return;
         }
+
+        // Animación fluida de deslizamiento hacia atrás (Duration: ~250ms)
+        const inicioAnim = performance.now();
+        const duracionAnim = 250; 
+        const posOrig = this.vista.aPixeles(mov.destFila, mov.destCol);
+        const posDest = this.vista.aPixeles(mov.origFila, mov.origCol);
+
+        // Bloqueamos interacciones mientras anima para que no se rompa nada
+        this.mensajeAnimacionDeshacer = true; 
+
+        const animarRetorno = (ahora) => {
+            const progreso = Math.min(1, (ahora - inicioAnim) / duracionAnim);
+            // Easing suave (Ease Out)
+            const ease = 1 - Math.pow(1 - progreso, 3);
+
+            // Coordenadas intermedias para la animación visual temporal
+            const xActual = posOrig.x + (posDest.x - posOrig.x) * ease;
+            const yActual = posOrig.y + (posDest.y - posOrig.y) * ease;
+
+            // Forzamos a la vista a redibujar la ficha moviéndose de forma fluida
+            this.vista.dibujar({
+                arrastre: {
+                    ficha: fichaAMover,
+                    x: xActual + (posDest.x - posOrig.x < 0 ? 0 : 0), // compensación de offset simple
+                    y: yActual,
+                    offsetX: 0,
+                    offsetY: 0,
+                    destinos: []
+                },
+                tiempo: ahora / 1000,
+                esVictoria: false,
+                esDerrota: false,
+                shaking: false
+            });
+
+            if (progreso < 1) {
+                requestAnimationFrame(animarRetorno);
+            } else {
+                // Una vez terminada la animación visual, aplicamos el cambio real en el modelo del tablero
+                this.tablero.grilla = estadoAnterior.grilla.map(row => [...row]);
+                this.tablero.fichas = estadoAnterior.fichas.map(f => new Ficha(f.fila, f.col, f.tipo));
+                this.mensaje = null;
+                this.esVictoria = false;
+                this.esDerrota = false;
+                this.shaking = false;
+                this.victoryOverlay.classList.add('hidden');
+                this.mensajeAnimacionDeshacer = false;
+            }
+        };
+
+        requestAnimationFrame(animarRetorno);
     }
 
     reiniciarJuego() {

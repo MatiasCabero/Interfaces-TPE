@@ -76,10 +76,13 @@ class Tablero {
     realizarMovimiento(ficha, filaDestino, colDestino) {
         if (!this.esMovimientoValido(ficha, filaDestino, colDestino)) return false;
 
-        // 1. Guardamos el estado previo antes de aplicar cambios para el "Deshacer"
-        this.guardarEstado();
+        const filaOrig = ficha.fila;
+        const colOrig = ficha.col;
+        const saltada = this.obtenerFicha((filaOrig + filaDestino) / 2, (colOrig + colDestino) / 2);
 
-        const saltada = this.obtenerFicha((ficha.fila + filaDestino) / 2, (ficha.col + colDestino) / 2);
+        // Guardamos el estado pasando el movimiento exacto
+        this.guardarEstado(ficha, filaOrig, colOrig, filaDestino, colDestino, saltada);
+
         this.eliminarFicha(saltada);
         ficha.moverA(filaDestino, colDestino);
         return true;
@@ -113,12 +116,23 @@ class Tablero {
     }
 
     //FUNCIONES PARA EL BOTON DESHACER
-    guardarEstado() {
+    guardarEstado(ficha, filaOrig, colOrig, filaDest, colDest, saltada) {
         if (!this.historial) this.historial = [];
-        // Guardamos una copia independiente de la matriz y de las fichas
         const snapshot = {
             grilla: this.grilla.map(row => [...row]),
-            fichas: this.fichas.map(f => new Ficha(f.fila, f.col, f.tipo))
+            // Guardamos una copia de las fichas y los datos exactos del movimiento
+            fichas: this.fichas.map(f => new Ficha(f.fila, f.col, f.tipo)),
+            movimiento: {
+                fichaTipo: ficha.tipo,
+                origFila: filaOrig,
+                origCol: colOrig,
+                destFila: filaDest,
+                destCol: colDest,
+                // Guardamos los datos de la ficha que había sido comida para poder revivirla con animación si hace falta
+                saltadaTipo: saltada ? saltada.tipo : null,
+                saltadaFila: saltada ? saltada.fila : null,
+                saltadaCol: saltada ? saltada.col : null
+            }
         };
         this.historial.push(snapshot);
     }
