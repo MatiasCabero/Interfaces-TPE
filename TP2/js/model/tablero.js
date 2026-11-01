@@ -2,12 +2,14 @@ class Tablero {
     constructor(tipoFichaInicial = 'reliquia_oro') {
         this.tipoFichaActual = tipoFichaInicial;
         this.fichas = [];
+        this.historial=[];
+
         // Grilla en forma de Cruz (1 = Casilla válida, 0 = Invalida)
         this.grilla = [
             [0, 0, 1, 1, 1, 0, 0],
             [0, 0, 1, 1, 1, 0, 0],
             [1, 1, 1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1, 1, 1], // El centro (3,3) inicia vacío (0)
+            [1, 1, 1, 1, 1, 1, 1], // El centro (3,3) inicia vacío 
             [1, 1, 1, 1, 1, 1, 1],
             [0, 0, 1, 1, 1, 0, 0],
             [0, 0, 1, 1, 1, 0, 0]
@@ -18,6 +20,7 @@ class Tablero {
     // Inicializa la disposición completa de piezas
     inicializarFichas() {
         this.fichas = [];
+        this.historial = []; // <--- 2. Limpia el historial cada vez que se inicia o reinicia la partida
         for (let f = 0; f < 7; f++) {
             for (let c = 0; c < 7; c++) {
                 // Solo agrega ficha si es casilla válida Y NO es la casilla central (3,3)
@@ -73,6 +76,9 @@ class Tablero {
     realizarMovimiento(ficha, filaDestino, colDestino) {
         if (!this.esMovimientoValido(ficha, filaDestino, colDestino)) return false;
 
+        // 1. Guardamos el estado previo antes de aplicar cambios para el "Deshacer"
+        this.guardarEstado();
+
         const saltada = this.obtenerFicha((ficha.fila + filaDestino) / 2, (ficha.col + colDestino) / 2);
         this.eliminarFicha(saltada);
         ficha.moverA(filaDestino, colDestino);
@@ -104,5 +110,26 @@ class Tablero {
         if (this.fichas.length !== 1) return false;
         const ultimaFicha = this.fichas[0];
         return ultimaFicha.fila === 3 && ultimaFicha.col === 3;
+    }
+
+    //FUNCIONES PARA EL BOTON DESHACER
+    guardarEstado() {
+        if (!this.historial) this.historial = [];
+        // Guardamos una copia independiente de la matriz y de las fichas
+        const snapshot = {
+            grilla: this.grilla.map(row => [...row]),
+            fichas: this.fichas.map(f => new Ficha(f.fila, f.col, f.tipo))
+        };
+        this.historial.push(snapshot);
+    }
+
+    deshacerMovimiento() {
+        if (!this.historial || this.historial.length === 0) return false;
+
+        const estadoAnterior = this.historial.pop();
+        this.grilla = estadoAnterior.grilla.map(row => [...row]);
+        this.fichas = estadoAnterior.fichas.map(f => new Ficha(f.fila, f.col, f.tipo));
+
+        return true;
     }
 }

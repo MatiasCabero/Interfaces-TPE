@@ -103,8 +103,21 @@ class JuegoCompleto {
         this.verificarFin();
     }
 
+    //DESHACER MOVIMIENTO
+    deshacer() {
+        this.arrastre = null; // ¡Clave! Soltamos cualquier ficha para que no quede pegada al mouse
+        if (this.tablero.deshacerMovimiento()) {
+            this.mensaje = null;
+            this.esVictoria = false;
+            this.esDerrota = false;
+            this.shaking = false;
+            this.victoryOverlay.classList.add('hidden');
+        }
+    }
+
     reiniciarJuego() {
         this.tablero.inicializarFichas();
+        if (this.tablero.historial) this.tablero.historial = [];
         this.mensaje = null;
         this.esVictoria = false;
         this.arrastre = null;
@@ -267,6 +280,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnVolverAJugar) {
             btnVolverAJugar.addEventListener('click', () => {
                 juego.reiniciarJuegoConOcultamiento();
+            });
+        }
+
+        //Boton deshacer
+        const btnDeshacer = document.getElementById('btnDeshacer');
+        if (btnDeshacer) {
+            btnDeshacer.addEventListener('click', () => {
+                juego.deshacer();
             });
         }
 
