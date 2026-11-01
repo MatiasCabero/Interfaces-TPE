@@ -83,7 +83,17 @@ class TableroView {
             ctx.beginPath();
             ctx.arc(x, y, r, 0, 2 * Math.PI);
             ctx.clip();
-            ctx.drawImage(img, x - r, y - r, r * 2, r * 2);
+
+            const imgWidth = img.naturalWidth || img.width;
+            const imgHeight = img.naturalHeight || img.height;
+            
+            // Reducimos ligeramente el área de muestreo de la imagen fuente (un 80%) 
+            // para recortar solo la fichita redonda de adentro y descartar el borde negro 
+            const size = Math.min(imgWidth, imgHeight) * 0.70; 
+            const sx = (imgWidth - size) / 2;
+            const sy = (imgHeight - size) / 2;
+
+            ctx.drawImage(img, sx, sy, size, size, x - r, y - r, r * 2, r * 2);
             
             ctx.beginPath();
             ctx.arc(x, y, r, 0, 2 * Math.PI);
