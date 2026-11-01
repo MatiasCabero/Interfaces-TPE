@@ -133,14 +133,27 @@
     position: absolute;
     top: 15px;
     left: 20px; /* Cronómetro fijo arriba a la izquierda */
-    background: rgba(14, 13, 54, 0.88);
-    border: 1px solid #3b3795;
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-size: 1.1rem;
+    
+    /* Mismas medidas y proporciones que los botones */
+    width: 185px;
+    box-sizing: border-box; /* Asegura que el padding no expanda el ancho total */
+    padding: 20px 20px;
+    text-align: center;
+    
+    /* Misma textura de piedra, bordes y sombras */
+    background-image: url('../Assets/pegSolitarie/boton.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid #d97706; /* Borde dorado ancestral */
+    border-radius: 10px;
+    
+    /* Tipografía grande y clara */
+    font-size: 1.15rem;
     font-weight: bold;
-    color: #ffffff;
-    backdrop-filter: blur(4px);
+    color: #f3f4f6;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    backdrop-filter: none; 
   }
 
   /* Contenedor de botones posicionado exactamente en el lateral derecho */
