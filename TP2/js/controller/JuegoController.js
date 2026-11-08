@@ -1,10 +1,16 @@
 // ============================================================================
 // CLASE PRINCIPAL DEL CONTROLADOR DEL JUEGO (JuegoCompleto)
 // ============================================================================
+
+
+/* Conecta los eventos del usuario (clics, movimiento del mouse, botones del menú) con el Modelo (Tablero) 
+para cambiar las reglas, y con la Vista (TableroView) para reflejar esos cambios en la pantalla a 60 fotogramas 
+por segundo */
 class JuegoCompleto {
     constructor(canvas, imagenes, tiempoLimite = 900) {
         this.canvas = canvas;
         
+        // instanciamos modelo y vista
         this.tablero = new Tablero();
         this.vista = new TableroView(canvas, this.tablero, imagenes);
         
@@ -31,12 +37,13 @@ class JuegoCompleto {
         this.alMover = e => this.onMouseMove(e);
         this.alSoltar = e => this.onMouseUp(e);
 
+        // escuchamos desde el window para que si el usuario mueve la ficha fuera del canvas este no se rompa
         this.canvas.addEventListener('mousedown', this.alBajar);
         window.addEventListener('mousemove', this.alMover);
         window.addEventListener('mouseup', this.alSoltar);
 
-        this.loop = this.loop.bind(this);
-        requestAnimationFrame(this.loop);
+        this.loop = this.loop.bind(this); /* hacemos referencia a la instancia del juego actual */
+        requestAnimationFrame(this.loop);/* funcion nativa de los navegadores para que las animaciones sean fluidas */
     }
 
     /**
@@ -58,14 +65,18 @@ class JuegoCompleto {
         this.startOverlay.classList.remove('hidden');
     }
 
+    // cuando el usuario hace click
     onMouseDown(e) {
-        if (this.mensaje) return;
+        if (this.mensaje) return; /* si aparece algun modal (victoria, derrota, etc) corta la 
+                                     funcion e impide que el usuario siga moviendo las fichas */
 
-        const p = this.vista.posicionMouse(e);
-        const { fila, col } = this.vista.aCelda(p.x, p.y);
-        const ficha = this.tablero.obtenerFicha(fila, col);
+        const p = this.vista.posicionMouse(e); /* llama a la visa y guarda la posicion del mouse en el lienzo */
+        const { fila, col } = this.vista.aCelda(p.x, p.y); /* transforma esas coordenas en píxeles a fila y columna 
+                                                              lógica de la matriz del tablero (por ejemplo, fila 2, 
+                                                              columna 3)*/
+        const ficha = this.tablero.obtenerFicha(fila, col); /* le pregunta al modelo si hay una ficha en esa posicion */
 
-        if (!ficha) return;
+        if (!ficha) return; /* si no hay ninguna ficha corta la funcion */
 
         // Inicia el cronometro en la primera jugada
         if (!this.juegoIniciado) {
@@ -73,13 +84,22 @@ class JuegoCompleto {
             this.inicio = performance.now();
         }
 
-        const centro = this.vista.aPixeles(ficha.fila, ficha.col);
+        // Calcula el centro exacto en píxeles donde está dibujada esa ficha en el tablero
+        const centro = this.vista.aPixeles(ficha.fila, ficha.col); 
+
+        // se crea el objeto arrastre
         this.arrastre = {
-            ficha,
-            x: p.x,
-            y: p.y,
-            offsetX: p.x - centro.x,
+            ficha, /* la ficha que el usuario eligio */
+            x: p.x, /* coordenadas actuales del mouse */
+            y: p.y, /* coordenadas actuales del mouse */
+
+            /* Son los desfasajes (la distancia exacta entre el centro de la ficha y el lugar 
+            reciso donde el usuario hizo clic adentro de ella). Sirve para que la ficha 
+            no salte hacia el mouse */
+            offsetX: p.x - centro.x, 
             offsetY: p.y - centro.y,
+
+            // le pedimos al modelo los movimientos posibles 
             destinos: this.tablero.obtenerMovimientosPosibles(ficha)
         };
     }

@@ -127,26 +127,38 @@ class TableroView {
             ctx.fill();
         }
         
+        // Restaura los valores originales del canvas que habíamos guardado al principio con ctx.save()
+        // Esto sirve para que las sombras y las máscaras de recorte de esta ficha no afecten a la siguiente 
+        //ficha que se vaya a dibujar en el próximo ciclo del bucle
         ctx.restore();
     }
 
     dibujarHints(destinos, tiempo, tipoFicha) {
+        // Destinos es un array que viene del MODELO (por medio del controlador) con las coordenadas exactas donde 
+        // la ficha tiene permitido saltar.
+        // El tiempo viene del controlador, es un contador de tiempo que avanza fotograma a fotograma
         const ctx = this.ctx;
-        const pulso = (Math.sin(tiempo * 6) + 1) / 2;
+        const pulso = (Math.sin(tiempo * 6) + 1) / 2; /* esto le da el efecto de respiracion a la animacion */
+                                                      /* el 6 es la velocidad con que se realiza la animacion */
 
         // Selecciona el color RGB según si la reliquia es verde o dorada
         const esVerde = (tipoFicha === 'reliquia_verde' || tipoFicha === 'reliquia_jade');
         const colorRgb = esVerde ? '16, 185, 129' : '245, 158, 11'; // Verde esmeralda o Dorado ancestral
 
+        // recorremos los destinos posibles de la ficha que nos mando el modelo
         for (const d of destinos) {
-            const { x, y } = this.aPixeles(d.fila, d.col);
+            const { x, y } = this.aPixeles(d.fila, d.col); /* Utiliza la función matemática para transformar las 
+                                                              coordenadas lógicas de la matriz (fila, col) en las 
+                                                              coordenadas exactas en píxeles del centro de ese casillero 
+                                                              en el canvas */
 
-            ctx.save();
-            ctx.setLineDash([4, 4]); // Borde punteado (la opción 3 que elegiste)
-            ctx.beginPath();
-            ctx.arc(x, y, 22, 0, 2 * Math.PI);
-            ctx.strokeStyle = `rgba(${colorRgb}, ${0.4 + pulso * 0.4})`;
-            ctx.lineWidth = 2.5;
+            ctx.save(); /* Guarda el estado actual del pincel para no alterar los estilos de otras partes del juego */
+            ctx.setLineDash([4, 4]); // Borde punteado 
+            ctx.beginPath(); /* comienza la ruta */
+            ctx.arc(x, y, 22, 0, 2 * Math.PI);  /* dibuja el circulo con un radio mayor (22) al de la ficha */
+            ctx.strokeStyle = `rgba(${colorRgb}, ${0.4 + pulso * 0.4})`; /* a medida que el hint pulsa, cambia la 
+                                                                            opacidad del mismo */
+            ctx.lineWidth = 2.5; /* ancho del contorno */
             ctx.stroke();
 
             ctx.fillStyle = `rgba(${colorRgb}, ${0.15 + pulso * 0.1})`;
@@ -155,36 +167,47 @@ class TableroView {
         }
     }
 
-    dibujar(estado = {}) {
-        const { arrastre = null, tiempo = 0 } = estado;
+    // este es el metodo que se actualiza 60 fps para actualizar lo que el usuario ve en la pantalla
+    dibujar(estado = {}) { /* el metodo recibe un objeto que le pasa el controlador con toda la info del momento actual */
 
-        this.ctx.save();
+        const { arrastre = null, tiempo = 0 } = estado; /* es la info de la ficha que el usuario tiene clickeada
+                                                           si es que la hay */
+
+        this.ctx.save(); /* guarda la foto del estado global del CANVAS antes de empezar a dibujar todo el fotograma */
 
         // Limpiamos el canvas por completo en cada fotograma, 
-        // permitiendo que sea transparente y se luzca el fondo estático de CSS.
-        this.dibujarFondo(); 
-        this.dibujarHuecos();
+        this.dibujarFondo(); /* borra todo lo que se dibujo en el fotograma anterior */
+        this.dibujarHuecos(); /* dibujas los huecos */
 
+        // recorremos la lista de todas las fichas que estan guardadas en el modelo
         for (const ficha of this.tablero.fichas) {
-            if (arrastre && ficha === arrastre.ficha) continue;
+            if (arrastre && ficha === arrastre.ficha) continue; /* si el usuario tiene una ficha levantada esta se salta
+                                                                    y no se dibuja en su lugar original */
+
+            // para el resto de las fichas se calcula su posicion exacta en pixeles y se la dibuja
             const { x, y } = this.aPixeles(ficha.fila, ficha.col);
             this.dibujarFicha(ficha.tipo, x, y);
         }
 
-        // Pasamos el tipo de ficha a los hints para que tome su color dinámico
+        // Si el usuario tiene una ficha arrastrada:
+        //      -pasamos el tipo de ficha a los hints para que tome su color dinámico
         if (arrastre && arrastre.destinos) {
             this.dibujarHints(arrastre.destinos, tiempo, arrastre.ficha.tipo);
         }
 
+        // dibujamos la ficha que se esta arrastrando (si la hay)
         if (arrastre) {
             this.dibujarFicha(
+                // la ficha se dibuja calculando las coordenafas actuales del mouse
+                // y restándoles un desfase para que la ficha quede perfectamente centrada bajo el puntero
                 arrastre.ficha.tipo,
                 arrastre.x - arrastre.offsetX,
                 arrastre.y - arrastre.offsetY,
-                true
+                true /* este true se usa para el "levantada=true" y darle el efecto sombra*/
             );
         }
 
+        // Restaura los valores originales del canvas para cerrar el ciclo de renderizado de este fotograma
         this.ctx.restore();
     }
 }
