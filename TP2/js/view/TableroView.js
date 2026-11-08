@@ -1,3 +1,6 @@
+// la unica funcion de la vista es es captar las coordenadas del mouse
+// y pintar todo en el <canvas> fotograma a fotograma
+
 class TableroView {
     constructor(canvas, tablero, imagenes = {}) {
         this.canvas = canvas;
@@ -5,14 +8,19 @@ class TableroView {
         this.tablero = tablero;
         this.imagenes = imagenes;
 
-        this.tamCelda = 56;
-        this.radioFicha = 24;
-        this.offsetX = (canvas.width - 7 * this.tamCelda) / 2;
-        this.offsetY = (canvas.height - 7 * this.tamCelda) / 2;
+        this.tamCelda = 56; /* tamaño de la celda */
+        this.radioFicha = 24; /* tamaño de la ficha */
+
+        this.offsetX = (canvas.width - 7 * this.tamCelda) / 2; /* Sirve para centrar la cruz del tablero exactamente en el medio del canvas */
+                        // 7 es el tamaño de la grilla
+        this.offsetY = (canvas.height - 7 * this.tamCelda) / 2; /* Sirve para centrar la cruz del tablero exactamente en el medio del canvas */
     }
 
-    // Calcula la posicion exacta ajustando la escala entre el tamaño visible en CSS y la grilla interna del Canvas (900x600)
+    // Calcula la posicion exacta ajustando la escala entre el tamaño visible en CSS y la grilla interna del Canvas (1470x650)
     posicionMouse(e) {
+        // Como el canvas puede verse más chico o más grande en la página web gracias al CSS, esta 
+        // función usa getBoundingClientRect() para calcular una escala de proporción (scaleX y scaleY) 
+        // y saber exactamente en qué punto del lienzo interno de píxeles se hizo click
         const rect = this.canvas.getBoundingClientRect();
         const scaleX = this.canvas.width / rect.width;
         const scaleY = this.canvas.height / rect.height;
@@ -23,6 +31,8 @@ class TableroView {
         };
     }
 
+    // Transforma coordenadas de píxeles (dónde está el mouse) en números de fila y columna de la 
+    // matriz (ej: "estás en la fila 3, columna 2"). Se usa Math.floor para redondear hacia abajo
     aCelda(x, y) {
         return {
             fila: Math.floor((y - this.offsetY) / this.tamCelda),
@@ -30,6 +40,8 @@ class TableroView {
         };
     }
 
+    // Hace lo inverso. Dado una fila y columna lógica (ej: la celda [3, 3]), 
+    // te devuelve el centro exacto en píxeles de esa celda para poder dibujar allí una ficha
     aPixeles(fila, col) {
         return {
             x: this.offsetX + col * this.tamCelda + this.tamCelda / 2,
@@ -43,6 +55,7 @@ class TableroView {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
+    // Recorre la matriz de 7x7 y, en cada lugar donde hay un 1, dibuja un círculo oscuro con un borde de color
     dibujarHuecos() {
         for (let f = 0; f < 7; f++) {
             for (let c = 0; c < 7; c++) {
@@ -60,42 +73,54 @@ class TableroView {
         }
     }
 
+    // pinta las fichas en el canvas, tanto cuando estan quietas como cuando estan levantadas\
     dibujarFicha(tipo, x, y, levantada = false) {
         const ctx = this.ctx;
         const r = this.radioFicha;
 
+        // ctx.save () guarda una "fotografía" de cómo está configurado el pincel en ese instante (colores, sombras, 
+        // recortes). Todo lo que modifiquemos de acá en adelante solo afectará a esta ficha en particular. Cuando 
+        // terminemos de dibujarla, usaremos ctx.restore() para que el pincel vuelva a estar limpio
         ctx.save();
         
+        // efecto de la ficha levantada 
         if (levantada) {
             ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
             ctx.shadowBlur = 18;
-            ctx.shadowOffsetY = 12;
+            ctx.shadowOffsetY = 12; /* da el efecto sombra */
         }
 
         const img = this.imagenes[tipo] || this.imagenes['reliquia_verde'] || this.imagenes['reliquia_oro'];
 
         if (img) {
-            ctx.beginPath();
-            ctx.arc(x, y, r, 0, 2 * Math.PI);
-            ctx.clip();
+            // 1- dibujamos la ficha sin imagen, es decir un circulo
+            ctx.beginPath(); /* comienza una nueva ruta de dibujo vacia */
+            ctx.arc(x, y, r, 0, 2 * Math.PI); /* Dibuja las fichas SIN IMAGEN con forma de círculo perfecto 
+                                                 en la coordenada (x, y) con el radio r de la ficha. */
+            ctx.clip(); /* recorta todo lo que no este dentro del circulo que dibujamos */
 
+            // 2- tomamos las dimensiones de la imagen que le pasamos
             const imgWidth = img.naturalWidth || img.width;
             const imgHeight = img.naturalHeight || img.height;
             
-            // Reducimos ligeramente el área de muestreo de la imagen fuente (un 80%) 
-            // para recortar solo la fichita redonda de adentro y descartar el borde negro 
-            const size = Math.min(imgWidth, imgHeight) * 0.70; 
-            const sx = (imgWidth - size) / 2;
-            const sy = (imgHeight - size) / 2;
+            // 3- Reducimos ligeramente el área de muestreo de la imagen fuente (un 70%) 
+            //    para recortar solo la fichita redonda de adentro y descartar el borde negro 
+            const size = Math.min(imgWidth, imgHeight) * 0.70; /*recortamos la iamgen un 70% para no tener bordes negros*/
+            const sx = (imgWidth - size) / 2; /* Calcula el punto exacto de inicio para centrar ese recorte */
+            const sy = (imgHeight - size) / 2; /* Calcula el punto exacto de inicio para centrar ese recorte */
 
+            // 4- dibujamos la ficha en la posicion exactas del canvas con las medidas exactas de la ficha y la imagen
             ctx.drawImage(img, sx, sy, size, size, x - r, y - r, r * 2, r * 2);
             
+            // 5- dibujamos el borde de la ficha, el color es de acuerdo al tipo de ficha en juego
             ctx.beginPath();
             ctx.arc(x, y, r, 0, 2 * Math.PI);
             ctx.strokeStyle = (tipo === 'reliquia_verde' || tipo === 'reliquia_jade') ? '#10b981' : '#f59e0b';
             ctx.lineWidth = 2.5;
             ctx.stroke();
+
         } else {
+            // este else lo recomendo gemini, si la imagen tarda en cargar dibuja una ficha de color solido
             ctx.beginPath();
             ctx.arc(x, y, r, 0, 2 * Math.PI);
             ctx.fillStyle = (tipo === 'reliquia_verde' || tipo === 'reliquia_jade') ? '#10b981' : '#f59e0b';

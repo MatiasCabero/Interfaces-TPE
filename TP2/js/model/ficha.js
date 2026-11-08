@@ -1,5 +1,5 @@
 class Ficha {
-    constructor(fila, col, tipo = 'reliquia_oro') {
+    constructor(fila, col, tipo) {
         this.fila = fila; // Fila lógica (0 a 6)
         this.col = col;   // Columna lógica (0 a 6)
         this.tipo = tipo; // Tipo/Formatos de ficha (ej: reliquia_oro, reliquia_jade)
