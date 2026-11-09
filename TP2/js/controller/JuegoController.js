@@ -7,7 +7,7 @@
 para cambiar las reglas, y con la Vista (TableroView) para reflejar esos cambios en la pantalla a 60 fotogramas 
 por segundo */
 class JuegoCompleto {
-    constructor(canvas, imagenes, tiempoLimite = 900) {
+    constructor(canvas, imagenes, tiempoLimite = 900/* SE PASO UN TIEMPO PREDETERMINADO POR LAS DUDAS */) {
         this.canvas = canvas;
         
         // instanciamos modelo y vista
@@ -104,38 +104,59 @@ class JuegoCompleto {
         };
     }
 
+    // arrastras la ficha
     onMouseMove(e) {
-        if (!this.arrastre) return;
-        const p = this.vista.posicionMouse(e);
-        this.arrastre.x = p.x;
-        this.arrastre.y = p.y;
+        if (!this.arrastre) return; /* si el usuario no esta arrastrando nada la funcion se corta */
+        const p = this.vista.posicionMouse(e); /* Cada milisegundo que el mouse se mueve por la pantalla, 
+                                                  esta línea captura la nueva posición del cursor y la traduce  
+                                                  a las coordenadas internas del canvas */
+        this.arrastre.x = p.x; /* Actualiza dinámicamente las coordenadas x e y dentro del objeto de arrastre */
+        this.arrastre.y = p.y; /* Actualiza dinámicamente las coordenadas x e y dentro del objeto de arrastre */
     }
 
+    // soltar la ficha
     onMouseUp(e) {
-        if (!this.arrastre) return;
+        if (!this.arrastre) return; /* si el usuario no esta arrastrando nada la funcion se corta */
 
-        const { ficha, x, y, offsetX, offsetY } = this.arrastre;
+        // Extrae del objeto de arrastre la ficha que se estaba moviendo y las últimas coordenadas donde quedó 
+        // el cursor, junto con el desfase (offsetX y offsetY) que calculamos cuando empezó el clic
+        const { ficha, x, y, offsetX, offsetY } = this.arrastre; 
+
+        // calcula donde cayo la ficha
+        // Se le resta el offset a la posición del mouse para apuntar exactamente al centro de la ficha y 
+        // se le pide a la Vista (aCelda) que traduzca esos píxeles a una fila y columna lógica de la matriz 
+        // (por ejemplo, ver si la soltaste en la celda [2, 3])
         const { fila, col } = this.vista.aCelda(x - offsetX, y - offsetY);
 
+        // el MODELO se encarga de ver si es un salto valido, de comer la ficha, guardar el estado en el historial
+        // y de actualizar la matriz
         this.tablero.realizarMovimiento(ficha, fila, col);
+
+        // borra el arrastre
         this.arrastre = null;
 
-        this.verificarFin();
+        this.verificarFin(); /* ocurre inmediatamente despues de soltar la ficha */
     }
 
     //DESHACER MOVIMIENTO
     deshacer() {
         this.arrastre = null; // Soltamos cualquier ficha del mouse
-        if (!this.tablero.historial || this.tablero.historial.length === 0) return;
+        if (!this.tablero.historial || this.tablero.historial.length === 0) return; /* verifica que haya movimientos para deshacer */
 
-        // Sacamos el último estado
+        // vamos al Modelo, sacamos el último "snapshot" (la foto del estado anterior) usando .pop() y lo borra del 
+        // historial para dar marcha atrás. De ahí extrae la variable mov con los datos exactos de qué ficha se movió 
+        // y adónde
         const estadoAnterior = this.tablero.historial.pop();
         const mov = estadoAnterior.movimiento;
 
         // Encontramos la ficha actual que tiene que volver atrás
-        const fichaAMover = this.tablero.obtenerFicha(mov.destFila, mov.destCol);
-        if (!fichaAMover) {
-            // Si por algo no la encuentra, hace un restore directo de emergencia
+        const fichaAMover = this.tablero.obtenerFicha(mov.destFila, mov.destCol); /* Busca en el tablero actual la reliquia 
+                                                                                     que se encuentra en la posición de 
+                                                                                     destino para ordenarle que vuelva al 
+                                                                                     origen */
+        
+            // Si por algo no la encuentra, hace un restore directo de emergencia                                                                         
+            if (!fichaAMover) {
             this.tablero.grilla = estadoAnterior.grilla.map(row => [...row]);
             this.tablero.fichas = estadoAnterior.fichas.map(f => new Ficha(f.fila, f.col, f.tipo));
             return;
@@ -144,6 +165,9 @@ class JuegoCompleto {
         // Animación fluida de deslizamiento hacia atrás (Duration: ~250ms)
         const inicioAnim = performance.now();
         const duracionAnim = 250; 
+
+        // Calcula con la Vista las coordenadas exactas en píxeles de dónde está la ficha ahora (destFila, destCol) 
+        // y a dónde tiene que regresar (origFila, origCol)
         const posOrig = this.vista.aPixeles(mov.destFila, mov.destCol);
         const posDest = this.vista.aPixeles(mov.origFila, mov.origCol);
 
@@ -151,15 +175,20 @@ class JuegoCompleto {
         this.mensajeAnimacionDeshacer = true; 
 
         const animarRetorno = (ahora) => {
-            const progreso = Math.min(1, (ahora - inicioAnim) / duracionAnim);
+            const progreso = Math.min(1, (ahora - inicioAnim) / duracionAnim);/* Calcula qué porcentaje de la animación 
+                                                                                 ya pasó con un valor entre 0 y 1*/
             // Easing suave (Ease Out)
             const ease = 1 - Math.pow(1 - progreso, 3);
 
-            // Coordenadas intermedias para la animación visual temporal
+            // Calcula las coordenadas intermedias exactas en las que debe dibujarse 
+            // la reliquia en ese fotograma específico
             const xActual = posOrig.x + (posDest.x - posOrig.x) * ease;
             const yActual = posOrig.y + (posDest.y - posOrig.y) * ease;
 
             // Forzamos a la vista a redibujar la ficha moviéndose de forma fluida
+            // Mientras dura la animación de los 250ms, el controlador engaña a la Vista haciéndole creer que esa 
+            // ficha se está "arrastrando" (arrastre), pero actualizando su posición paso a paso (xActual, yActual) 
+            // para que se vea deslizándose sola por el aire hacia su casilla original
             this.vista.dibujar({
                 arrastre: {
                     ficha: fichaAMover,
@@ -175,10 +204,11 @@ class JuegoCompleto {
                 shaking: false
             });
 
+            // si la animacion no termino se sigue llamando asi misma en el siguiente fotograma
             if (progreso < 1) {
                 requestAnimationFrame(animarRetorno);
             } else {
-                // Una vez terminada la animación visual, aplicamos el cambio real en el modelo del tablero
+                // Una vez terminada la animación restauramos los datos en el modelo
                 this.tablero.grilla = estadoAnterior.grilla.map(row => [...row]);
                 this.tablero.fichas = estadoAnterior.fichas.map(f => new Ficha(f.fila, f.col, f.tipo));
                 this.mensaje = null;
@@ -194,8 +224,8 @@ class JuegoCompleto {
     }
 
     reiniciarJuego() {
-        this.tablero.inicializarFichas();
-        if (this.tablero.historial) this.tablero.historial = [];
+        this.tablero.inicializarFichas(); /* se re arma el tablero con todas las fichas en posicion incial */
+        if (this.tablero.historial) this.tablero.historial = [];  /* vacia el historial */
         this.mensaje = null;
         this.esVictoria = false;
         this.arrastre = null;
@@ -203,16 +233,17 @@ class JuegoCompleto {
         this.esDerrota = false;
         this.shaking = false;
 
-        //Quitamos el destello al reiniciar
+        //Quitamos el destello al reiniciar por si el usuario habia ganado
         const gameMedia = document.getElementById('gameMedia');
         if (gameMedia) gameMedia.classList.remove('victory-glow');
 
         this.juegoIniciado = false;
         this.inicio = null;
         this.victoryOverlay.classList.add('hidden');
-        if (this.hudTiempo) this.hudTiempo.textContent = "15:00";
+        if (this.hudTiempo) this.hudTiempo.textContent = "15:00"; /* reseteamos el tiempo */
     }
 
+    // funcion para ocultar el boton de prueba
     reiniciarJuegoConOcultamiento() {
         this.reiniciarJuego();
         const btnModoPrueba = document.getElementById('btnModoPrueba');
@@ -238,13 +269,15 @@ class JuegoCompleto {
     }
 
     verificarFin() {
-        const fichasRestantes = this.tablero.fichas.length;
+        const fichasRestantes = this.tablero.fichas.length; /* cuenta cuantas fichas quedan en el tablero */
 
+        // le pregunta al modelo si se cumple la condicion de victoria
         if (this.tablero.gano()) {
             this.esVictoria = true;
             this.mensaje = `¡Misión Cumplida! Rescataste la reliquia en el centro en ${this.obtenerTiempoTranscurrido()}.`;
-            this.mostrarModalFinConRetraso();
-        } else if (!this.tablero.hayMovimientosPosibles()) {
+            this.mostrarModalFinConRetraso(); /* esto sirve para que el usuario vea como quedo el tablero al terminar */
+            
+        } else if (!this.tablero.hayMovimientosPosibles()) { /* sino gano y no hay movimientos posible muestra la derrota */
             this.esDerrota = true;
             this.shaking = true;
             
@@ -252,7 +285,7 @@ class JuegoCompleto {
             setTimeout(() => this.shaking = false, 2200); 
 
             this.mensaje = `Sin movimientos posibles. Te quedaron ${fichasRestantes} reliquias atrapadas en el altar.`;
-            this.mostrarModalFinConRetraso();
+            this.mostrarModalFinConRetraso(); /* esto sirve para que el usuario vea como quedo el tablero al terminar */
         }
     }
 
@@ -282,7 +315,8 @@ class JuegoCompleto {
 
     //========================================================================================
     //ESTE METODO HACE QUE EL JUEGO SE RENDERIZE A 60FPS Y NO QUEDE LA IMAGEN ESTATICA
-    //esto ayuda a que cuando movemos una ficha se dibuje su nueva posicion
+    //es la encargada de actualizar el tiempo, controlar las animaciones de la interfaz y 
+    //mandar a redibujar el canvas en cada fotograma
     //========================================================================================
 
     loop(ahora) {
@@ -318,19 +352,19 @@ class JuegoCompleto {
 
         // 3. Evaluamos fotograma a fotograma si el jugador perdio o gano para activar los efectos
         const gameMedia = document.getElementById('gameMedia');
-        if (gameMedia) {
-            if (this.shaking) {
-                gameMedia.classList.add('shaking'); // Activa la animación de sacudida en todo el contenedor
-            } else {
-                gameMedia.classList.remove('shaking'); // La remueve cuando termina de vibrar
-            }
-
-            if (this.esVictoria) {
-                gameMedia.classList.add('victory-glow');
-            } else {
-                gameMedia.classList.remove('victory-glow');
-            }
+      
+        if (this.shaking) {
+            gameMedia.classList.add('shaking'); // Activa la animación de sacudida en todo el contenedor
+        } else {
+            gameMedia.classList.remove('shaking'); // La remueve cuando termina de vibrar
         }
+
+        if (this.esVictoria) {
+            gameMedia.classList.add('victory-glow');
+        } else {
+            gameMedia.classList.remove('victory-glow');
+        }
+        
 
         // 4. Mandamos a dibujar todos los elementos visuales actualizados en el Canvas 
         // (fondo transparente, huecos, fichas y ayudas/hints)
@@ -359,12 +393,14 @@ function cargarImagen(src) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('canvasJuego');
-    if (!canvas) return;
+    if (!canvas) return; /* si no encuentra el canvas termina la ejecucion */
 
+    // carga asincrona de las imagenes
     Promise.all([
         cargarImagen('Assets/pegSolitarie/tablero.jpeg'),
         cargarImagen('Assets/pegSolitarie/fichaVerde.jpeg'),
         cargarImagen('Assets/pegSolitarie/fichaOro.jpeg')
+
     ]).then(([fondo, fichaVerde, fichaOro]) => {
 
         const juego = new JuegoCompleto(canvas, {
@@ -372,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
             reliquia_oro: fichaOro,
             reliquia_verde: fichaVerde,
             reliquia_jade: fichaVerde
-        }, 900);
+        }, 900); /* ACA ESTA LA DURACION DE LA PARTIDA */
 
         // Evento del Boton Comenzar en el Menu Inicial
         const btnComenzar = document.getElementById('btnComenzarJuego');
@@ -439,8 +475,8 @@ document.addEventListener('DOMContentLoaded', () => {
             btnModoPrueba.addEventListener('click', () => juego.activarModoPruebaVictoria());
         }
 
-    }).catch(err => {
+    }).catch(err => {       /* atrapamos el error por si falla la carga de imagenes */
         console.warn("Error cargando texturas...", err);
         const juego = new JuegoCompleto(canvas, {}, 900);
-    });
+    }); 
 });
