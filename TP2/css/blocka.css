@@ -15,6 +15,7 @@
     width: 100%;
     height: 600px;
     background-color: #D4EBF8; 
+    background-image: none !important;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
@@ -36,12 +37,13 @@
     top: 16px;
     left: 0;
     width: 100%;
+    height: auto !important; /* <-- Esto sube toda la barra de vuelta arriba */
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
     z-index: 5;
-    pointer-events: none; /* Permite clicks a través del espacio libre */
+    pointer-events: none;
   }
   
   .game-hud.hidden {
@@ -58,14 +60,17 @@
   }
   
   .hud-item {
-    background: rgba(255, 255, 255, 0.92);
-    color: #1e293b;
+    position: static !important; /* <-- Evita que se apilen arriba a la izquierda */
+    width: auto !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    background-image: none !important; /* <-- Quita la textura de botón de piedra */
+    color: #1e293b !important;
     font-family: system-ui, -apple-system, sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
     padding: 8px 14px;
     border-radius: 6px;
-    border: 1px solid #c2e2f3;
+    border: 1px solid #c2e2f3 !important;
     box-shadow: 0 4px 12px rgba(15, 30, 60, 0.08);
     backdrop-filter: blur(4px);
   }
@@ -252,44 +257,49 @@
   }
   
   /* Botones de Acción Generales */
+  .game-overlay .btn-primary,
   .btn-primary {
-    background: #2563eb;
-    color: #ffffff;
-    border: none;
-    padding: 12px 32px;
-    font-size: 1rem;
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 12px 32px !important;
+    font-size: 1rem !important;
     font-weight: 700;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
   }
-  
+
+  .game-overlay .btn-primary:hover,
   .btn-primary:hover {
-    background: #1d4ed8;
+    background: #1d4ed8 !important;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.45) !important;
     transform: translateY(-2px);
   }
-  
+
   .btn-primary:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
   }
-  
+
+  .game-overlay .btn-secondary,
   .btn-secondary {
-    background: #f1f5f9;
-    color: #334155;
-    border: 1px solid #cbd5e1;
-    padding: 12px 24px;
-    font-size: 0.95rem;
+    background: #f1f5f9 !important;
+    color: #334155 !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 12px 24px !important;
+    font-size: 0.95rem !important;
     font-weight: 700;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
   }
-  
+
+  .game-overlay .btn-secondary:hover,
   .btn-secondary:hover {
-    background: #e2e8f0;
+    background: #e2e8f0 !important;
   }
   
   .victory-actions {
@@ -310,15 +320,15 @@
     padding: 32px 44px;
     border-radius: 12px;
     border: 1px solid #c2e2f3;
-    box-shadow: 0 12px 36px rgba(15, 30, 60, 0.2);
+    box-shadow: 0 12px 36px rgba(15, 30, 60, 0.2) !important;
     max-width: 620px;
     width: 90%;
     animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
   
   .preview-img {
-    width: 100%;
-    max-width: 520px;
+    width: auto;
+    max-width: 100%;
     max-height: 360px;
     border-radius: 8px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
