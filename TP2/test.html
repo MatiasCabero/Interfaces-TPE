@@ -36,6 +36,12 @@
       animation: volar 0.65s steps(5) infinite;
     }
 
+    .superman.impulso {
+      animation: 
+        volar 0.65s steps(5) infinite,
+        cabeceo-impulso 0.45s ease-out;
+    }
+
     .superman.chocado {
       animation: 
         volar 0.65s steps(5) infinite,
@@ -45,13 +51,13 @@
     .superman.chocado-edificio {
       animation: 
         volar 0.65s steps(5) infinite,
-        golpe-edificio 0.7s ease-in-out;
+        golpe-edificio 1.1s ease-in-out;
     }
 
     .superman.curado {
       animation: 
         volar 0.65s steps(5) infinite,
-        curar-brillo 0.4s ease-in-out 4;
+        curar-brillo 0.4s ease-in-out 3;
     }
 
     .superman.muerto {
@@ -60,7 +66,6 @@
         caer-derrotado 1.2s ease-in forwards; 
     }
 
-    /* Tus sprites de ítems y enemigos (guardados listos para usar) */
     .corazon {
       width: 100px;
       height: 90px;
@@ -97,7 +102,7 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 12px;
-      max-width: 560px;
+      max-width: 600px;
     }
 
     button {
@@ -112,6 +117,7 @@
 
     button:active { transform: scale(0.96); }
 
+    .btn-impulso    { background: #a855f7; color: white; }
     .btn-kriptonita { background: #22c55e; color: #052e16; }
     .btn-edificio   { background: #ef4444; color: white; }
     .btn-vida       { background: #facc15; color: #422006; }
@@ -122,6 +128,18 @@
     @keyframes volar {
       0% { background-position: 0px 0px; }
       100% { background-position: -600px 0px; }
+    }
+
+    @keyframes cabeceo-impulso {
+      0% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      35% {
+        transform: translateY(-15px) rotate(-15deg);
+      }
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
     }
 
     @keyframes titilar-dano {
@@ -183,17 +201,25 @@
         transform: translate(0, 0) rotate(0deg);
         filter: none;
       }
-      20% {
+      15% {
         transform: translate(-15px, -6px) rotate(-18deg);
         filter: brightness(2.5);
       }
-      45% {
+      35% {
         transform: translate(8px, 5px) rotate(12deg);
-        filter: sepia(1) hue-rotate(-50deg) saturate(4) brightness(1.2);
+        filter: sepia(1) hue-rotate(-50deg) saturate(5) brightness(1.2);
       }
-      70% {
-        transform: translate(-6px, -2px) rotate(-8deg);
-        filter: brightness(1.8);
+      55% {
+        transform: translate(-10px, -4px) rotate(-12deg);
+        filter: brightness(2.2);
+      }
+      75% {
+        transform: translate(5px, 3px) rotate(6deg);
+        filter: sepia(1) hue-rotate(-50deg) saturate(5) brightness(1.2);
+      }
+      90% {
+        transform: translate(-3px, -1px) rotate(-3deg);
+        filter: sepia(1) hue-rotate(-50deg) saturate(3) brightness(1.1);
       }
       100% {
         transform: translate(0, 0) rotate(0deg);
@@ -209,8 +235,9 @@
   </div>
 
   <div class="controles">
+    <button class="btn-impulso" onclick="activarAnimacion('impulso', 450)">Impulso (Espacio)</button>
     <button class="btn-kriptonita" onclick="activarAnimacion('chocado', 1200)">Choque Kriptonita</button>
-    <button class="btn-edificio" onclick="activarAnimacion('chocado-edificio', 700)">Choque Edificio</button>
+    <button class="btn-edificio" onclick="activarAnimacion('chocado-edificio', 1100)">Choque Edificio</button>
     <button class="btn-vida" onclick="activarAnimacion('curado', 1600)">Agarrar Vida</button>
     <button class="btn-gameover" onclick="activarGameOver()">Game Over</button>
     <button class="btn-reset" onclick="resetearVuelo()">Volver a Volar</button>
@@ -222,8 +249,8 @@
 
     function limpiarEstados() {
       clearTimeout(temporizador);
-      superman.classList.remove('chocado', 'chocado-edificio', 'curado', 'muerto');
-      void superman.offsetWidth; // Reinicia la animación desde 0 si volvés a apretar
+      superman.classList.remove('impulso', 'chocado', 'chocado-edificio', 'curado', 'muerto');
+      void superman.offsetWidth;
     }
 
     function activarAnimacion(clase, duracionMs) {
@@ -243,6 +270,13 @@
     function resetearVuelo() {
       limpiarEstados();
     }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        activarAnimacion('impulso', 450);
+      }
+    });
   </script>
 
 </body>
