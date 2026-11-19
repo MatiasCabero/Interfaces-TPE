@@ -68,7 +68,6 @@ class JuegoView {
     }
   
     registrarEventosAnimacion() {
-      // Cuando termina una animación de un solo disparo, vuelve a volar normal
       this.supermanSpriteEl.addEventListener('animationend', (e) => {
         if (
           e.animationName === 'cabeceo-impulso' ||

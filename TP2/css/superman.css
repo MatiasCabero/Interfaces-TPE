@@ -1,21 +1,12 @@
 /* =========================================================
-   Contenedor del Juego (Misma proporción 1470x650 que el Canvas)
+   Contenedor del Juego (Mismo tamaño exacto 1470x650 que el Canvas)
    ========================================================= */
-   .game-stage {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .game-media {
-    position: relative;
+   .game-media {
+    position: relative !important;
     width: 100%;
     max-width: 1470px;
-    aspect-ratio: 1470 / 650;
-    border-radius: 12px;
+    height: 650px !important;
     overflow: hidden;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
     background: #8ec5ea;
     user-select: none;
   }
@@ -23,7 +14,7 @@
   .escenario-juego {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 650px;
     overflow: hidden;
     cursor: pointer;
   }
@@ -40,7 +31,6 @@
     pointer-events: none;
   }
   
-  /* Capa 1: Cielo lejano (z-index: 1) */
   .capa-cielo {
     top: 0;
     height: 100%;
@@ -48,27 +38,24 @@
     background: linear-gradient(180deg, #7cc0eb 0%, #a8d8f5 65%, #cbe8fa 100%);
   }
   
-  /* Capa 2: Ciudad de fondo (z-index: 2) */
   .capa-ciudad {
-    bottom: 65px; /* Apoyada justo encima de la calle */
+    bottom: 65px;
     height: calc(100% - 65px);
     z-index: 2;
-    background-image: url('/TP2/Assets/superman/fondo.JPG');
+    background-image: url('../Assets/superman/fondo.JPG');
     background-size: auto 100%;
     background-position: 0px bottom;
   }
   
-  /* Capa 3: Calle / Asfalto (z-index: 3) */
   .capa-calle {
     bottom: 0;
     height: 75px;
     z-index: 3;
-    background-image: url('/TP2/Assets/superman/calle.png');
+    background-image: url('../Assets/superman/calle.png');
     background-size: auto 100%;
     background-position: 0px 0px;
   }
   
-  /* Capa 4: Autos circulando por la calle (z-index: 4) */
   .capa-autos {
     position: absolute;
     left: 0;
@@ -90,21 +77,21 @@
   }
   
   .auto-1 {
-    width: 110px;
-    height: 48px;
-    background-image: url('/TP2/Assets/superman/auto 1.png');
+    width: 105px;
+    height: 46px;
+    background-image: url('../Assets/superman/auto 1.png');
   }
   
   .auto-2 {
-    width: 90px;
-    height: 38px;
-    background-image: url('/TP2/Assets/superman/auto 2.png');
+    width: 86px;
+    height: 36px;
+    background-image: url('../Assets/superman/auto 2.png');
   }
   
   .auto-3 {
-    width: 58px;
-    height: 52px;
-    background-image: url('/TP2/Assets/superman/auto 3.png');
+    width: 54px;
+    height: 48px;
+    background-image: url('../Assets/superman/auto 3.png');
   }
   
   /* =========================================================
@@ -112,12 +99,14 @@
      ========================================================= */
   .capa-entidades {
     position: absolute;
-    inset: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     z-index: 5;
     pointer-events: none;
   }
   
-  /* Edificios Obstáculo (Normal e Invertido/Espejado) */
   .edificio-obstaculo {
     position: absolute;
     left: 0;
@@ -128,82 +117,78 @@
     will-change: transform;
   }
   
-  .edificio-obstaculo.espejado {
-    transform-origin: center center;
-  }
-  
-  .edificio-tipo-1 { background-image: url('/TP2/Assets/superman/edificio 1.png'); }
-  .edificio-tipo-2 { background-image: url('/TP2/Assets/superman/edificio 2.png'); }
-  .edificio-tipo-3 { background-image: url('/TP2/Assets/superman/edificio 3.png'); }
-  .edificio-tipo-4 { background-image: url('/TP2/Assets/superman/edificio 4.png'); }
-  .edificio-tipo-5 { background-image: url('/TP2/Assets/superman/edificio 5.png'); }
+  .edificio-tipo-1 { background-image: url('../Assets/superman/edificio 1.png'); }
+  .edificio-tipo-2 { background-image: url('../Assets/superman/edificio 2.png'); }
+  .edificio-tipo-3 { background-image: url('../Assets/superman/edificio 3.png'); }
+  .edificio-tipo-4 { background-image: url('../Assets/superman/edificio 4.png'); }
+  .edificio-tipo-5 { background-image: url('../Assets/superman/edificio 5.png'); }
   
   /* =========================================================
-     Ítems Animados (Spritesheets: Corazón y Kriptonita)
+     Ítems Animados (Corazón y Kriptonita proporcionados)
      ========================================================= */
   .item-entidad {
     position: absolute;
     left: 0;
     top: 0;
     will-change: transform;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.2s ease;
   }
   
   .item-entidad.tomado {
     opacity: 0;
   }
-  
+    
+  /* Corazón: 72x64 px (6 steps -> 432px de ancho total) */
   .item-corazon {
-    width: 100px;
-    height: 90px;
-    background-image: url('/TP2/Assets/superman/corazon.png');
+    width: 72px;
+    height: 64px;
+    background-image: url('../Assets/superman/corazon.png');
     background-repeat: no-repeat;
-    background-size: 600px 90px;
+    background-size: 432px 64px;
     image-rendering: pixelated;
-    animation:
-      girar-corazon 0.6s steps(6) infinite,
-      flotar-corazon 1s ease-in-out infinite alternate;
+    animation: girar-corazon 0.6s steps(6) infinite;
   }
   
+  /* Kriptonita: 68x51 px (5 steps -> 340px de ancho total) */
   .item-kriptonita {
-    width: 120px;
-    height: 90px;
-    background-image: url('/TP2/Assets/superman/meteoritoverde.png');
+    width: 92px;
+    height: 69px;
+    background-image: url('../Assets/superman/meteoritoverde.png');
     background-repeat: no-repeat;
-    background-size: 600px 90px;
+    background-size: 460px 69px;
     image-rendering: pixelated;
-    animation: volar 0.65s steps(5) infinite;
+    animation: volar-kriptonita 0.65s steps(5) infinite;
   }
   
   /* =========================================================
-     Personaje: Superman (Wrapper físico + Sprite animado)
+     Personaje: Superman más compacto (84x63 px, 5 steps -> 420px)
      ========================================================= */
   .superman-box {
     position: absolute;
     left: 0;
     top: 0;
-    width: 120px;
-    height: 90px;
+    width: 84px;
+    height: 63px;
     z-index: 6;
     pointer-events: none;
     will-change: transform;
   }
   
   .superman-sprite {
-    width: 120px;
-    height: 90px;
-    background-image: url('/TP2/Assets/superman/volando.png');
+    width: 84px;
+    height: 63px;
+    background-image: url('../Assets/superman/volando.png');
     background-repeat: no-repeat;
-    background-size: 600px 90px;
+    background-size: 420px 63px;
     image-rendering: pixelated;
     animation: volar 0.65s steps(5) infinite;
   }
   
-  /* Estados de animación disparados por eventos (JS cambia clase) */
+  /* Cabeceo sutil sin doble salto brusco */
   .superman-sprite.impulso {
     animation:
       volar 0.65s steps(5) infinite,
-      cabeceo-impulso 0.45s ease-out;
+      cabeceo-impulso 0.35s ease-out;
   }
   
   .superman-sprite.chocado {
@@ -215,7 +200,7 @@
   .superman-sprite.chocado-edificio {
     animation:
       volar 0.65s steps(5) infinite,
-      golpe-edificio 1.1s ease-in-out;
+      golpe-edificio 1.8s ease-in-out;
   }
   
   .superman-sprite.curado {
@@ -230,9 +215,10 @@
       caer-derrotado 1.2s ease-in forwards;
   }
   
-  /* Clase opcional para visualizar hitboxes durante pruebas */
   .debug-hitbox {
     position: absolute;
+    left: 0;
+    top: 0;
     border: 2px solid #ef4444;
     background: rgba(239, 68, 68, 0.18);
     z-index: 20;
@@ -265,8 +251,8 @@
   }
   
   .icono-vida {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     object-fit: contain;
     transition: transform 0.25s ease, opacity 0.25s ease, filter 0.25s ease;
   }
@@ -310,7 +296,6 @@
     display: none;
   }
   
-  /* En el menú inicial no tapamos el fondo para que se vea volar a Superman */
   .start-overlay {
     background: transparent;
     pointer-events: none;
@@ -341,7 +326,6 @@
     transform: scale(0.97);
   }
   
-  /* Pantalla de Game Over */
   .gameover-overlay {
     background: rgba(15, 23, 42, 0.72);
     backdrop-filter: blur(4px);
@@ -379,102 +363,50 @@
      ========================================================= */
   @keyframes volar {
     0% { background-position: 0px 0px; }
-    100% { background-position: -600px 0px; }
+    100% { background-position: -420px 0px; }
+  }
+  
+  @keyframes volar-kriptonita {
+    0% { background-position: 0px 0px; }
+    100% { background-position: -460px 0px; }
   }
   
   @keyframes cabeceo-impulso {
-    0% {
-      transform: translateY(0px) rotate(0deg);
-    }
-    35% {
-      transform: translateY(-15px) rotate(-15deg);
-    }
-    100% {
-      transform: translateY(0px) rotate(0deg);
-    }
+    0% { transform: rotate(0deg); }
+    35% { transform: rotate(-10deg); }
+    100% { transform: rotate(0deg); }
   }
   
   @keyframes titilar-dano {
-    0% {
-      opacity: 1;
-      filter: none;
-    }
-    50% {
-      opacity: 0.25;
-      filter: hue-rotate(95deg) saturate(2.5) brightness(1.3);
-    }
+    0% { opacity: 1; filter: none; }
+    50% { opacity: 0.25; filter: hue-rotate(95deg) saturate(2.5) brightness(1.3); }
   }
   
   @keyframes girar-corazon {
     0% { background-position: 0px 0px; }
-    100% { background-position: -600px 0px; }
-  }
-  
-  @keyframes flotar-corazon {
-    0% { transform: translateY(0px); }
-    100% { transform: translateY(-14px); }
+    100% { background-position: -432px 0px; }
   }
   
   @keyframes curar-brillo {
-    0% {
-      transform: scale(1);
-      filter: brightness(1);
-    }
-    50% {
-      transform: scale(1.1);
-      filter: brightness(1.8) drop-shadow(0 0 10px #facc15);
-    }
-    100% {
-      transform: scale(1);
-      filter: brightness(1);
-    }
+    0% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.1); filter: brightness(1.8) drop-shadow(0 0 10px #facc15); }
+    100% { transform: scale(1); filter: brightness(1); }
   }
   
   @keyframes caer-derrotado {
-    0% {
-      transform: translateY(0px) rotate(0deg);
-      filter: none;
-      opacity: 1;
-    }
-    25% {
-      transform: translateY(-25px) rotate(-20deg);
-      filter: grayscale(0.8) brightness(0.8);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(250px) rotate(85deg);
-      filter: grayscale(1) brightness(0.6);
-      opacity: 0;
-    }
+    0% { transform: translateY(0px) rotate(0deg); filter: none; opacity: 1; }
+    25% { transform: translateY(-20px) rotate(-18deg); filter: grayscale(0.8) brightness(0.8); opacity: 1; }
+    100% { transform: translateY(250px) rotate(85deg); filter: grayscale(1) brightness(0.6); opacity: 0; }
   }
   
   @keyframes golpe-edificio {
-    0% {
-      transform: translate(0, 0) rotate(0deg);
-      filter: none;
-    }
-    15% {
-      transform: translate(-15px, -6px) rotate(-18deg);
-      filter: brightness(2.5);
-    }
-    35% {
-      transform: translate(8px, 5px) rotate(12deg);
-      filter: sepia(1) hue-rotate(-50deg) saturate(5) brightness(1.2);
-    }
-    55% {
-      transform: translate(-10px, -4px) rotate(-12deg);
-      filter: brightness(2.2);
-    }
-    75% {
-      transform: translate(5px, 3px) rotate(6deg);
-      filter: sepia(1) hue-rotate(-50deg) saturate(5) brightness(1.2);
-    }
-    90% {
-      transform: translate(-3px, -1px) rotate(-3deg);
-      filter: sepia(1) hue-rotate(-50deg) saturate(3) brightness(1.1);
-    }
-    100% {
-      transform: translate(0, 0) rotate(0deg);
-      filter: none;
-    }
+    0%   { transform: translate(0, 0) rotate(0deg); filter: none; }
+    10%  { transform: translate(-14px, -6px) rotate(-18deg); filter: brightness(2.6); }
+    22%  { transform: translate(9px, 5px) rotate(12deg); filter: sepia(1) hue-rotate(-50deg) saturate(5) brightness(1.3); }
+    35%  { transform: translate(-10px, -4px) rotate(-12deg); filter: brightness(2.3); }
+    48%  { transform: translate(7px, 3px) rotate(8deg); filter: sepia(1) hue-rotate(-50deg) saturate(5) brightness(1.2); }
+    62%  { transform: translate(-6px, -2px) rotate(-7deg); filter: brightness(1.9); }
+    75%  { transform: translate(4px, 2px) rotate(5deg); filter: sepia(1) hue-rotate(-50deg) saturate(4) brightness(1.1); }
+    88%  { transform: translate(-2px, -1px) rotate(-2deg); filter: sepia(1) hue-rotate(-50deg) saturate(2.5) brightness(1.05); }
+    100% { transform: translate(0, 0) rotate(0deg); filter: none; }
   }

@@ -1,42 +1,58 @@
 class ItemAnimado {
-    constructor({ x, y, tipo }) {
-      this.id = ItemAnimado.siguienteId++;
-      this.x = x;
-      this.y = y;
-      this.tipo = tipo; // 'corazon' | 'kriptonita'
-  
-      this.ancho = tipo === 'corazon' ? 100 : 120;
-      this.alto = 90;
-  
-      // La kriptonita avanza un poquito más rápido que la ciudad
-      this.velocidadExtra = tipo === 'kriptonita' ? 95 : 0;
-  
-      this.tomado = false;
-      this.tiempoDesaparicion = 0;
-      this.el = null;
+  constructor({ x, y, tipo }) {
+    this.id = ItemAnimado.siguienteId++;
+    this.x = x;
+    this.y = y;
+    this.yBase = y;
+    this.tiempo = Math.random() * Math.PI * 2;
+    this.tipo = tipo; // 'corazon' | 'kriptonita'
+
+    this.ancho = tipo === 'corazon' ? 72 : 92;
+    this.alto = tipo === 'corazon' ? 64 : 69;
+
+    // La kriptonita avanza un poco más rápido que los edificios
+    this.velocidadExtra = tipo === 'kriptonita' ? 75 : 0;
+
+    this.tomado = false;
+    this.tiempoDesaparicion = 0;
+    this.el = null;
+  }
+
+  actualizar(dt, velocidadMundo) {
+    this.x -= (velocidadMundo + this.velocidadExtra) * dt;
+    this.tiempo += dt;
+
+    if (this.tipo === 'corazon') {
+      this.y = this.yBase + Math.sin(this.tiempo * 4) * 10;
     }
-  
-    actualizar(dt, velocidadMundo) {
-      this.x -= (velocidadMundo + this.velocidadExtra) * dt;
-  
-      if (this.tomado) {
-        this.tiempoDesaparicion += dt;
-      }
-    }
-  
-    // Hitbox centrada y justa para cada ítem
-    caja() {
-      return {
-        x: this.x + 22,
-        y: this.y + 20,
-        w: this.ancho - 44,
-        h: this.alto - 40
-      };
-    }
-  
-    estaFueraDePantalla() {
-      return this.x + this.ancho < -30 || (this.tomado && this.tiempoDesaparicion > 0.25);
+
+    if (this.tomado) {
+      this.tiempoDesaparicion += dt;
     }
   }
-  
-  ItemAnimado.siguienteId = 1;
+
+  caja() {
+    if (this.tipo === 'kriptonita') {
+      // Hitbox centrada en la roca (ignora la estela verde de atrás)
+      return {
+        x: this.x + 14,
+        y: this.y + 17,
+        w: 52,
+        h: 35
+      };
+    }
+
+    return {
+      x: this.x + 14,
+      y: this.y + 12,
+      w: this.ancho - 28,
+      h: this.alto - 24
+    };
+  }
+
+  estaFueraDePantalla() {
+    return this.x + this.ancho < -30 || (this.tomado && this.tiempoDesaparicion > 0.25);
+  }
+}
+
+ItemAnimado.siguienteId = 1;
