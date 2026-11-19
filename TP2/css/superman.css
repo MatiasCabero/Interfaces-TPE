@@ -1,0 +1,480 @@
+/* =========================================================
+   Contenedor del Juego (Misma proporción 1470x650 que el Canvas)
+   ========================================================= */
+   .game-stage {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .game-media {
+    position: relative;
+    width: 100%;
+    max-width: 1470px;
+    aspect-ratio: 1470 / 650;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    background: #8ec5ea;
+    user-select: none;
+  }
+  
+  .escenario-juego {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  
+  /* =========================================================
+     PARALLAX — 4 Capas con profundidad (z-index)
+     ========================================================= */
+  .capa-parallax {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background-repeat: repeat-x;
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+  
+  /* Capa 1: Cielo lejano (z-index: 1) */
+  .capa-cielo {
+    top: 0;
+    height: 100%;
+    z-index: 1;
+    background: linear-gradient(180deg, #7cc0eb 0%, #a8d8f5 65%, #cbe8fa 100%);
+  }
+  
+  /* Capa 2: Ciudad de fondo (z-index: 2) */
+  .capa-ciudad {
+    bottom: 65px; /* Apoyada justo encima de la calle */
+    height: calc(100% - 65px);
+    z-index: 2;
+    background-image: url('/TP2/Assets/superman/fondo.JPG');
+    background-size: auto 100%;
+    background-position: 0px bottom;
+  }
+  
+  /* Capa 3: Calle / Asfalto (z-index: 3) */
+  .capa-calle {
+    bottom: 0;
+    height: 75px;
+    z-index: 3;
+    background-image: url('/TP2/Assets/superman/calle.png');
+    background-size: auto 100%;
+    background-position: 0px 0px;
+  }
+  
+  /* Capa 4: Autos circulando por la calle (z-index: 4) */
+  .capa-autos {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 75px;
+    z-index: 4;
+    pointer-events: none;
+  }
+  
+  .auto-trafico {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-repeat: no-repeat;
+    background-size: contain;
+    image-rendering: pixelated;
+    will-change: transform;
+  }
+  
+  .auto-1 {
+    width: 110px;
+    height: 48px;
+    background-image: url('/TP2/Assets/superman/auto 1.png');
+  }
+  
+  .auto-2 {
+    width: 90px;
+    height: 38px;
+    background-image: url('/TP2/Assets/superman/auto 2.png');
+  }
+  
+  .auto-3 {
+    width: 58px;
+    height: 52px;
+    background-image: url('/TP2/Assets/superman/auto 3.png');
+  }
+  
+  /* =========================================================
+     Contenedores de Entidades (Edificios e Ítems)
+     ========================================================= */
+  .capa-entidades {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+  }
+  
+  /* Edificios Obstáculo (Normal e Invertido/Espejado) */
+  .edificio-obstaculo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+    image-rendering: pixelated;
+    will-change: transform;
+  }
+  
+  .edificio-obstaculo.espejado {
+    transform-origin: center center;
+  }
+  
+  .edificio-tipo-1 { background-image: url('/TP2/Assets/superman/edificio 1.png'); }
+  .edificio-tipo-2 { background-image: url('/TP2/Assets/superman/edificio 2.png'); }
+  .edificio-tipo-3 { background-image: url('/TP2/Assets/superman/edificio 3.png'); }
+  .edificio-tipo-4 { background-image: url('/TP2/Assets/superman/edificio 4.png'); }
+  .edificio-tipo-5 { background-image: url('/TP2/Assets/superman/edificio 5.png'); }
+  
+  /* =========================================================
+     Ítems Animados (Spritesheets: Corazón y Kriptonita)
+     ========================================================= */
+  .item-entidad {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  
+  .item-entidad.tomado {
+    opacity: 0;
+  }
+  
+  .item-corazon {
+    width: 100px;
+    height: 90px;
+    background-image: url('/TP2/Assets/superman/corazon.png');
+    background-repeat: no-repeat;
+    background-size: 600px 90px;
+    image-rendering: pixelated;
+    animation:
+      girar-corazon 0.6s steps(6) infinite,
+      flotar-corazon 1s ease-in-out infinite alternate;
+  }
+  
+  .item-kriptonita {
+    width: 120px;
+    height: 90px;
+    background-image: url('/TP2/Assets/superman/meteoritoverde.png');
+    background-repeat: no-repeat;
+    background-size: 600px 90px;
+    image-rendering: pixelated;
+    animation: volar 0.65s steps(5) infinite;
+  }
+  
+  /* =========================================================
+     Personaje: Superman (Wrapper físico + Sprite animado)
+     ========================================================= */
+  .superman-box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 120px;
+    height: 90px;
+    z-index: 6;
+    pointer-events: none;
+    will-change: transform;
+  }
+  
+  .superman-sprite {
+    width: 120px;
+    height: 90px;
+    background-image: url('/TP2/Assets/superman/volando.png');
+    background-repeat: no-repeat;
+    background-size: 600px 90px;
+    image-rendering: pixelated;
+    animation: volar 0.65s steps(5) infinite;
+  }
+  
+  /* Estados de animación disparados por eventos (JS cambia clase) */
+  .superman-sprite.impulso {
+    animation:
+      volar 0.65s steps(5) infinite,
+      cabeceo-impulso 0.45s ease-out;
+  }
+  
+  .superman-sprite.chocado {
+    animation:
+      volar 0.65s steps(5) infinite,
+      titilar-dano 0.15s steps(2) infinite;
+  }
+  
+  .superman-sprite.chocado-edificio {
+    animation:
+      volar 0.65s steps(5) infinite,
+      golpe-edificio 1.1s ease-in-out;
+  }
+  
+  .superman-sprite.curado {
+    animation:
+      volar 0.65s steps(5) infinite,
+      curar-brillo 0.4s ease-in-out 4;
+  }
+  
+  .superman-sprite.muerto {
+    animation:
+      volar 0.65s steps(5) infinite,
+      caer-derrotado 1.2s ease-in forwards;
+  }
+  
+  /* Clase opcional para visualizar hitboxes durante pruebas */
+  .debug-hitbox {
+    position: absolute;
+    border: 2px solid #ef4444;
+    background: rgba(239, 68, 68, 0.18);
+    z-index: 20;
+    pointer-events: none;
+  }
+  
+  /* =========================================================
+     HUD Superior Izquierdo (3 Corazones + Puntaje)
+     ========================================================= */
+  .hud-superman {
+    position: absolute;
+    top: 18px;
+    left: 22px;
+    z-index: 15;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    pointer-events: none;
+  }
+  
+  .hud-vidas {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .icono-vida {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    transition: transform 0.25s ease, opacity 0.25s ease, filter 0.25s ease;
+  }
+  
+  .icono-vida.perdida {
+    opacity: 0.25;
+    filter: grayscale(1);
+    transform: scale(0.85);
+  }
+  
+  .hud-puntaje {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    color: #f8fafc;
+    font-size: 16px;
+    font-weight: 600;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    padding-left: 16px;
+  }
+  
+  .hud-puntaje strong {
+    color: #facc15;
+    font-size: 22px;
+    font-weight: 800;
+  }
+  
+  /* =========================================================
+     Overlays: Menú Inicial ("Jugar") y Game Over
+     ========================================================= */
+  .superman-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 18;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .superman-overlay.hidden {
+    display: none;
+  }
+  
+  /* En el menú inicial no tapamos el fondo para que se vea volar a Superman */
+  .start-overlay {
+    background: transparent;
+    pointer-events: none;
+  }
+  
+  .btn-jugar-verde {
+    pointer-events: auto;
+    background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 16px 48px;
+    border: 3px solid #bbf7d0;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(22, 163, 74, 0.55);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  }
+  
+  .btn-jugar-verde:hover {
+    transform: scale(1.06);
+    filter: brightness(1.08);
+    box-shadow: 0 10px 28px rgba(34, 197, 94, 0.7);
+  }
+  
+  .btn-jugar-verde:active {
+    transform: scale(0.97);
+  }
+  
+  /* Pantalla de Game Over */
+  .gameover-overlay {
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(4px);
+  }
+  
+  .gameover-card {
+    background: #1e293b;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 32px 44px;
+    text-align: center;
+    color: #f8fafc;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  }
+  
+  .gameover-title {
+    margin: 0 0 10px;
+    font-size: 28px;
+    color: #f87171;
+  }
+  
+  .gameover-score {
+    margin: 0 0 24px;
+    font-size: 18px;
+    color: #cbd5e1;
+  }
+  
+  .gameover-score strong {
+    color: #facc15;
+    font-size: 24px;
+  }
+  
+  /* =========================================================
+     Keyframes de Spritesheets y Reacciones
+     ========================================================= */
+  @keyframes volar {
+    0% { background-position: 0px 0px; }
+    100% { background-position: -600px 0px; }
+  }
+  
+  @keyframes cabeceo-impulso {
+    0% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    35% {
+      transform: translateY(-15px) rotate(-15deg);
+    }
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+  }
+  
+  @keyframes titilar-dano {
+    0% {
+      opacity: 1;
+      filter: none;
+    }
+    50% {
+      opacity: 0.25;
+      filter: hue-rotate(95deg) saturate(2.5) brightness(1.3);
+    }
+  }
+  
+  @keyframes girar-corazon {
+    0% { background-position: 0px 0px; }
+    100% { background-position: -600px 0px; }
+  }
+  
+  @keyframes flotar-corazon {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-14px); }
+  }
+  
+  @keyframes curar-brillo {
+    0% {
+      transform: scale(1);
+      filter: brightness(1);
+    }
+    50% {
+      transform: scale(1.1);
+      filter: brightness(1.8) drop-shadow(0 0 10px #facc15);
+    }
+    100% {
+      transform: scale(1);
+      filter: brightness(1);
+    }
+  }
+  
+  @keyframes caer-derrotado {
+    0% {
+      transform: translateY(0px) rotate(0deg);
+      filter: none;
+      opacity: 1;
+    }
+    25% {
+      transform: translateY(-25px) rotate(-20deg);
+      filter: grayscale(0.8) brightness(0.8);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(250px) rotate(85deg);
+      filter: grayscale(1) brightness(0.6);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes golpe-edificio {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+      filter: none;
+    }
+    15% {
+      transform: translate(-15px, -6px) rotate(-18deg);
+      filter: brightness(2.5);
+    }
+    35% {
+      transform: translate(8px, 5px) rotate(12deg);
+      filter: sepia(1) hue-rotate(-50deg) saturate(5) brightness(1.2);
+    }
+    55% {
+      transform: translate(-10px, -4px) rotate(-12deg);
+      filter: brightness(2.2);
+    }
+    75% {
+      transform: translate(5px, 3px) rotate(6deg);
+      filter: sepia(1) hue-rotate(-50deg) saturate(5) brightness(1.2);
+    }
+    90% {
+      transform: translate(-3px, -1px) rotate(-3deg);
+      filter: sepia(1) hue-rotate(-50deg) saturate(3) brightness(1.1);
+    }
+    100% {
+      transform: translate(0, 0) rotate(0deg);
+      filter: none;
+    }
+  }
