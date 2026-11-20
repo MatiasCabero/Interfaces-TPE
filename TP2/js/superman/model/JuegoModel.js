@@ -34,6 +34,8 @@ class JuegoModel {
     this.puntos = 0;
     this.tiempoJugado = 0;
     this.velocidad = this.VELOCIDAD_INICIAL;
+    this.tiempoFrenoChoque = 0; // Temporizador de desaceleración breve al chocar
+    this.tiempoMuerte = 0;
 
     // Precargamos un par de edificios inferiores iniciales para el fondo del menú
     this.poblarEscenarioInicial();
@@ -41,38 +43,32 @@ class JuegoModel {
 
   poblarEscenarioInicial() {
     this.edificios = [
-      new ParEdificios({ x: 680,  centro: 370, hueco: 220, tipo: 1, soloInferior: true, altoEscenario: this.ALTO_JUGABLE }),
-      new ParEdificios({ x: 1120, centro: 340, hueco: 220, tipo: 3, soloInferior: true, altoEscenario: this.ALTO_JUGABLE })
+      new ParEdificios({ x: 300,  centro: 390, hueco: 220, tipo: 1, soloInferior: true, altoEscenario: this.ALTO_JUGABLE }),
+      new ParEdificios({ x: 480,  centro: 350, hueco: 220, tipo: 3, soloInferior: true, altoEscenario: this.ALTO_JUGABLE }),
+      new ParEdificios({ x: 660,  centro: 400, hueco: 220, tipo: 2, soloInferior: true, altoEscenario: this.ALTO_JUGABLE }),
+      new ParEdificios({ x: 840,  centro: 360, hueco: 220, tipo: 4, soloInferior: true, altoEscenario: this.ALTO_JUGABLE }),
+      new ParEdificios({ x: 1020, centro: 385, hueco: 220, tipo: 5, soloInferior: true, altoEscenario: this.ALTO_JUGABLE }),
+      new ParEdificios({ x: 1200, centro: 345, hueco: 220, tipo: 1, soloInferior: true, altoEscenario: this.ALTO_JUGABLE }),
+      new ParEdificios({ x: 1380, centro: 395, hueco: 220, tipo: 3, soloInferior: true, altoEscenario: this.ALTO_JUGABLE })
     ];
   }
 
   iniciarPartida() {
-    // Si venimos de Game Over ('fin'), sí limpiamos los edificios congelados
-    if (this.estado === 'fin') {
-      this.edificiosAEliminar.push(...this.edificios);
-      this.edificios = [];
-      this.spawner.reiniciar();
-      this.superman.reiniciar();
-    } else {
-      // Si venimos del 'menu', transición continua: los edificios siguen pasando
-      const yActual = this.superman.y;
-      const anguloActual = this.superman.angulo;
-      this.superman.reiniciar();
-      this.superman.y = yActual;
-      this.superman.angulo = anguloActual;
-
-      this.spawner.edificiosGenerados = 0;
-      this.spawner.edificiosDesdeUltimoCorazon = 0;
-      this.spawner.edificiosDesdeUltimaKriptonita = 0;
-    }
-
+    // Limpiar cualquier edificio o ítem anterior (tanto del menú como de Game Over)
+    this.edificiosAEliminar.push(...this.edificios);
+    this.edificios = [];
     this.itemsAEliminar.push(...this.items);
     this.items = [];
 
+    this.spawner.reiniciar();
+    this.superman.reiniciar();
+
     this.puntos = 0;
     this.tiempoJugado = 0;
+    this.tiempoFrenoChoque = 0;
     this.velocidad = this.VELOCIDAD_INICIAL;
     this.estado = 'jugando';
+    this.tiempoMuerte = 0;
 
     this.superman.impulsar();
   }
@@ -95,18 +91,29 @@ class JuegoModel {
   }
 
   actualizar(dt) {
-    // 1. Actualizar velocidad del mundo (acelera gradualmente en 'jugando')
-    if (this.estado === 'jugando') {
+    const estaMuriendo = this.estado === 'jugando' && this.superman.vidas <= 0;
+
+    // 1. Actualizar velocidad del mundo
+    if (estaMuriendo || this.estado === 'fin') {
+      // Apenas pierde la última vida, el mundo frena para lucir la animación de muerte
+      this.velocidad = 0;
+    } else if (this.estado === 'jugando') {
       this.tiempoJugado += dt;
-      this.velocidad = Math.min(
+
+      const velocidadObjetivo = Math.min(
         this.VELOCIDAD_MAXIMA,
         this.VELOCIDAD_INICIAL + this.tiempoJugado * 4.2
       );
+
+      if (this.tiempoFrenoChoque > 0) {
+        this.tiempoFrenoChoque = Math.max(0, this.tiempoFrenoChoque - dt);
+        const velocidadFrenada = velocidadObjetivo * 0.55;
+        this.velocidad += (velocidadFrenada - this.velocidad) * Math.min(1, dt * 10);
+      } else {
+        this.velocidad += (velocidadObjetivo - this.velocidad) * Math.min(1, dt * 6);
+      }
     } else if (this.estado === 'menu') {
       this.velocidad = 150;
-    } else {
-      // En 'fin' (Game Over) el escenario frena
-      this.velocidad = 0;
     }
 
     // 2. Actualizar las 3 capas de fondo parallax con dt
@@ -117,7 +124,7 @@ class JuegoModel {
 
     // 3. Actualizar Capa 4: Autos sobre la calle
     for (const auto of this.autos) {
-      if (this.estado !== 'fin') {
+      if (this.estado !== 'fin' && !estaMuriendo) {
         auto.x -= (this.velocidad + auto.velRelativa) * dt;
         if (auto.x + auto.ancho < -40) {
           auto.x = this.ANCHO + 60 + Math.random() * 250;
@@ -133,10 +140,9 @@ class JuegoModel {
     } else if (this.estado === 'jugando') {
       this.superman.actualizar(dt);
 
-      // Si perdió vida al tocar el piso/calle y sigue vivo, resetea la velocidad del mundo
+      // Si perdió vida al tocar el piso/calle y sigue vivo, aplica freno breve de 1.8s
       if (this.superman.vidas < vidasAntes && this.superman.vidas > 0) {
-        this.tiempoJugado = 0;
-        this.velocidad = this.VELOCIDAD_INICIAL;
+        this.tiempoFrenoChoque = 1.8;
       }
     }
 
@@ -171,8 +177,7 @@ class JuegoModel {
         if (this.choca(hitboxSuperman, ed.cajaArriba()) || this.choca(hitboxSuperman, ed.cajaAbajo())) {
           const recibioDanio = this.superman.recibirDanio('edificio');
           if (recibioDanio && this.superman.vidas > 0) {
-            this.tiempoJugado = 0;
-            this.velocidad = this.VELOCIDAD_INICIAL;
+            this.tiempoFrenoChoque = 1.8;
           }
         }
       }
@@ -193,15 +198,26 @@ class JuegoModel {
               this.puntos += 3;
             }
           } else if (item.tipo === 'kriptonita') {
-            this.superman.recibirDanio('kriptonita');
+            const recibioDanio = this.superman.recibirDanio('kriptonita');
+            if (recibioDanio && this.superman.vidas > 0) {
+              this.tiempoFrenoChoque = 1.8;
+            }
           }
         }
       }
     }
 
-    // 8. Verificar fin de juego si Superman se quedó sin vidas
+    // 8. Si Superman se quedó sin vidas, esperar 1.8s para ver su animación de muerte antes del cartel
     if (this.estado === 'jugando' && this.superman.vidas <= 0) {
-      this.estado = 'fin';
+      if (this.tiempoMuerte <= 0) {
+        this.tiempoMuerte = 1.8; // Inicia la cuenta regresiva la primera vez que llega a 0 vidas
+      } else {
+        this.tiempoMuerte -= dt;
+        if (this.tiempoMuerte <= 0) {
+          this.tiempoMuerte = 0;
+          this.estado = 'fin';
+        }
+      }
     }
 
     // 9. Eliminar del arreglo los objetos que salieron de pantalla (y encolarlos para borrar del DOM)

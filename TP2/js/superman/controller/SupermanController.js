@@ -16,6 +16,17 @@ class SupermanController {
     this.iniciarLoop();
   }
 
+  arrancarConParpadeo() {
+    this.entrada.impulso = false;
+
+    // Reinicia la animación CSS de parpadeo en el escenario
+    this.escenarioEl.classList.remove('escenario-flash');
+    void this.escenarioEl.offsetWidth; // Fuerza reflow para que siempre se dispare
+    this.escenarioEl.classList.add('escenario-flash');
+
+    this.model.iniciarPartida();
+  }
+
   registrarEventos() {
     // 1. Teclado: Espacio o Flecha Arriba (una entrada por pulsación: !e.repeat)
     document.addEventListener('keydown', (e) => {
@@ -30,8 +41,7 @@ class SupermanController {
 
         // Si está en el menú inicial, Espacio arranca la partida igual que el botón "Jugar"
         if (this.model.estado === 'menu') {
-          this.entrada.impulso = false;
-          this.model.iniciarPartida();
+          this.arrancarConParpadeo();
           return;
         }
 
@@ -50,16 +60,14 @@ class SupermanController {
     this.btnJugar.addEventListener('click', (e) => {
       e.stopPropagation();
       e.currentTarget.blur();
-      this.entrada.impulso = false;
-      this.model.iniciarPartida();
+      this.arrancarConParpadeo();
     });
 
     // 4. Botón "Volver a Jugar" en Game Over
     this.btnReiniciar.addEventListener('click', (e) => {
       e.stopPropagation();
       e.currentTarget.blur();
-      this.entrada.impulso = false;
-      this.model.iniciarPartida();
+      this.arrancarConParpadeo();
     });
   }
 

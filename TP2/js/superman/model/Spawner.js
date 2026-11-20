@@ -41,8 +41,8 @@ class Spawner {
       const centro = this.azar(minCentro, maxCentro);
       this.ultimoCentro = centro;
 
-      const distMin = Math.max(360, 440 - tiempoJugado * 0.7);
-      const distMax = Math.max(480, 580 - tiempoJugado * 0.7);
+      const distMin = Math.max(240, 290 - tiempoJugado * 0.8);
+      const distMax = Math.max(300, 370 - tiempoJugado * 0.8);
       const distanciaSiguiente = this.azar(distMin, distMax);
       this.distanciaParaProximo = distanciaSiguiente;
 
@@ -69,7 +69,7 @@ class Spawner {
         const puedeSalirCorazon =
           vidasActuales < 3 && this.edificiosDesdeUltimoCorazon >= 6;
         const probCorazon = puedeSalirCorazon ? (juegoRapido ? 0.28 : 0.12) : 0;
-        
+
         // 2. Kriptonitas: arrancan a los 30 puntos y escalan progresivamente con el puntaje
         const puntosExtra = Math.max(0, puntosActuales - 30);
 
