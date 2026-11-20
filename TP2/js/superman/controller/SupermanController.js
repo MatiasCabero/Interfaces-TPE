@@ -63,11 +63,12 @@ class SupermanController {
       this.arrancarConParpadeo();
     });
 
-    // 4. Botón "Volver a Jugar" en Game Over
+    // 4. Botón "Volver a Jugar" en Game Over (sin parpadeo)
     this.btnReiniciar.addEventListener('click', (e) => {
       e.stopPropagation();
       e.currentTarget.blur();
-      this.arrancarConParpadeo();
+      this.entrada.impulso = false;
+      this.model.iniciarPartida();
     });
   }
 

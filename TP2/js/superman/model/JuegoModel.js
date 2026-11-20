@@ -36,6 +36,8 @@ class JuegoModel {
     this.velocidad = this.VELOCIDAD_INICIAL;
     this.tiempoFrenoChoque = 0; // Temporizador de desaceleración breve al chocar
     this.tiempoMuerte = 0;
+    this.tiempoTransicion = 0;  // Temporizador del parpadeo al iniciar partida
+    this.switchRealizado = false;
 
     // Precargamos un par de edificios inferiores iniciales para el fondo del menú
     this.poblarEscenarioInicial();
@@ -53,28 +55,57 @@ class JuegoModel {
     ];
   }
 
-  iniciarPartida() {
-    // Limpiar cualquier edificio o ítem anterior (tanto del menú como de Game Over)
-    this.edificiosAEliminar.push(...this.edificios);
-    this.edificios = [];
-    this.itemsAEliminar.push(...this.items);
-    this.items = [];
+  // Crea de golpe toda la tanda inicial de edificios espejados en toda la pantalla
+  poblarEdificiosEspejadosIniciales() {
+  this.edificiosAEliminar.push(...this.edificios);
+  this.itemsAEliminar.push(...this.items);
+  this.items = [];
 
-    this.spawner.reiniciar();
+  const edDetras = new ParEdificios({ x: 100, centro: 310, hueco: 215, tipo: 5, soloInferior: false, altoEscenario: this.ALTO_JUGABLE });
+  edDetras.superado = true; // Ya está atrás de Superman al iniciar, no suma punto gratis
+
+  this.edificios = [
+    edDetras,
+    new ParEdificios({ x: 430,  centro: 265, hueco: 215, tipo: 2, soloInferior: false, altoEscenario: this.ALTO_JUGABLE }),
+    new ParEdificios({ x: 740,  centro: 335, hueco: 215, tipo: 4, soloInferior: false, altoEscenario: this.ALTO_JUGABLE }),
+    new ParEdificios({ x: 1050, centro: 250, hueco: 215, tipo: 1, soloInferior: false, altoEscenario: this.ALTO_JUGABLE }),
+    new ParEdificios({ x: 1360, centro: 315, hueco: 215, tipo: 3, soloInferior: false, altoEscenario: this.ALTO_JUGABLE })
+  ];
+
+  this.spawner.reiniciar();
+  // El próximo edificio del spawner entrará manteniendo la misma separación (~310px después del último en x=1360)
+  this.spawner.distanciaParaProximo = 180;
+  }
+
+  iniciarPartida() {
+    const veniaDeMenu = this.estado === 'menu';
+
+    // Si venimos de Game Over ('fin'), limpiamos de inmediato sin parpadeo; si venimos del menú, el switch ocurre a mitad del parpadeo
+    if (!veniaDeMenu) {
+      this.poblarEdificiosEspejadosIniciales();
+      this.switchRealizado = true;
+      this.tiempoTransicion = 0;
+    } else {
+      this.switchRealizado = false;
+      this.tiempoTransicion = 0.6; // Duración de los 3 parpadeos suaves antes de arrancar
+    }
+
     this.superman.reiniciar();
 
     this.puntos = 0;
     this.tiempoJugado = 0;
     this.tiempoFrenoChoque = 0;
+    this.tiempoMuerte = 0;
     this.velocidad = this.VELOCIDAD_INICIAL;
     this.estado = 'jugando';
-    this.tiempoMuerte = 0;
 
-    this.superman.impulsar();
+    if (!veniaDeMenu) {
+      this.superman.impulsar();
+    }
   }
 
   procesarImpulso() {
-    if (this.estado === 'jugando') {
+    if (this.estado === 'jugando' && this.tiempoTransicion <= 0) {
       this.superman.impulsar();
     }
   }
@@ -91,6 +122,22 @@ class JuegoModel {
   }
 
   actualizar(dt) {
+    // 0. Durante el parpadeo inicial, pausamos un instante y hacemos el switch cuando el velo tapa al 100%
+    if (this.estado === 'jugando' && this.tiempoTransicion > 0) {
+      this.tiempoTransicion -= dt;
+
+      if (!this.switchRealizado && this.tiempoTransicion <= 0.31) {
+        this.poblarEdificiosEspejadosIniciales();
+        this.switchRealizado = true;
+      }
+
+      if (this.tiempoTransicion <= 0) {
+        this.tiempoTransicion = 0;
+        this.superman.impulsar();
+      }
+      return;
+    }
+
     const estaMuriendo = this.estado === 'jugando' && this.superman.vidas <= 0;
 
     // 1. Actualizar velocidad del mundo
