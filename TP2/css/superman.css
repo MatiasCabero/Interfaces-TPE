@@ -35,7 +35,7 @@
   }
   
   /* =========================================================
-     PARALLAX — 4 Capas con profundidad (z-index)
+     PARALLAX — 5 Capas con profundidad (z-index)
      ========================================================= */
   .capa-parallax {
     position: absolute;
@@ -65,7 +65,7 @@
   .capa-calle {
     bottom: 0;
     height: 75px;
-    z-index: 3;
+    z-index: 4;
     background-image: url('../Assets/superman/calle.png');
     background-size: auto 100%;
     background-position: 0px 0px;
@@ -77,7 +77,7 @@
     bottom: 0;
     width: 100%;
     height: 75px;
-    z-index: 4;
+    z-index: 5;
     pointer-events: none;
   }
   
@@ -118,7 +118,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: 5;
+    z-index: 6;
     pointer-events: none;
   }
   
@@ -184,7 +184,7 @@
     top: 0;
     width: 84px;
     height: 63px;
-    z-index: 6;
+    z-index: 7;
     pointer-events: none;
     will-change: transform;
   }

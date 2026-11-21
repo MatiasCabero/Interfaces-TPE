@@ -11,14 +11,14 @@ class JuegoModel {
     this.superman = new Superman(240, 250);
     this.spawner = new Spawner(this.ANCHO, this.ALTO_JUGABLE);
 
-    // 4 Capas de Parallax (factores de profundidad: lejos lento, cerca rápido)
+    // 5 Capas de Parallax (factores de profundidad: lejos lento, cerca rápido)
     this.capasParallax = {
-      cielo:  { x: 0, factor: 0.04, anchoTile: 1470 },
-      ciudad: { x: 0, factor: 0.14, anchoTile: 1365 },
-      calle:  { x: 0, factor: 1.00, anchoTile: 1365 } // Factor 1 = misma velocidad que edificios
+      cielo:       { x: 0, factor: 0.04, anchoTile: 1470 },
+      ciudad:      { x: 0, factor: 0.14, anchoTile: 1365 },
+      calle:       { x: 0, factor: 1.00, anchoTile: 1365 } // Factor 1 = misma velocidad que edificios
     };
 
-    // Capa 4: Autos circulando por la calle
+    // Capa 5: Autos circulando por la calle
     this.autos = [
       { id: 1, tipo: 1, x: 350,  y: 590, ancho: 110, velRelativa: 95,  el: null },
       { id: 2, tipo: 2, x: 880,  y: 602, ancho: 90,  velRelativa: 145, el: null },
@@ -57,24 +57,24 @@ class JuegoModel {
 
   // Crea de golpe toda la tanda inicial de edificios espejados en toda la pantalla
   poblarEdificiosEspejadosIniciales() {
-  this.edificiosAEliminar.push(...this.edificios);
-  this.itemsAEliminar.push(...this.items);
-  this.items = [];
+    this.edificiosAEliminar.push(...this.edificios);
+    this.itemsAEliminar.push(...this.items);
+    this.items = [];
 
-  const edDetras = new ParEdificios({ x: 100, centro: 310, hueco: 215, tipo: 5, soloInferior: false, altoEscenario: this.ALTO_JUGABLE });
-  edDetras.superado = true; // Ya está atrás de Superman al iniciar, no suma punto gratis
+    const edDetras = new ParEdificios({ x: 100, centro: 310, hueco: 215, tipo: 5, soloInferior: false, altoEscenario: this.ALTO_JUGABLE });
+    edDetras.superado = true; // Ya está atrás de Superman al iniciar, no suma punto gratis
 
-  this.edificios = [
-    edDetras,
-    new ParEdificios({ x: 430,  centro: 265, hueco: 215, tipo: 2, soloInferior: false, altoEscenario: this.ALTO_JUGABLE }),
-    new ParEdificios({ x: 740,  centro: 335, hueco: 215, tipo: 4, soloInferior: false, altoEscenario: this.ALTO_JUGABLE }),
-    new ParEdificios({ x: 1050, centro: 250, hueco: 215, tipo: 1, soloInferior: false, altoEscenario: this.ALTO_JUGABLE }),
-    new ParEdificios({ x: 1360, centro: 315, hueco: 215, tipo: 3, soloInferior: false, altoEscenario: this.ALTO_JUGABLE })
-  ];
+    this.edificios = [
+      edDetras,
+      new ParEdificios({ x: 430,  centro: 265, hueco: 215, tipo: 2, soloInferior: false, altoEscenario: this.ALTO_JUGABLE }),
+      new ParEdificios({ x: 740,  centro: 335, hueco: 215, tipo: 4, soloInferior: false, altoEscenario: this.ALTO_JUGABLE }),
+      new ParEdificios({ x: 1050, centro: 250, hueco: 215, tipo: 1, soloInferior: false, altoEscenario: this.ALTO_JUGABLE }),
+      new ParEdificios({ x: 1360, centro: 315, hueco: 215, tipo: 3, soloInferior: false, altoEscenario: this.ALTO_JUGABLE })
+    ];
 
-  this.spawner.reiniciar();
-  // El próximo edificio del spawner entrará manteniendo la misma separación (~310px después del último en x=1360)
-  this.spawner.distanciaParaProximo = 180;
+    this.spawner.reiniciar();
+    // El próximo edificio del spawner entrará manteniendo la misma separación (~310px después del último en x=1360)
+    this.spawner.distanciaParaProximo = 180;
   }
 
   iniciarPartida() {
@@ -163,13 +163,13 @@ class JuegoModel {
       this.velocidad = 150;
     }
 
-    // 2. Actualizar las 3 capas de fondo parallax con dt
+    // 2. Actualizar las 4 capas de fondo parallax con dt
     for (const key in this.capasParallax) {
       const capa = this.capasParallax[key];
       capa.x = (capa.x + this.velocidad * capa.factor * dt) % capa.anchoTile;
     }
 
-    // 3. Actualizar Capa 4: Autos sobre la calle
+    // 3. Actualizar Capa 5: Autos sobre la calle
     for (const auto of this.autos) {
       if (this.estado !== 'fin' && !estaMuriendo) {
         auto.x -= (this.velocidad + auto.velRelativa) * dt;
