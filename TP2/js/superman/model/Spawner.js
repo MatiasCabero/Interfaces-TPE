@@ -92,12 +92,22 @@ class Spawner {
           nuevosItems.push(new ItemAnimado({ x: xItem, y: yCorazon, tipo: 'corazon' }));
           this.edificiosDesdeUltimoCorazon = 0;
         } else if (roll < probCorazon + probKriptonita) {
-          const irPorArriba = centro > this.altoJugable / 2;
-          const yKriptonita = irPorArriba
-            ? this.azar(45, Math.max(85, centro - 115))
-            : this.azar(Math.min(this.altoJugable - 135, centro + 115), this.altoJugable - 105);
+          // Altura completamente aleatoria en toda la pantalla jugable
+          const yKriptonita = this.azar(35, this.altoJugable - 100);
 
-          nuevosItems.push(new ItemAnimado({ x: xItem, y: yKriptonita, tipo: 'kriptonita' }));
+          // Velocidad extra: suave cuando recién aparecen (~75-130 px/s) y luego aleatoria con picos rápidos (hasta ~310 px/s)
+          const velExtraMin = 75;
+          const velExtraMax = Math.min(310, 130 + puntosExtra * 4.5);
+          const velocidadExtra = this.azar(velExtraMin, velExtraMax);
+
+          nuevosItems.push(
+            new ItemAnimado({
+              x: xItem,
+              y: yKriptonita,
+              tipo: 'kriptonita',
+              velocidadExtra
+            })
+          );
           this.edificiosDesdeUltimaKriptonita = 0;
         }
       }

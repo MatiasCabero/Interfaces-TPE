@@ -1,5 +1,5 @@
 class ItemAnimado {
-  constructor({ x, y, tipo }) {
+  constructor({ x, y, tipo, velocidadExtra = null }) {
     this.id = ItemAnimado.siguienteId++;
     this.x = x;
     this.y = y;
@@ -10,8 +10,9 @@ class ItemAnimado {
     this.ancho = tipo === 'corazon' ? 72 : 92;
     this.alto = tipo === 'corazon' ? 64 : 69;
 
-    // La kriptonita avanza un poco más rápido que los edificios
-    this.velocidadExtra = tipo === 'kriptonita' ? 75 : 0;
+    // Si se pasa velocidadExtra la usa; si no, mantiene el valor por defecto
+    this.velocidadExtra =
+      velocidadExtra !== null ? velocidadExtra : (tipo === 'kriptonita' ? 75 : 0);
 
     this.tomado = false;
     this.tiempoDesaparicion = 0;
