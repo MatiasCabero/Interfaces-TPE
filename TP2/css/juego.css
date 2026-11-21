@@ -90,7 +90,7 @@
     }
   
     /* =========================================================
-        Animación de vibración para la victoria
+        Animación para la victoria
     ========================================================= */
     @keyframes goldPulse {
       0% { 
@@ -264,7 +264,7 @@
     }
     
     /* =========================================================
-       MODALES Y CARTELES TEMATIZADOS (Estilo Ruinas Ancestrales)
+       MODALES Y CARTELES TEMATIZADOS 
        ========================================================= */
     
     /* Panel principal del modal: Piedra oscura mística y elegante */
@@ -325,7 +325,7 @@
       gap: 12px;
       padding: 16px 24px;
       
-      /* Fondo naranja / ámbar transparente sin rastro de violeta */
+      /* Fondo naranja / ámbar transparente */
       background: rgba(217, 119, 6, 0.12);
       border: 2px solid rgba(217, 119, 6, 0.4);
       border-radius: 12px;

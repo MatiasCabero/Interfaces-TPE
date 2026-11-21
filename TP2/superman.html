@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superman vs Espejo — M&M Arcade</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/juego.css">
+  <link rel="stylesheet" href="css/superman.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     Navegación Superior (Navbar)
+     ========================================================= -->
+<header class="navbar">
+  <div class="navbar-container">
+    
+    <!-- Botón de Menú Hamburguesa + logo -->
+    <div class="nav-left">
+      <button id="btnOpenMenu" class="icon-btn" aria-label="Abrir menú">
+        <img src="Assets/Iconos/Menu.png" alt="Menú" class="hamburger-icon-img">
+      </button>
+      <div class="brand-logo">
+        <a href="index.html" class="logo-link">
+          <span class="logo-text">
+            <span class="logo-mm">M&M</span>
+            <span class="logo-arcade">ARCADE</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Barra de Búsqueda -->
+    <div class="nav-center">
+      <div class="search-box">
+        <img src="Assets/Iconos/Search.png" alt="Buscar" class="search-icon-img">
+        <input type="text" placeholder="Buscar juegos..." class="search-input">
+      </div>
+    </div>
+
+    <!-- Botón Perfil de Usuario con Avatar -->
+    <div class="nav-right">
+      <button id="btnOpenUserMenu" class="user-avatar-btn">
+        <img src="Assets/Iconos/Avatar.png" alt="Perfil de usuario" class="user-avatar-img">
+      </button>
+    </div>
+
+  </div>
+</header>
+
+
+<!-- =========================================================
+     Menú Desplegable Lateral (Navegación Principal)
+     ========================================================= -->
+<aside id="sideMenu" class="side-menu">
+  <div class="side-menu-header">
+    <div class="side-menu-brand">
+      <img src="Assets/LogoChico.jpeg" alt="M&M Games" class="mini-logo-img">
+      <span class="side-menu-title">Games</span>
+    </div>
+    <button id="btnCloseMenu" class="close-btn" aria-label="Cerrar menú">✕</button>
+  </div>
+
+  <nav class="side-menu-nav">
+    <ul>
+      <li><a href="index.html"><img src="Assets/Iconos/home.png" alt="Inicio" class="menu-icon-img">Inicio</a></li>
+      <li><a href="#"><img src="Assets/Iconos/recientes.png" alt="Recientes" class="menu-icon-img">Recientes</a></li>
+      <li><a href="#"><img src="Assets/Iconos/nuevos.png" alt="Nuevos" class="menu-icon-img">Nuevos</a></li>
+      <li><a href="#"><img src="Assets/Iconos/moda.png" alt="De moda" class="menu-icon-img">De moda</a></li>
+      <li><a href="#"><img src="Assets/Iconos/actualizados.png" alt="Actualizados" class="menu-icon-img">Actualizados</a></li>
+      <li><a href="#"><img src="Assets/Iconos/multijugador.png" alt="Multijugador" class="menu-icon-img">Multijugador</a></li>
+      <li><a href="#"><img src="Assets/Iconos/original.png" alt="Originales" class="menu-icon-img">Originales</a></li>
+      <li><a href="#"><img src="Assets/Iconos/pagos.png" alt="Pagos" class="menu-icon-img">Pagos</a></li>
+    </ul>
+
+    <hr class="menu-divider">
+
+    <ul class="categories-list">
+      <li><a href="#">Aventura</a></li>
+      <li><a href="#">Disparos</a></li>
+      <li><a href="#">Autos</a></li>
+      <li><a href="#">Juegos de rol</a></li>
+      <li><a href="#">Moda</a></li>
+      <li><a href="#">Cartas</a></li>
+      <li><a href="#">Click</a></li>
+      <li><a href="#">Cartas</a></li>
+    </ul>
+  </nav>
+</aside>
+
+
+<!-- =========================================================
+     Menú Desplegable del Perfil de Usuario (Derecha)
+     ========================================================= -->
+<div id="userMenu" class="user-popover">
+  <div class="user-popover-arrow"></div>
+  <div class="user-popover-header">
+    <span class="user-name">Nombre del usuario</span>
+    <button id="btnCloseUserMenu" class="close-btn-sm" aria-label="Cerrar menú usuario">✕</button>
+  </div>
+
+  <ul class="user-menu-list">
+    <li><a href="#"><img src="Assets/Iconos/perfil.png" alt="Mi Perfil" class="menu-icon-img">Mi Perfil</a></li>
+    <li><a href="#"><img src="Assets/Iconos/favorito.png" alt="Favoritos" class="menu-icon-img">Favoritos</a></li>
+    <li><a href="#"><img src="Assets/Iconos/compras.png" alt="Mis Compras" class="menu-icon-img">Mis Compras</a></li>
+    <li><a href="#"><img src="Assets/Iconos/config.png" alt="Configuración" class="menu-icon-img">Configuración</a></li>
+    <li><a href="#"><img src="Assets/Iconos/carrito.png" alt="Carrito" class="menu-icon-img">Carrito</a></li>
+    <li><a href="#"><img src="Assets/Iconos/dark.png" alt="Dark Mode" class="menu-icon-img">Dark Mode</a></li>
+    <li><a href="#"><img src="Assets/Iconos/soporte.png" alt="Ayuda Soporte" class="menu-icon-img">Ayuda Soporte</a></li>
+    <li><a href="login.html"><img src="Assets/Iconos/logout.png" alt="Cerrar Sesión" class="menu-icon-img">Cerrar Sesión</a></li>
+  </ul>
+</div>
+
+<!-- Capa oscura para cerrar menús al tocar afuera -->
+<div id="backdropOverlay" class="backdrop-overlay"></div>
+
+  <!-- =========================================================
+       Contenido Principal — Página de detalle del juego
+       ========================================================= -->
+  <main class="main-content game-page">
+
+    <nav class="game-breadcrumb">
+      <a href="index.html">Juegos de Aventura </a> / <span class="current"> Superman vs Espejo </span>
+    </nav>
+
+    <!-- =========================================================
+         1) ESCENARIO DEL JUEGO DOM (1470 x 650 proporcional)
+         ========================================================= -->
+    <div class="game-stage">
+      <div class="game-media" id="gameMedia">
+        
+        <!-- Contenedor principal del juego -->
+        <div id="escenarioJuego" class="escenario-juego">
+
+          <!-- PARALLAX: 5 Capas con distinta profundidad (z-index) -->
+          <!-- Capa 1: Cielo lejano (z-index: 1) -->
+          <div id="capaCielo" class="capa-parallax capa-cielo"></div>
+          <!-- Capa 2: Ciudad de Metrópolis lejana (z-index: 2) -->
+          <div id="capaCiudad" class="capa-parallax capa-ciudad"></div>
+          <!-- Capa 4: Calle / Asfalto (z-index: 4) -->
+          <div id="capaCalle" class="capa-parallax capa-calle"></div>
+          <!-- Capa 5: Tránsito de autos sobre la calle (z-index: 5) -->
+          <div id="capaAutos" class="capa-autos"></div>
+
+          <!-- Capas dinámicas de obstáculos e ítems (z-index: 6 y 7) -->
+          <div id="capaEdificios" class="capa-entidades"></div>
+          <div id="capaItems" class="capa-entidades"></div>
+
+          <!-- Personaje: Contenedor exterior (posición/rotación JS) + Sprite interior (keyframes CSS) -->
+          <div id="supermanBox" class="superman-box">
+            <div id="supermanSprite" class="superman-sprite"></div>
+          </div>
+
+          <!-- HUD Superior Izquierdo: 3 Vidas + Puntaje -->
+          <div id="hudSuperman" class="hud-superman">
+            <div id="hudVidas" class="hud-vidas" title="Vidas restantes">
+              <img src="/TP2/Assets/superman/vida.png" alt="Vida" class="icono-vida">
+              <img src="/TP2/Assets/superman/vida.png" alt="Vida" class="icono-vida">
+              <img src="/TP2/Assets/superman/vida.png" alt="Vida" class="icono-vida">
+            </div>
+            <div class="hud-puntaje">
+              <span>Puntos:</span>
+              <strong id="hudPuntos">0</strong>
+            </div>
+          </div>
+
+          <!-- Overlay Inicial: Transparente para ver volar a Superman, con botón verde "Jugar" -->
+          <div id="startOverlay" class="superman-overlay start-overlay">
+            <button id="btnJugar" class="btn-jugar-verde">Jugar</button>
+          </div>
+
+          <!-- Overlay Fin de Juego (Game Over) -->
+          <div id="gameOverOverlay" class="superman-overlay gameover-overlay hidden">
+            <div class="gameover-card">
+              <h2 class="gameover-title">¡El villano Espejo te ha vencido!</h2>
+              <p class="gameover-score">Puntaje final: <strong id="finalPuntos">0</strong></p>
+              <button id="btnReiniciar" class="btn-jugar-verde">Volver a Jugar</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- =========================================================
+         2) SECCIÓN INFERIOR — Compartir + Galería Unificada
+         ========================================================= -->
+    <section class="game-bottom-section">
+
+      <!-- Compartir en Redes -->
+      <div class="game-share-row">
+        <span class="game-share-label">Compartir en Redes</span>
+        <div class="social-icons">
+          <a href="#" class="social-icon-btn" aria-label="Compartir en Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg>
+          </a>
+          <a href="#" class="social-icon-btn" aria-label="Compartir en X">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M18.9 3H21l-6.6 7.6L22 21h-6.1l-4.8-6.3L5.6 21H3.4l7-8L2 3h6.2l4.3 5.8L18.9 3zM17.8 19h1.2L7.3 4.9H6l11.8 14.1z"/></svg>
+          </a>
+          <a href="#" class="social-icon-btn" aria-label="Compartir en Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 8.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4zM12 2c-2.7 0-3.1 0-4.1.1-1.1.1-1.9.2-2.5.5-.7.3-1.3.6-1.9 1.2-.6.6-.9 1.2-1.2 1.9-.3.6-.4 1.4-.5 2.5C2 9.2 2 9.6 2 12s0 2.8.1 3.8c.1 1.1.2 1.9.5 2.5.3.7.6 1.3 1.2 1.9.6.6 1.2.9 1.9 1.2.6.3 1.4.4 2.5.5 1 .1 1.4.1 4.1.1s3.1 0 4.1-.1c1.1-.1 1.9-.2 2.5-.5.7-.3 1.3-.6 1.9-1.2.6-.6.9-1.2 1.2-1.9.3-.6.4-1.4.5-2.5.1-1 .1-1.4.1-4.1s0-2.8-.1-3.8c-.1-1.1-.2-1.9-.5-2.5-.3-.7-.6-1.3-1.2-1.9-.6-.6-1.2-.9-1.9-1.2-.6-.3-1.4-.4-2.5-.5C15.1 2 14.7 2 12 2zm0 1.8c2.6 0 2.9 0 4 .1.9.1 1.5.2 1.9.4.5.2.8.4 1.1.7.3.3.5.6.7 1.1.2.4.3 1 .4 1.9.1 1.1.1 1.4.1 4s0 2.9-.1 4c-.1.9-.2 1.5-.4 1.9-.2.5-.4.8-.7 1.1-.3.3-.6.5-1.1.7-.4.2-1 .3-1.9.4-1.1.1-1.4.1-4 .1s-2.9 0-4-.1c-.9-.1-1.5-.2-1.9-.4-.5-.2-.8-.4-1.1-.7-.3-.3-.5-.6-.7-1.1-.2-.4-.3-1-.4-1.9-.1-1.1-.1-1.4-.1-4s0-2.9.1-4c.1-.9.2-1.5.4-1.9.2-.5.4-.8.7-1.1.3-.3.6-.5 1.1-.7.4-.2 1-.3 1.9-.4 1.1-.1 1.4-.1 4-.1z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Fila Unificada: Galería con Video integrado -->
+      <div class="game-gallery-video-row">
+        <div class="game-gallery">
+          <h3 class="game-thumbnails-title">Imágenes y Video del juego</h3>
+          <div class="game-thumbnails" id="gameThumbnails">
+            <!-- Capturas del juego -->
+            <div class="game-thumb"><img src="Assets/superman/supermangp1.png" alt="Captura 1"></div>
+            <div class="game-thumb"><img src="Assets/superman/supermangp2.png" alt="Captura 2"></div>
+            <div class="game-thumb"><img src="Assets/superman/supermangp3.png" alt="Captura 3"></div>
+            <div class="game-thumb"><img src="Assets/superman/supermangp4.png" alt="Captura 4"></div>
+            <div class="game-thumb"><img src="Assets/superman/supermangp5.png" alt="Captura 5"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         Descripción del juego + Ayuda + Comentarios
+         ========================================================= -->
+    <div class="game-detail-grid">
+
+      <div class="game-detail-main">
+
+        <div class="game-description">
+          <h3>¡Surcá los cielos de Metrópolis y derrotá al villano Espejo!</h3>
+          <p>El villano Espejo ha distorsionado la gravedad de Metrópolis, invirtiendo rascacielos desde el cielo para bloquear el paso de Superman. Poné a prueba tus reflejos esquivando los edificios espejados, recolectando energía vital y evitando los fragmentos de kriptonita que cruzan la ciudad.</p>
+
+          <h3>¿Cómo jugar?</h3>
+          <p>Presioná la <strong>Barra Espaciadora</strong>, la <strong>Flecha Arriba</strong> o hacé <strong>Clic izquierdo</strong> dentro de la pantalla para darle impulso de vuelo a Superman y mantenerlo en el aire. Atravesá el espacio entre los edificios inferiores y los edificios espejados superiores para sumar <strong>+1 punto</strong> por cada par superado.</p>
+          <p>Comenzás con <strong>3 vidas</strong>: chocar contra un edificio o contra un meteorito de kriptonita verde te restará <strong>1 vida</strong>, mientras que atrapar los <strong>corazones flotantes</strong> te permitirá recuperar <strong>1 vida</strong> (o sumar puntos extra si ya tenés la salud al máximo). ¡Cuidado, a medida que avanzás la ciudad acelera y el espacio entre edificios se vuelve cada vez más estrecho!</p>
+        </div>
+
+        <div class="game-comments">
+          <h2 class="section-title">Lo que piensa la gente</h2>
+        
+          <!-- Comentario 1 -->
+          <div class="comment-item">
+            <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-username">MetropolisHero_99</span>
+                <span class="comment-date">- Hace 2 horas</span>
+              </div>
+              <div class="comment-box">
+                ¡Muy buena la idea de los edificios invertidos por el villano Espejo! Cuando empieza a acelerar se pone re intenso.
+              </div>
+              <div class="comment-actions">
+                <button type="button" class="action-btn like-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                  <span>12</span>
+                </button>
+                <button type="button" class="action-btn dislike-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                  <span>0</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Comentario 2 -->
+          <div class="comment-item">
+            <img src="Assets/Iconos/AvatarComentarios.png" alt="Avatar Usuario" class="comment-avatar">
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-username">PixelKnight</span>
+                <span class="comment-date">- Ayer, 18:45</span>
+              </div>
+              <div class="comment-box">
+                Los corazones me salvaron la partida más de una vez cuando venía esquivando kriptonita. 10/10.
+              </div>
+              <div class="comment-actions">
+                <button type="button" class="action-btn like-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                  <span>8</span>
+                </button>
+                <button type="button" class="action-btn dislike-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                  <span>1</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Formulario para publicar -->
+          <form class="comment-form" id="commentForm">
+            <textarea placeholder="Comentá qué te pareció..." rows="3" required></textarea>
+            <button type="submit" class="btn-primary-play btn-publicar" id="btnPublicar">
+              <span class="btn-text">Publicar</span>
+              <svg class="mail-icon" width="22" height="22" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- =========================================================
+       Pie de Página Extendido (Fat Footer)
+       ========================================================= -->
+  <footer class="fat-footer">
+    <div class="footer-container">
+      
+      <!-- Columna Logo + Resumen del sitio -->
+      <div class="footer-brand-col">
+        <div class="footer-logo-placeholder">
+          <img src="Assets/LogoGrande.jpeg" alt="M&M Arcade Logo" class="footer-logo-img">
+        </div>
+        <p class="footer-brand-desc">Tu plataforma de entretenimiento retro y moderna. Juégalo todo desde tu navegador.</p>
+      </div>
+  
+      <!-- Grilla de Enlaces Ampliada (4 Columnas) -->
+      <div class="footer-links-grid">
+        
+        <!-- Columna 1: Explorar -->
+        <div class="footer-col">
+          <h4>Explorar</h4>
+          <a href="index.html">Inicio</a>
+          <a href="#">Juegos Populares</a>
+          <a href="#">Novedades</a>
+          <a href="#">Juegos de Mesa</a>
+          <a href="#">Multijugador</a>
+          <a href="#">Acción & Aventura</a>
+          <a href="#">Estrategia</a>
+          <a href="#">Originales M&M</a>
+        </div>
+  
+        <!-- Columna 2: Comunidad & Social -->
+        <div class="footer-col">
+          <h4>Comunidad</h4>
+          <a href="#">Foro de Jugadores</a>
+          <a href="#">Reseñas & Críticas</a>
+          <a href="#">Eventos & Torneos</a>
+          <a href="#">Creadores de Contenido</a>
+          <a href="#">Discord Oficial</a>
+          <a href="#">Canal de YouTube</a>
+          <a href="#">Instagram</a>
+          <a href="#">Servidores de Estado</a>
+        </div>
+  
+        <!-- Columna 3: Soporte & Legales -->
+        <div class="footer-col">
+          <h4>Soporte & Legal</h4>
+          <a href="#">Centro de Ayuda</a>
+          <a href="#">Preguntas Frecuentes</a>
+          <a href="#">Reportar un Error</a>
+          <a href="#">Términos de Servicio</a>
+          <a href="#">Política de Privacidad</a>
+          <a href="#">Política de Cookies</a>
+          <a href="#">Aviso Legal</a>
+          <a href="#">Configuración de Cookies</a>
+        </div>
+  
+        <!-- Columna 4: Tienda & Newsletter -->
+        <div class="footer-col footer-col-newsletter">
+          <h4>Tienda & Cuenta</h4>
+          <a href="login.html">Iniciar Sesión</a>
+          <a href="register.html">Crear Cuenta</a>
+          <a href="#">Pase Arcade VIP</a>
+          <a href="#">Tarjetas de Regalo</a>
+          <a href="#">Historial de Compras</a>
+          
+          <h4 style="margin-top: 14px;">Boletín Informativo</h4>
+          <p class="newsletter-desc">Recibí ofertas y nuevos juegos semanalmente.</p>
+          <form class="footer-newsletter-form" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="Tu email..." required>
+            <button type="submit">Unirme</button>
+          </form>
+        </div>
+  
+      </div>
+  
+    </div>
+  
+    <!-- Sección inferior: Medios de pago y Copyright -->
+    <div class="footer-bottom">
+      <div class="footer-payments">
+        <span>Métodos de pago aceptados:</span>
+        <span class="payment-badge">Visa</span>
+        <span class="payment-badge">Mastercard</span>
+        <span class="payment-badge">Mercado Pago</span>
+        <span class="payment-badge">PayPal</span>
+      </div>
+      <p>© 2026 Powered and secured by M&M Arcade Inc. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- JS común a todo el sitio -->
+  <script src="js/script.js"></script>
+  <script src="js/juego.js"></script>
+  <!-- Modelos, Vista y Controlador de Superman vs Espejo -->
+  <script src="js/superman/model/Superman.js"></script>
+  <script src="js/superman/model/ParEdificios.js"></script>
+  <script src="js/superman/model/ItemAnimado.js"></script>
+  <script src="js/superman/model/Spawner.js"></script>
+  <script src="js/superman/model/JuegoModel.js"></script>
+  <script src="js/superman/view/JuegoView.js"></script>
+  <script src="js/superman/controller/SupermanController.js"></script>
+</body>
+</html>
