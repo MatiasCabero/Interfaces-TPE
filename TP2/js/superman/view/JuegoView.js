@@ -9,6 +9,7 @@ class JuegoView {
     this.capaCalleEl = document.getElementById('capaCalle');
     this.capaAutosEl = document.getElementById('capaAutos');
     this.capaEdificiosEl = document.getElementById('capaEdificios');
+    this.capaNubesEl = document.getElementById('capaNubes');
     this.capaItemsEl = document.getElementById('capaItems');
 
     this.supermanBoxEl = document.getElementById('supermanBox');
@@ -42,6 +43,7 @@ class JuegoView {
       'Assets/superman/corazon.png',
       'Assets/superman/meteoritoverde.png',
       'Assets/superman/fondo.JPG',
+      'Assets/superman/nubes.png', 
       'Assets/superman/calle.png',
       'Assets/superman/auto 1.png',
       'Assets/superman/auto 2.png',
@@ -108,8 +110,9 @@ class JuegoView {
   }
 
   renderizarParallax() {
-    const { cielo, ciudad, ciudadMedia, calle } = this.model.capasParallax;
+    const { cielo, nubes, ciudad, calle } = this.model.capasParallax;
     this.capaCieloEl.style.backgroundPositionX = `${-cielo.x}px`;
+    this.capaNubesEl.style.backgroundPositionX = `${-nubes.x}px`;
     this.capaCiudadEl.style.backgroundPositionX = `${-ciudad.x}px`;
     this.capaCalleEl.style.backgroundPositionX = `${-calle.x}px`;
   }

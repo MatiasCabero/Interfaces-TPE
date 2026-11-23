@@ -70,6 +70,16 @@
     background-size: auto 100%;
     background-position: 0px 0px;
   }
+
+  .capa-nubes {
+    /* top: 1px; */
+    height: 400px;
+    z-index: 3;
+    background-image: url('../Assets/superman/nubes.png');
+    background-size: auto 100%;
+    background-position: 0px top;
+    opacity: 0.8;
+  }
   
   .capa-autos {
     position: absolute;
@@ -77,7 +87,7 @@
     bottom: 0;
     width: 100%;
     height: 75px;
-    z-index: 5;
+    z-index: 7;
     pointer-events: none;
   }
   
@@ -92,20 +102,20 @@
   }
   
   .auto-1 {
-    width: 105px;
-    height: 46px;
+    width: 156px;
+    height: 68px;
     background-image: url('../Assets/superman/auto 1.png');
   }
   
   .auto-2 {
-    width: 86px;
-    height: 36px;
+    width: 128px;
+    height: 54px;
     background-image: url('../Assets/superman/auto 2.png');
   }
   
   .auto-3 {
-    width: 54px;
-    height: 48px;
+    width: 80px;
+    height: 70px;
     background-image: url('../Assets/superman/auto 3.png');
   }
   
@@ -184,7 +194,7 @@
     top: 0;
     width: 84px;
     height: 63px;
-    z-index: 7;
+    z-index: 8;
     pointer-events: none;
     will-change: transform;
   }

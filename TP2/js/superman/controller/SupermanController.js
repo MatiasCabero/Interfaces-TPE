@@ -77,17 +77,29 @@ class SupermanController {
   }
 
   iniciarLoop() {
+    // esto permite al navegdor renderizar el juego segun la tasa de refresco de la pantalla
     const frame = (ahora) => {
-      const dt = Math.min((ahora - this.anterior) / 1000, 0.05);
+      const dt = Math.min((ahora - this.anterior) / 1000, 0.05); /* Calcula cuánto tiempo real pasó 
+                                                    entre el fotograma anterior y el actual, y lo 
+                                                    divide por 1000 para pasarlo de milisegundos a 
+                                                    segundos (por ejemplo, a 60 FPS vale aprox. 
+                                                    0.0166s). */
       this.anterior = ahora;
 
+      /* pusimos lo del impulso aca pq los eventos de teclado o mouse son asíncronos y pueden 
+      ocurrir en cualquier momento entre frames, desacoplamos la captura del evento del ciclo físico 
+      y garantizamos que el impulso se procese de forma sincronizada y como máximo una vez por 
+      fotograma */
+
+      // le manda al modelo la orden para que haga el impulso y lo pone en false para que no se
+      // siga repitiendo
       if (this.entrada.impulso) {
         this.model.procesarImpulso();
         this.entrada.impulso = false;
       }
 
-      this.model.actualizar(dt);
-      this.view.renderizar();
+      this.model.actualizar(dt); /* se actualiza toda la animacion */
+      this.view.renderizar(); /* se actualiza el DOM */
 
       requestAnimationFrame(frame);
     };

@@ -2,7 +2,7 @@ class ParEdificios {
     constructor({ x, centro, hueco, tipo = 1, soloInferior = false, altoEscenario = 585 }) {
       this.id = ParEdificios.siguienteId++;
       this.x = x;
-      this.ancho = 96;
+      this.ancho = 110;
       this.centro = centro;
       this.hueco = hueco;
       this.tipo = tipo; // 1 a 5 (edificio 1.png ... edificio 5.png)
