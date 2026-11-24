@@ -1,3 +1,6 @@
+/* es el director de dificultad y generación procedural del juego: decide cuándo aparece cada 
+par de edificios, qué tan difícil es el pasillo y cuándo aparecen corazones o kriptonitas */
+
 class Spawner {
   constructor(anchoEscenario = 1470, altoJugable = 585) {
     this.anchoEscenario = anchoEscenario;
@@ -7,7 +10,8 @@ class Spawner {
 
   reiniciar() {
     this.distanciaParaProximo = 120;
-    this.ultimoCentro = this.altoJugable / 2;
+    this.ultimoCentro = this.altoJugable / 2; /* esto evita que los centros no esten tan
+                                                 descoordinados en altura y sea jugable */
     this.edificiosGenerados = 0;
     this.edificiosDesdeUltimoCorazon = 0;
     this.edificiosDesdeUltimaKriptonita = 0;

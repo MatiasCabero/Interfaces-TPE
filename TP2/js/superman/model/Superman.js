@@ -67,18 +67,27 @@ class Superman {
 
   // esta es la fisica princal del personaje
   actualizar(dt) {
+
+    // permite que si superman se choca algo despues de ya haber chocado algo previo
+    // no le aafecte
     if (this.invulnerable > 0) {
+      // hacemos la resta del tiempo de invulnerabilidad menos el tiempo que transcure
+      // cuando llega a cero salimos del if y el personaje vuelve a ser vulnerable
       this.invulnerable = Math.max(0, this.invulnerable - dt);
     }
 
+    // gravedad y movimiento vertical
     this.vy += this.GRAVEDAD * dt;
     this.y += this.vy * dt;
 
+    // si llega al limite del techo corta el impulso
     if (this.y < this.TECHO) {
       this.y = this.TECHO;
       if (this.vy < 0) this.vy = 0;
     }
 
+    // si el personaje llega al suelo le resta una vida, simula un choque con un edificio,
+    // le da un leve impulso y evita que quede debajo del suelo
     if (this.y + this.alto > this.PISO) {
       this.y = this.PISO - this.alto;
       if (this.vidas > 0) {
@@ -98,7 +107,7 @@ class Superman {
     if (this.invulnerable > 0 || this.vidas <= 0) return false;
 
     this.vidas--;
-    this.invulnerable = 1.85;
+    this.invulnerable = 1.85; /* tiempo en el cual permanece invulnerable */
 
     if (this.vidas <= 0) {
       this.vidas = 0;

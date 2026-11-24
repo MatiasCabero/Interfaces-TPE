@@ -1,6 +1,6 @@
 // modela las entidades recolectables del juego ('corazon' y 'kriptonita'), encargándose de 
 // su desplazamiento, movimiento ondulatorio, caja de colisión (hitbox) y ciclo de vida 
-// en el Modelo
+// en el Modelo.
 
 class ItemAnimado {
   constructor({ x, y, tipo, velocidadExtra = null }) {
