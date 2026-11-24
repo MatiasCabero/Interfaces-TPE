@@ -55,6 +55,7 @@ class JuegoView {
       'Assets/superman/edificio 2.png',
       'Assets/superman/edificio 3.png',
       'Assets/superman/edificio 4.png',
+      'Assets/superman/vida.png',
       'Assets/superman/edificio 5.png'
     ];
     rutas.forEach((src) => {
