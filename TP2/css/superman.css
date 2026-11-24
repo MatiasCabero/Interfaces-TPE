@@ -72,7 +72,7 @@
   }
 
   .capa-nubes {
-    /* top: 1px; */
+    top: 0;
     height: 400px;
     z-index: 3;
     background-image: url('../Assets/superman/nubes.png');
