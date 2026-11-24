@@ -1,4 +1,9 @@
+// modela al personaje dentro del Modelo: su física de vuelo vertical, 
+// el sistema de vidas e invulnerabilidad, la máquina de estados visuales y su hitbox.
+
 class Superman {
+
+  // el X de superman nunca cambia, esta fijo, solo cambia en la altura Y
   constructor(x = 240, y = 260) {
     this.xInicial = x;
     this.yInicial = y;
@@ -7,7 +12,7 @@ class Superman {
     this.ancho = 84;
     this.alto = 63;
 
-    // Física más suave y controlable
+    // aca manejamos la fisica del personaje: GRAVEDAD E IMPULSO
     this.GRAVEDAD = 1150; // px/s²
     this.IMPULSO = 390;   // px/s
 
@@ -20,7 +25,7 @@ class Superman {
   reiniciar() {
     this.x = this.xInicial;
     this.y = this.yInicial;
-    this.vy = 0;
+    this.vy = 0; /* velocidad en Y, dice que tan rapido sube y baja superman */
     this.angulo = 0;
 
     this.vidas = 3;
@@ -28,10 +33,15 @@ class Superman {
     this.invulnerable = 0;
     this.tiempoMenu = 0;
 
+    /* estas dos variables controlan que animacion debe mostrar la vista (vuela, impulso,
+    chocado, chocado-edificio, curado, muerto).
+    estadoId se incrementa en cada cambio (ponerEstado) para que JuegoView detecte incluso 
+    dos impulsos seguidos como un evento nuevo y reinicie la animación CSS */
     this.estado = 'vuela';
     this.estadoId = 0;
   }
 
+  // cambiamos el estado
   ponerEstado(nuevoEstado) {
     this.estado = nuevoEstado;
     this.estadoId++;
@@ -47,12 +57,15 @@ class Superman {
     }
   }
 
+  // esto es solo para cuando esta la pantalla del menu,
+  // hace que Superman flote suavemente arriba y abajo
   actualizarEnMenu(dt) {
     this.tiempoMenu += dt;
     this.y = this.yInicial + Math.sin(this.tiempoMenu * 2.8) * 14;
     this.angulo = Math.cos(this.tiempoMenu * 2.8) * 3;
   }
 
+  // esta es la fisica princal del personaje
   actualizar(dt) {
     if (this.invulnerable > 0) {
       this.invulnerable = Math.max(0, this.invulnerable - dt);

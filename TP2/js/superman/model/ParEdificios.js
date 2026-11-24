@@ -1,26 +1,35 @@
+// no dibuja nada, solo calcula coordenadas y hitboxes
+
 class ParEdificios {
     constructor({ x, centro, hueco, tipo = 1, soloInferior = false, altoEscenario = 585 }) {
       this.id = ParEdificios.siguienteId++;
-      this.x = x;
-      this.ancho = 110;
-      this.centro = centro;
-      this.hueco = hueco;
+      this.x = x; /* posicion horizontal donde nace el par de edificios */
+      this.ancho = 110; /* ancho del edificio */
+
+      // centro y hueco no los pasa Spawner.js
+      this.centro = centro; /* es a que altura en Y se ubica el centro
+                              del hueco por el que pasa superman */
+      this.hueco = hueco; /* es la distancia entre el techo y el piso del 
+                            hueco por donde pasa superman */
+
       this.tipo = tipo; // 1 a 5 (edificio 1.png ... edificio 5.png)
       this.soloInferior = soloInferior;
-      this.altoEscenario = altoEscenario; // 650px total - 65px de calle
+      this.altoEscenario = altoEscenario; // 650px total-65px de calle = 585px (el espacio jugable)
   
       this.superado = false; // Para sumar +1 punto una sola vez al pasarlo
       this.elArriba = null;
       this.elAbajo = null;
     }
   
+    // sirve para desplazar los edificios de izquierda a derecha
     actualizar(dt, velocidad) {
       this.x -= velocidad * dt;
     }
   
-    // Caja del edificio superior (invertido / espejado por el villano Espejo)
+    // Caja del edificio superior (invertido / espejado)
     cajaArriba() {
-      if (this.soloInferior) return null;
+      if (this.soloInferior) return null; /* si solo esta mostrando el edificio inferior no 
+                                             dibujamos el superior */
       const altoArriba = Math.max(0, this.centro - this.hueco / 2);
       return {
         x: this.x + 6,
@@ -42,7 +51,7 @@ class ParEdificios {
       };
     }
   
-    // Devuelve true cuando sale completamente por la izquierda para destruirlo
+    // Devuelve true cuando sale completamente por la izquierda para sacarlo del arreglo
     estaFueraDePantalla() {
       return this.x + this.ancho < -20;
     }
