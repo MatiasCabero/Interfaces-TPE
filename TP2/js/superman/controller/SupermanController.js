@@ -1,3 +1,6 @@
+// Escucha teclado/mouse, dispara el loop con requestAnimationFrame
+// y calcula la diferencia de tiempo
+
 class SupermanController {
   constructor() {
     this.model = new JuegoModel();
@@ -21,17 +24,18 @@ class SupermanController {
 
     // Reinicia la animación CSS de parpadeo en el escenario
     this.escenarioEl.classList.remove('escenario-flash');
-    void this.escenarioEl.offsetWidth; // Fuerza reflow para que siempre se dispare
+    void this.escenarioEl.offsetWidth; // lo recomendo gemini por si haciamos el parpadeo en "vovler a jugar"
     this.escenarioEl.classList.add('escenario-flash');
 
     this.model.iniciarPartida();
   }
 
   registrarEventos() {
-    // 1. Teclado: Espacio o Flecha Arriba (una entrada por pulsación: !e.repeat)
+    // 1. Teclado: Espacio o Flecha Arriba 
+    // el !e.repeat evita que el personaje sigua subiendo si dejamos una tecla apretada, osea solo lo detecta una vez
     document.addEventListener('keydown', (e) => {
       if ((e.code === 'Space' || e.code === 'ArrowUp') && !e.repeat) {
-        if (
+        if (     /* este if hace que no se scrolea la pagina para abajo si estamos jugando */
           this.model.estado === 'menu' ||
           this.model.estado === 'jugando' ||
           document.activeElement === document.body
@@ -39,7 +43,7 @@ class SupermanController {
           e.preventDefault();
         }
 
-        // Si está en el menú inicial, Espacio arranca la partida igual que el botón "Jugar"
+        // Si está en el menú inicial, espacio arranca la partida igual que el botón "Jugar"
         if (this.model.estado === 'menu') {
           this.arrancarConParpadeo();
           return;
@@ -50,7 +54,7 @@ class SupermanController {
       }
     });
 
-    // 2. Clic / toque dentro del escenario del juego
+    // 2. detecta el click dentro del juego para que superman vuele (impulso)
     this.escenarioEl.addEventListener('pointerdown', (e) => {
       if (e.target.closest('button')) return;
       this.entrada.impulso = true;
@@ -73,17 +77,29 @@ class SupermanController {
   }
 
   iniciarLoop() {
+    // esto permite al navegdor renderizar el juego segun la tasa de refresco de la pantalla
     const frame = (ahora) => {
-      const dt = Math.min((ahora - this.anterior) / 1000, 0.05);
+      const dt = Math.min((ahora - this.anterior) / 1000, 0.05); /* Calcula cuánto tiempo real pasó 
+                                                    entre el fotograma anterior y el actual, y lo 
+                                                    divide por 1000 para pasarlo de milisegundos a 
+                                                    segundos (por ejemplo, a 60 FPS vale aprox. 
+                                                    0.0166s). */
       this.anterior = ahora;
 
+      /* pusimos lo del impulso aca pq los eventos de teclado o mouse son asíncronos y pueden 
+      ocurrir en cualquier momento entre frames, desacoplamos la captura del evento del ciclo físico 
+      y garantizamos que el impulso se procese de forma sincronizada y como máximo una vez por 
+      fotograma */
+
+      // le manda al modelo la orden para que haga el impulso y lo pone en false para que no se
+      // siga repitiendo
       if (this.entrada.impulso) {
         this.model.procesarImpulso();
         this.entrada.impulso = false;
       }
 
-      this.model.actualizar(dt);
-      this.view.renderizar();
+      this.model.actualizar(dt); /* se actualiza toda la animacion */
+      this.view.renderizar(); /* se actualiza el DOM */
 
       requestAnimationFrame(frame);
     };

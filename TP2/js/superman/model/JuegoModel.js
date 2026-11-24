@@ -14,15 +14,16 @@ class JuegoModel {
     // 5 Capas de Parallax (factores de profundidad: lejos lento, cerca rápido)
     this.capasParallax = {
       cielo:       { x: 0, factor: 0.04, anchoTile: 1470 },
-      ciudad:      { x: 0, factor: 0.14, anchoTile: 1365 },
-      calle:       { x: 0, factor: 1.00, anchoTile: 1365 } // Factor 1 = misma velocidad que edificios
+      nubes:       { x: 0, factor: 0.55, anchoTile: 5664 },
+      ciudad:      { x: 0, factor: 0.14, anchoTile: 1379 },
+      calle:       { x: 0, factor: 1.00, anchoTile: 1249 }
     };
 
     // Capa 5: Autos circulando por la calle
     this.autos = [
-      { id: 1, tipo: 1, x: 350,  y: 590, ancho: 110, velRelativa: 95,  el: null },
-      { id: 2, tipo: 2, x: 880,  y: 602, ancho: 90,  velRelativa: 145, el: null },
-      { id: 3, tipo: 3, x: 1320, y: 586, ancho: 58,  velRelativa: 120, el: null }
+      { id: 1, tipo: 1, x: 350,  y: 568, ancho: 162, velRelativa: 95,  el: null },
+      { id: 2, tipo: 2, x: 880,  y: 584, ancho: 134, velRelativa: 145, el: null },
+      { id: 3, tipo: 3, x: 1320, y: 564, ancho: 86,  velRelativa: 120, el: null }
     ];
 
     this.edificios = [];

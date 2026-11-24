@@ -1,3 +1,6 @@
+/* lee el estado actual del Modelo y lol refleja en el DOM usando CSS y transformaciones 
+aceleradas por hardware (translate3d), sin calcular físicas ni reglas del juego. */
+
 class JuegoView {
   constructor(model) {
     this.model = model;
@@ -9,6 +12,7 @@ class JuegoView {
     this.capaCalleEl = document.getElementById('capaCalle');
     this.capaAutosEl = document.getElementById('capaAutos');
     this.capaEdificiosEl = document.getElementById('capaEdificios');
+    this.capaNubesEl = document.getElementById('capaNubes');
     this.capaItemsEl = document.getElementById('capaItems');
 
     this.supermanBoxEl = document.getElementById('supermanBox');
@@ -26,7 +30,7 @@ class JuegoView {
     this.puntosMostrados = -1;
     this.estadoPantallaMostrado = '';
 
-    // Debug opcional para ver la hitbox de Superman (poner en true si querés ajustarla)
+    // PARA VER LA HITBOX DE SUPERMAN CAMBIAR A TRUE //
     this.mostrarDebugHitbox = false;
     this.debugBoxEl = null;
 
@@ -42,6 +46,7 @@ class JuegoView {
       'Assets/superman/corazon.png',
       'Assets/superman/meteoritoverde.png',
       'Assets/superman/fondo.JPG',
+      'Assets/superman/nubes.png', 
       'Assets/superman/calle.png',
       'Assets/superman/auto 1.png',
       'Assets/superman/auto 2.png',
@@ -50,6 +55,7 @@ class JuegoView {
       'Assets/superman/edificio 2.png',
       'Assets/superman/edificio 3.png',
       'Assets/superman/edificio 4.png',
+      'Assets/superman/vida.png',
       'Assets/superman/edificio 5.png'
     ];
     rutas.forEach((src) => {
@@ -58,6 +64,10 @@ class JuegoView {
     });
   }
 
+  // a diferencia de los edificios los autos no se crean y destruyen
+  // son los mismos 3 dando vueltas en bucle. Creando sus nodos DOM una sola vez al principio 
+  // y reutilizándolos en cada vuelta, evitamos crear y destruir nodos constantemente, ahorrando 
+  // memoria y procesamiento
   inicializarAutosDOM() {
     for (const auto of this.model.autos) {
       const div = document.createElement('div');
@@ -67,6 +77,8 @@ class JuegoView {
     }
   }
 
+  // permite que cuando termine una animacion, y si el usuario sigue con vida, 
+  // superman vuelva al estado de vuelo
   registrarEventosAnimacion() {
     this.supermanSpriteEl.addEventListener('animationend', (e) => {
       if (
@@ -81,6 +93,8 @@ class JuegoView {
     });
   }
 
+  // cambia el estado (animacion) del superman, salvo que este estado sea el base
+  //  de volar. Primero borra cualquier estado que haya y luego aplica el correspondiente
   aplicarClaseEstadoSuperman(estado) {
     this.supermanSpriteEl.classList.remove(
       'impulso',
@@ -89,8 +103,6 @@ class JuegoView {
       'curado',
       'muerto'
     );
-    // Forzar reflow para reiniciar la animación si se repite el mismo evento rápido
-    void this.supermanSpriteEl.offsetWidth;
 
     if (estado !== 'vuela') {
       this.supermanSpriteEl.classList.add(estado);
@@ -107,23 +119,32 @@ class JuegoView {
     this.renderizarOverlays();
   }
 
+  // agarramos la coordenada X de cada capa (viene del modelo) y desplazamos
+  // la imagen de fondo del DIV correspondiente a cada capa con la propiedad
+  // backgroundPositionX de CSS
+  /* los valores estan negativos para dar el efecto de que se mueve de izquierda a derecha */
   renderizarParallax() {
-    const { cielo, ciudad, ciudadMedia, calle } = this.model.capasParallax;
+    const { cielo, nubes, ciudad, calle } = this.model.capasParallax;
     this.capaCieloEl.style.backgroundPositionX = `${-cielo.x}px`;
+    this.capaNubesEl.style.backgroundPositionX = `${-nubes.x}px`;
     this.capaCiudadEl.style.backgroundPositionX = `${-ciudad.x}px`;
     this.capaCalleEl.style.backgroundPositionX = `${-calle.x}px`;
   }
 
+  // recorre los 3 autos y actualiza su posicion visual en la pantalla
+  // usamos translate3d pq esto fuerza al navegador a usar la GPU 
+  // (fue recomendaco por gemini para reemplzara translate(x,y))
   renderizarAutos() {
     for (const auto of this.model.autos) {
       if (auto.el) {
         auto.el.style.transform = `translate3d(${auto.x}px, ${auto.y - 575}px, 0)`;
+                                                // ancho        alto           profundidad que se la sacamos pq no es 3D
       }
     }
   }
 
   renderizarEdificios() {
-    // 1. Borrar del DOM los edificios que salieron de pantalla
+    // 1. Borrar del DOM los edificios que salieron de pantalla, son enviados desde el modelo
     while (this.model.edificiosAEliminar.length > 0) {
       const viejo = this.model.edificiosAEliminar.shift();
       if (viejo.elArriba) viejo.elArriba.remove();
@@ -177,6 +198,7 @@ class JuegoView {
         item.el = div;
       }
 
+      /* cuando el personaje toma un objeto le da un efecto de que desaparece */
       if (item.tomado) {
         item.el.classList.add('tomado');
       }
@@ -185,13 +207,15 @@ class JuegoView {
     }
   }
 
+  // traduce todo el estado físico y visual del personaje a pantalla en cada fotograma, separando 
+  // movimiento, animaciones y depuración
   renderizarSuperman() {
     const sup = this.model.superman;
 
     // Posición y rotación físicas en el contenedor exterior
     this.supermanBoxEl.style.transform = `translate3d(${sup.x}px, ${sup.y}px, 0) rotate(${sup.angulo}deg)`;
 
-    // Si estaba en estado 'chocado' (kriptonita infinita) y terminó su invulnerabilidad, vuelve a volar normal
+    // Si estaba en estado 'chocado' (kriptonita) y terminó su invulnerabilidad, vuelve a volar normal
     if (sup.estado === 'chocado' && sup.invulnerable <= 0 && sup.vidas > 0) {
       sup.ponerEstado('vuela');
     }
@@ -216,6 +240,7 @@ class JuegoView {
     }
   }
 
+  // muestra las vidas y puntos
   renderizarHUD() {
     const sup = this.model.superman;
 
