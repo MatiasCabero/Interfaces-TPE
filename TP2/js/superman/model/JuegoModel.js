@@ -19,7 +19,7 @@ class JuegoModel {
       calle:       { x: 0, factor: 1.00, anchoTile: 1249 }
     };
 
-    // Capa 5: Autos circulando por la calle
+    // Capa 5: Autos circulando por la calle.
     this.autos = [
       { id: 1, tipo: 1, x: 350,  y: 568, ancho: 162, velRelativa: 95,  el: null },
       { id: 2, tipo: 2, x: 880,  y: 584, ancho: 134, velRelativa: 145, el: null },
