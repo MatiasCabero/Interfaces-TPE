@@ -24,7 +24,7 @@ class SupermanController {
 
     // Reinicia la animación CSS de parpadeo en el escenario
     this.escenarioEl.classList.remove('escenario-flash');
-    void this.escenarioEl.offsetWidth; // lo recomendo gemini por si haciamos el parpadeo en "vovler a jugar"
+    void this.escenarioEl.offsetWidth; // lo recomendo gemini por si haciamos el parpadeo en "volver a jugar"
     this.escenarioEl.classList.add('escenario-flash');
 
     this.model.iniciarPartida();
@@ -32,7 +32,7 @@ class SupermanController {
 
   registrarEventos() {
     // 1. Teclado: Espacio o Flecha Arriba 
-    // el !e.repeat evita que el personaje sigua subiendo si dejamos una tecla apretada, osea solo lo detecta una vez
+    // el !e.repeat evita que el personaje siga subiendo si dejamos una tecla apretada, osea solo lo detecta una vez
     document.addEventListener('keydown', (e) => {
       if ((e.code === 'Space' || e.code === 'ArrowUp') && !e.repeat) {
         if (     /* este if hace que no se scrolea la pagina para abajo si estamos jugando */
