@@ -21,7 +21,7 @@ class ParEdificios {
       this.elAbajo = null;
     }
   
-    // sirve para desplazar los edificios de izquierda a derecha
+    // sirve para desplazar los edificios de derecha a izquierda
     actualizar(dt, velocidad) {
       this.x -= velocidad * dt;
     }

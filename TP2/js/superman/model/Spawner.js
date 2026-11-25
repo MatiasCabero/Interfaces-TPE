@@ -70,7 +70,7 @@ class Spawner {
       this.distanciaParaProximo = distanciaSiguiente;
 
 
-      // cremos un edificio fuera de camara y lo metemos en el arreglo de nuevosEdificios
+      // creamos un edificio fuera de camara y lo metemos en el arreglo de nuevosEdificios
       const edificio = new ParEdificios({
         x: this.anchoEscenario + 20,
         centro,

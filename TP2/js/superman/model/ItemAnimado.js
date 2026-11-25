@@ -40,7 +40,7 @@ class ItemAnimado {
     // y recien se lo elimina del arreglo cuando sale de pantalla, si dejo esta linea se elimina
     // del arreglo 0.25 segundos despues de la colision (osea cunado termina la animacion)
     if (this.tomado) {
-      this.tiempoDesaparicion += dt;
+      this.tiempoDesaparicion += dt; // dt tiempo que transcurre del fotograma actual al anterior
     }
   }
 

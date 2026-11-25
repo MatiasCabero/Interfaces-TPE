@@ -77,7 +77,7 @@ class SupermanController {
   }
 
   iniciarLoop() {
-    // esto permite al navegdor renderizar el juego segun la tasa de refresco de la pantalla
+    // esto permite al navegador renderizar el juego segun la tasa de refresco de la pantalla
     const frame = (ahora) => {
       const dt = Math.min((ahora - this.anterior) / 1000, 0.05); /* Calcula cuánto tiempo real pasó 
                                                     entre el fotograma anterior y el actual, y lo 
@@ -98,7 +98,7 @@ class SupermanController {
         this.entrada.impulso = false;
       }
 
-      this.model.actualizar(dt); /* se actualiza toda la animacion */
+      this.model.actualizar(dt); /* se actualiza toda la animacion (todo lo que pasa por detrás, gravedad, moviemiento, etc) */
       this.view.renderizar(); /* se actualiza el DOM */
 
       requestAnimationFrame(frame);
