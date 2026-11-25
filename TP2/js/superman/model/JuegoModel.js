@@ -1,3 +1,6 @@
+// es el director general del Modelo (el único archivo del Modelo que conoce y coordina a 
+// todas las demás entidades: Superman, Spawner, ParEdificios, ItemAnimado, el parallax y los autos)
+
 class JuegoModel {
   constructor() {
     this.ANCHO = 1470;
@@ -6,20 +9,32 @@ class JuegoModel {
     this.ALTO_JUGABLE = this.ALTO - this.ALTO_CALLE; // 585px
 
     this.VELOCIDAD_INICIAL = 215; // px/s
-    this.VELOCIDAD_MAXIMA = 370;  // px/s
+    this.VELOCIDAD_MAXIMA = 470;  // px/s
 
     this.superman = new Superman(240, 250);
     this.spawner = new Spawner(this.ANCHO, this.ALTO_JUGABLE);
 
     // 5 Capas de Parallax (factores de profundidad: lejos lento, cerca rápido)
+    /* 
+    FACTOR es el multiplicador por la velocidad del juego (this.velocidad) 
+    ANCHOTILE es el ancho de la imagen
+    X es cuanto pixeles se corrio esa cinta desde que empezo el juego
+    */
     this.capasParallax = {
-      cielo:       { x: 0, factor: 0.04, anchoTile: 1470 },
-      nubes:       { x: 0, factor: 0.55, anchoTile: 5664 },
-      ciudad:      { x: 0, factor: 0.14, anchoTile: 1379 },
+      cielo:       { x: 0, factor: 0.14, anchoTile: 1470 },
+      ciudad:      { x: 0, factor: 0.24, anchoTile: 1379 },
+      nubes:       { x: 0, factor: 0.34, anchoTile: 5664 },
       calle:       { x: 0, factor: 1.00, anchoTile: 1249 }
     };
 
-    // Capa 5: Autos circulando por la calle.
+    // Capa 5: Autos circulando por la calle
+    /* 
+    X la posicion inicial en pantalla
+    Y la posicion en la calle
+    ANCHO es el ancho de cada auto
+    VELRELATIVA es su velocidad propia
+    EL el espacio reservado en el DOM
+    */
     this.autos = [
       { id: 1, tipo: 1, x: 350,  y: 568, ancho: 162, velRelativa: 95,  el: null },
       { id: 2, tipo: 2, x: 880,  y: 584, ancho: 134, velRelativa: 145, el: null },
@@ -63,8 +78,9 @@ class JuegoModel {
     this.items = [];
 
     const edDetras = new ParEdificios({ x: 100, centro: 310, hueco: 215, tipo: 5, soloInferior: false, altoEscenario: this.ALTO_JUGABLE });
-    edDetras.superado = true; // Ya está atrás de Superman al iniciar, no suma punto gratis
+    edDetras.superado = true; // Ya está atrás de Superman al iniciar, no suma punto 
 
+    // estos son los unicos edificios que creamos a mano, el resto son creados todos al azar por el spawner
     this.edificios = [
       edDetras,
       new ParEdificios({ x: 430,  centro: 265, hueco: 215, tipo: 2, soloInferior: false, altoEscenario: this.ALTO_JUGABLE }),
@@ -112,6 +128,7 @@ class JuegoModel {
   }
 
   // Detección de colisión entre dos rectángulos (AABB)
+  // son las condiciones para que se considere que las hitbox chocaron
   choca(a, b) {
     if (!a || !b) return false;
     return (
@@ -142,9 +159,11 @@ class JuegoModel {
     const estaMuriendo = this.estado === 'jugando' && this.superman.vidas <= 0;
 
     // 1. Actualizar velocidad del mundo
+    /* la velocidad si el estado es fin */
     if (estaMuriendo || this.estado === 'fin') {
       // Apenas pierde la última vida, el mundo frena para lucir la animación de muerte
       this.velocidad = 0;
+      /* la velocidad si el estado es jugando */
     } else if (this.estado === 'jugando') {
       this.tiempoJugado += dt;
 
@@ -160,11 +179,12 @@ class JuegoModel {
       } else {
         this.velocidad += (velocidadObjetivo - this.velocidad) * Math.min(1, dt * 6);
       }
+      /* la velocidad si el estado es menu */
     } else if (this.estado === 'menu') {
       this.velocidad = 150;
     }
 
-    // 2. Actualizar las 4 capas de fondo parallax con dt
+    // 2. Actualiza frame a frame las 4 capas de fondo parallax con dt
     for (const key in this.capasParallax) {
       const capa = this.capasParallax[key];
       capa.x = (capa.x + this.velocidad * capa.factor * dt) % capa.anchoTile;
