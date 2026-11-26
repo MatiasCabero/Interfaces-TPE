@@ -1,4 +1,4 @@
-// modela las entidades recolectables del juego ('corazon' y 'kriptonita'), encargándose de 
+// modela las entidades corazon y kriptonita, encargándose de 
 // su desplazamiento, movimiento ondulatorio, caja de colisión (hitbox) y ciclo de vida 
 // en el Modelo.
 
@@ -30,7 +30,7 @@ class ItemAnimado {
     this.x -= (velocidadMundo + this.velocidadExtra) * dt;
     this.tiempo += dt;
 
-    // esta funcion sirve para que el corazon suba y baje en su propio lugar 10px
+    // esta funcion sirve para que el CORAZON SUBA Y BAJE en su propio lugar 10px
     if (this.tipo === 'corazon') {
       this.y = this.yBase + Math.sin(this.tiempo * 4) * 10;
     }
@@ -56,6 +56,7 @@ class ItemAnimado {
       };
     }
 
+    // si es un corazon:
     return {
       x: this.x + 14,
       y: this.y + 12,

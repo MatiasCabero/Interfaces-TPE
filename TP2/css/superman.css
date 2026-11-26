@@ -409,7 +409,7 @@
   
   @keyframes cabeceo-impulso {
     0% { transform: rotate(0deg); }
-    35% { transform: rotate(-10deg); }
+    35% { transform: rotate(20deg); }
     100% { transform: rotate(0deg); }
   }
   

@@ -1,4 +1,4 @@
-// no dibuja nada, solo calcula coordenadas y hitboxes.
+// no dibuja nada, solo calcula coordenadas y hitboxes de los edificios.
 
 class ParEdificios {
     constructor({ x, centro, hueco, tipo = 1, soloInferior = false, altoEscenario = 585 }) {

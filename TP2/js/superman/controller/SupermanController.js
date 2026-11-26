@@ -1,5 +1,5 @@
 // Escucha teclado/mouse, dispara el loop con requestAnimationFrame
-// y calcula la diferencia de tiempo
+// y calcula la diferencia de tiempo para pasarsela al modelo
 
 class SupermanController {
   constructor() {

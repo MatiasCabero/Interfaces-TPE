@@ -24,6 +24,7 @@ class JuegoView {
     this.startOverlayEl = document.getElementById('startOverlay');
     this.gameOverOverlayEl = document.getElementById('gameOverOverlay');
     this.finalPuntosEl = document.getElementById('finalPuntos');
+    this.finalRecordEl = document.getElementById('finalRecord');
 
     this.ultimoEstadoId = -1;
     this.vidasMostradas = -1;
@@ -208,7 +209,7 @@ class JuegoView {
   }
 
   // traduce todo el estado físico y visual del personaje a pantalla en cada fotograma, separando 
-  // movimiento, animaciones y depuración
+  // movimiento, animaciones 
   renderizarSuperman() {
     const sup = this.model.superman;
 
@@ -275,6 +276,7 @@ class JuegoView {
       this.startOverlayEl.classList.add('hidden');
       this.finalPuntosEl.textContent = this.model.puntos;
       this.gameOverOverlayEl.classList.remove('hidden');
+      this.finalRecordEl.textContent = this.model.puntos;
     }
   }
 }

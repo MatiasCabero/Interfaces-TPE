@@ -39,9 +39,9 @@ class Spawner {
       // si estamos en el menu solo diseñamos los edificios inferiores
       const soloInferior = (estadoJuego === 'menu');
 
-      // diseñamos el hueco entre edificio superior e inferior, lo minimo que va a tener
+      // diseñamos el ESPACIO (HUECO) entre edificio superior e inferior, lo minimo que va a tener
       // el hueco son 165 pixeles (arranca con 250)
-      const huecoBase = Math.max(165, 250 - tiempoJugado * 1.3);
+      const huecoBase = Math.max(165, 250 - tiempoJugado * 2.3);
       const hueco = huecoBase + this.azar(-10, 10);
 
       // los margenes nos sirve para que no desaparezca ningun edificio
@@ -61,11 +61,11 @@ class Spawner {
       // crear y el próximo que va a aparecer
 
       /* se calcula la distancia minima que hay entre un edificio y otro
-      lo minimo que puede haber entre un edificio y otro es 240px */
-      const distMin = Math.max(200, 290 - tiempoJugado * 0.8);
+      lo minimo que puede haber entre un edificio y otro es 200px */
+      const distMin = Math.max(140, 290 - tiempoJugado * 1.8);
       /* se calcula la distancia maxima que hay entre un edificio y otro
       lo maximo que puede haber entre un edificio y otro es 300px */
-      const distMax = Math.max(300, 370 - tiempoJugado * 0.8);
+      const distMax = Math.max(300, 370 - tiempoJugado * 1.8);
       const distanciaSiguiente = this.azar(distMin, distMax);
       this.distanciaParaProximo = distanciaSiguiente;
 
@@ -101,16 +101,24 @@ class Spawner {
         const puntosExtra = Math.max(0, puntosActuales - 30);
 
         // Descanso entre kriptonitas: baja gradualmente de cada 4 edificios hasta cada 2 edificios
+        /* es el tiempo minimo que hay que esperar para que salgan las kriptonitas */
         const descansoKriptonita = Math.max(2, 4 - Math.floor(puntosExtra / 20));
 
-        // Probabilidad: arranca en 22% a los 30 pts y sube progresivamente hasta un tope de 60%
+        // Probabilidad: arranca en 32% a los 30 pts y sube progresivamente hasta un tope de 70%
+        /* una vez que pasa el tiempo minimo de descanso pueden salir pero en base a esa probabilidad */
         const probKriptonita =
           puntosActuales >= 30 && this.edificiosDesdeUltimaKriptonita >= descansoKriptonita
-            ? Math.min(0.60, 0.22 + puntosExtra * 0.006)
+            ? Math.min(0.70, 0.32 + puntosExtra * 0.006)
             : 0;
 
         const roll = Math.random();
 
+        // aca calculamos donde va a aparecer el corazon
+
+        /* El corazón aparece horizontalmente a mitad de camino entre el edificio recién creado y el siguiente 
+        (distanciaSiguiente * 0.5), y su altura yCorazon se calcula desplazando el centro del hueco entre 110px y 
+        145px hacia arriba o hacia abajo al azar, acotado con Math.max(45, ...) y Math.min(this.altoJugable - 110, ...) 
+        para que nunca salga del área jugable */
         if (roll < probCorazon) {
           const arriba = Math.random() < 0.5;
           const desplazamiento = this.azar(110, 145) * (arriba ? -1 : 1);
@@ -121,10 +129,11 @@ class Spawner {
           
           this.edificiosDesdeUltimoCorazon = 0;
         } else if (roll < probCorazon + probKriptonita) {
+
           // Altura completamente aleatoria en toda la pantalla jugable
           const yKriptonita = this.azar(35, this.altoJugable - 100);
 
-          // Velocidad extra: suave cuando recién aparecen (~75-130 px/s) y luego aleatoria con picos rápidos (hasta ~310 px/s)
+          // VELOCIDAD EXTRA KRIPTONITA: suave cuando recién aparecen (~75-130 px/s) y luego aleatoria con picos rápidos (hasta ~410 px/s)
           const velExtraMin = 75;
           const velExtraMax = Math.min(410, 130 + puntosExtra * 4.5);
           const velocidadExtra = this.azar(velExtraMin, velExtraMax);

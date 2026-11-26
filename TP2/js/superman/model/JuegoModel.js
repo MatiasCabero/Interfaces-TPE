@@ -1,6 +1,10 @@
 // es el director general del Modelo (el único archivo del Modelo que conoce y coordina a 
 // todas las demás entidades: Superman, Spawner, ParEdificios, ItemAnimado, el parallax y los autos)
 
+//JuegoModel interactúa directamente con las tres clases: le pide a Spawner que genere nuevas instancias 
+//de ParEdificios e ItemAnimado, y luego asume la propiedad de esas instancias para actualizarlas frame a frame, 
+//evaluar sus colisiones con Superman y descartarlas cuando salen de pantalla.
+
 class JuegoModel {
   constructor() {
     this.ANCHO = 1470;
@@ -8,8 +12,9 @@ class JuegoModel {
     this.ALTO_CALLE = 65;
     this.ALTO_JUGABLE = this.ALTO - this.ALTO_CALLE; // 585px
 
-    this.VELOCIDAD_INICIAL = 215; // px/s
-    this.VELOCIDAD_MAXIMA = 470;  // px/s
+    // velocidad a la que se mueve el mundo al iniciar
+    this.VELOCIDAD_INICIAL = 600; // px/s
+    this.VELOCIDAD_MAXIMA = 1200;  // px/s
 
     this.superman = new Superman(240, 250);
     this.spawner = new Spawner(this.ANCHO, this.ALTO_JUGABLE);
@@ -48,6 +53,7 @@ class JuegoModel {
 
     this.estado = 'menu'; // 'menu' | 'jugando' | 'fin'
     this.puntos = 0;
+    this.puntajeAnterior = 0;
     this.tiempoJugado = 0;
     this.velocidad = this.VELOCIDAD_INICIAL;
     this.tiempoFrenoChoque = 0; // Temporizador de desaceleración breve al chocar
@@ -169,7 +175,8 @@ class JuegoModel {
 
       const velocidadObjetivo = Math.min(
         this.VELOCIDAD_MAXIMA,
-        this.VELOCIDAD_INICIAL + this.tiempoJugado * 4.2
+        this.VELOCIDAD_INICIAL + this.tiempoJugado * 8.2  /* esta es la ACELERACION que tiene el juego 
+                                                             por cada segundo que pasa */
       );
 
       if (this.tiempoFrenoChoque > 0) {
@@ -283,7 +290,8 @@ class JuegoModel {
         this.tiempoMuerte -= dt;
         if (this.tiempoMuerte <= 0) {
           this.tiempoMuerte = 0;
-          this.estado = 'fin';
+          this.estado = 'fin'
+          this.puntajeAnterior=this.puntos;
         }
       }
     }
